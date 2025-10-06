@@ -1,0 +1,77 @@
+/* Современный переключатель лиг */
+.league-switcher {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.league-tabs {
+    display: flex;
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.league-tabs input[type="radio"] {
+    display: none;
+}
+
+.league-tab {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    width: 140px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50px;
+    padding: 0 20px;
+}
+
+.league-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-icon {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.league-tabs input[type="radio"]:checked + .league-tab {
+    color: #0055a5;
+}
+
+#league-a:checked ~ .tab-indicator {
+    background: linear-gradient(135deg, #0055a5, #0077cc);
+    left: 33.33%;
+}
+
+#league-b:checked ~ .tab-indicator {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    left: 66.66%;
+}
+
+.tab-indicator {
+    position: absolute;
+    height: 45px;
+    width: 140px;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    z-index: 1;
+    left: 0;
+}
+
+.league-tabs input[type="radio"]:checked + .league-tab {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}

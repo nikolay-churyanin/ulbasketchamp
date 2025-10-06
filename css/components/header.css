@@ -1,0 +1,50 @@
+/* Хедер */
+header {
+    background-image: url('../../data/images/ul-logo.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+/* Темная вуаль поверх баннера для читаемости текста */
+header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+}
+
+/* Контент хедера поверх вуали */
+header > * {
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Скрываем внутренний баннер */
+.header-hero { 
+    display: none; 
+}
+
+/* Адаптивность для хедера */
+@media (max-width: 768px) {
+    header {
+        padding: 1.5rem 0;
+    }
+    
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+}

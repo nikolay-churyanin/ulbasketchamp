@@ -1,0 +1,49 @@
+/* Стили для секции статистики */
+.stats-container {
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Фильтры статистики */
+.stats-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.stats-filters.modern {
+    gap: 10px 16px;
+    align-items: center;
+}
+
+.stat-type-chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid #e0e0e0;
+    padding: 6px;
+    border-radius: 999px;
+}
+
+.stat-chip {
+    border: none;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: white;
+    color: #2c3e50;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.stat-chip:hover {
+    background: #f3f6ff;
+}
+
+.stat-chip.active {
+    background: linear-gradient(135deg, #0055a5, #0077cc);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 85, 165, 0.25);
+}

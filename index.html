@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0055a5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Чемпионат по баскетболу</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Коррекция выравнивания переключателя лиг (центр, фикс. ширина индикатора) */
+        .league-switcher { display: flex; justify-content: center; margin: 12px 0 8px; }
+        .league-tabs { position: relative; display: inline-flex; align-items: center; gap: 0; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 4px; }
+        .league-tabs input[type="radio"] { display: none; }
+        .league-tab { position: relative; z-index: 2; padding: 10px 18px; border-radius: 999px; color: #fff; font-weight: 600; cursor: pointer; min-width: 120px; text-align: center; }
+        .tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 999px; background: #fff; transition: left .25s ease; z-index: 1; }
+        #league-a:checked ~ .tab-indicator { left: 4px; }
+        #league-b:checked ~ .tab-indicator { left: calc(50% + 4px); }
+        #league-a:checked + label.league-tab, #league-b:checked + label.league-tab { color: #0055a5; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Чемпионат Ульяновской области по баскетболу<br/>Сезон 2025-2026</h1>
+        <div class="header-hero"></div>
+        
+        
+
+        <!-- Переключатель лиг в исходном стиле (только А и Б) -->
+        <div class="league-switcher">
+            <div class="league-tabs">
+                <input type="radio" id="league-a" name="league" value="A" checked>
+                <label for="league-a" class="league-tab">
+                    <span class="tab-icon">⭐</span>
+                    Лига А
+                </label>
+                
+                <input type="radio" id="league-b" name="league" value="B">
+                <label for="league-b" class="league-tab">
+                    <span class="tab-icon">🔥</span>
+                    Лига Б
+                </label>
+                
+                <div class="tab-indicator"></div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="#teams" class="nav-link">Команды</a>
+            <a href="#schedule" class="nav-link">Расписание</a>
+            <a href="#stats" class="nav-link">Статистика</a>
+        </nav>
+
+        <div class="loading-indicator" id="loading-indicator">
+            <div class="spinner"></div>
+            <span>Загрузка данных...</span>
+        </div>
+    </header>
+
+    <main>
+        <section id="teams">
+            <h2>Команды</h2>
+            <div id="teams-view-toggle"></div>
+            <div class="teams-container" id="teams-container">
+                <!-- Сюда JavaScript вставит карточки команд или таблицу -->
+            </div>
+        </section>
+
+        <section id="schedule">
+            <h2>Расписание и результаты</h2>
+            <div class="games-container" id="games-container">
+                <!-- Сюда JavaScript вставит таблицу матчей -->
+            </div>
+        </section>
+
+        <section id="stats">
+            <h2>ТОП 10</h2>
+            <div class="stats-filters modern">
+                <div class="stat-type-chips" role="tablist" aria-label="Тип статистики">
+                    <button class="stat-chip active" data-stat="points" role="tab" aria-selected="true">Очки</button>
+                    <button class="stat-chip" data-stat="rebounds" role="tab" aria-selected="false">Подборы</button>
+                    <button class="stat-chip" data-stat="assists" role="tab" aria-selected="false">Передачи</button>
+                    <button class="stat-chip" data-stat="steals" role="tab" aria-selected="false">Перехваты</button>
+                    <button class="stat-chip" data-stat="blocks" role="tab" aria-selected="false">Блоки</button>
+                </div>
+                <!-- Скрытые элементы для совместимости -->
+                <select id="stat-type" class="stat-filter" style="display:none">
+                    <option value="points" selected>points</option>
+                    <option value="rebounds">rebounds</option>
+                    <option value="assists">assists</option>
+                    <option value="steals">steals</option>
+                    <option value="blocks">blocks</option>
+                </select>
+                <input type="number" id="min-games" class="stat-filter" min="1" value="1" style="display:none">
+            </div>
+            <div class="stats-container" id="stats-container">
+                <!-- Сюда JavaScript вставит таблицу статистики -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальное окно деталей игры -->
+    <div id="game-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Детали игры</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Содержимое модального окна -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно информации о команде -->
+    <div id="team-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="team-modal-title">Информация о команде</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="team-modal-body">
+                <!-- Содержимое модального окна -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
+    <!-- <script src="script.js"></script> -->
+</body>
+</html>

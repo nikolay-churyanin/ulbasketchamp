@@ -1,0 +1,77 @@
+/* Таблицы */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+th {
+    background: linear-gradient(135deg, #0055a5, #0077cc);
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background: #f8f9fa;
+}
+
+/* Кликабельные строки */
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clickable-row:hover {
+    background: #e3f2fd !important;
+}
+
+/* Обертка для горизонтальной прокрутки на мобильных */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Адаптивность таблиц */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+    th, td {
+        padding: 10px 12px;
+    }
+}
+
+/* Сокрытие второстепенных колонок на очень узких экранах */
+@media (max-width: 600px) {
+    /* Турнирная таблица команд */
+    .standings-table th:nth-child(3),
+    .standings-table td:nth-child(3), /* И */
+    .standings-table th:nth-child(6),
+    .standings-table td:nth-child(6)  /* О */
+    { display: none; }
+
+    /* Статистика игроков: скрываем "Игры" и "Всего <метрика>" */
+    #stats .table-container table th:nth-child(4),
+    #stats .table-container table td:nth-child(4),
+    #stats .table-container table th:nth-child(6),
+    #stats .table-container table td:nth-child(6)
+    { display: none; }
+}

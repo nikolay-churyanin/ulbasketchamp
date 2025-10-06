@@ -1,0 +1,116 @@
+[
+  {
+    "name": "АВВА-МЧС",
+    "logo": "data/images/avva.pdf",
+    "city": "Ульяновск", 
+    "league": "A"
+  },
+  {
+    "name": "Перевалбаскет",
+    "logo": "data/images/pereval.jpg",
+    "city": "Димитровград", 
+    "league": "A"
+  },
+  {
+    "name": "Цементник-Марбакс",
+    "logo": "data/images/marrbaxx.jpg",
+    "city": "Новоульяновск", 
+    "league": "A"
+  },
+  {
+    "name": "Триумф",
+    "logo": "data/images/triumph.jpg",
+    "city": "Ульяновск", 
+    "league": "A"
+  },
+  {
+    "name": "УУОР",
+    "logo": "data/images/usut.jpg",
+    "city": "Ульяновск", 
+    "league": "A"
+  },
+  {
+    "name": "УлГУ",
+    "logo": "data/images/ulsu.svg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "Спарта-УлГПУ",
+    "logo": "data/images/sparta_ulspu.jpg", 
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "УИГА-Дельта", 
+    "logo": "data/images/uiga_delta.jpg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "БК Петровск", 
+    "logo": "data/images/petrovsk.jpg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "УлГПУ-2",
+    "logo": "data/images/ulspu.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Дельта-2",
+    "logo": "data/images/uiga_delta.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "УУОР-2",
+    "logo": "data/images/usut.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Ветераны",
+    "logo": "images/ulspu.png",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "7 Ветров",
+    "logo": "data/images/7_vetrov.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "УлГТУ",
+    "logo": "data/images/ulstu.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Триумф-2",
+    "logo": "data/images/triumph.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "ЦЕМРОС", 
+    "logo": "data/images/cemros.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "УКБП",
+    "logo": "data/images/priborka.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Авангард",
+    "logo": "data/images/avangard.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  }
+]
