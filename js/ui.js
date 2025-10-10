@@ -199,7 +199,8 @@ class BasketballUI {
 
         // Разделяем игры на результаты и расписание
         const resultsGames = games.filter(game => game._hasResult || game._isFromResults);
-        const scheduleGames = games.filter(game => !game._hasResult && !game._isFromResults);
+        const scheduleGames = games.filter(game => !game._hasResult && !game._isFromResults)
+            .sort((a, b) => a._fullDate - b._fullDate);
 
         console.log('Results games:', resultsGames.length);
         console.log('Schedule games:', scheduleGames.length);
