@@ -5,6 +5,10 @@
     #schedule .table-container table th:nth-child(7),
     #schedule .table-container table td:nth-child(7)  /* Место */
     { display: none; }
+
+    #schedule .table-container table th,
+    #schedule .table-container table td
+    { font-size: 9px } 
 }
 /* Стили для секции расписания */
 .games-container {
