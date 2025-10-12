@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "УУОР-2",
+    "team_b": "ДЕЛЬТА-2",
+    "score": "63:79",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2025-10-12",
+    "venue": "ФОК ФАВОРИТ",
+    "time": "12:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "УУОР-2",
+    "teamAway": "ДЕЛЬТА-2",
+    "date": "2025-10-12",
+    "time": "12:00",
+    "location": "ФОК ФАВОРИТ",
+    "datetime": "2025-10-12 12:00",
+    "timestamp": 1760256000.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "12.10.2025 16:44"
+}
