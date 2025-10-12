@@ -141,7 +141,7 @@ class BasketballUI {
                                 <td>${stand.played}</td>
                                 <td>${stand.wins}</td>
                                 <td>${stand.losses}</td>
-                                <td>${stand.wins / Math.max(stand.played, 1) * 100}</td>
+                                <td>${Math.round(stand.wins / Math.max(stand.played, 1) * 1000) / 10}</td>
                                 <td>
                                     ${stand.trand.slice(-5).split('').map((char, index) => `
                                         <div class="dot ${char === '1' ? 'green' : 'red'}"></div>
