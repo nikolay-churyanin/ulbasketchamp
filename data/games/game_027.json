@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "Ветераны",
+    "team_b": "Триумф-2",
+    "score": "62:55",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2025-10-18",
+    "venue": "Зал УлГУ",
+    "time": "18:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "Ветераны",
+    "teamAway": "Триумф-2",
+    "date": "2025-10-18",
+    "time": "18:00",
+    "location": "Зал УлГУ",
+    "datetime": "2025-10-18 18:00",
+    "timestamp": 1760796000.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "20.10.2025 10:23"
+}
