@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "Ветераны",
+    "team_b": "Дельта-2",
+    "score": "56:83",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2025-10-26",
+    "venue": "Зал УлГУ",
+    "time": "16:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "Ветераны",
+    "teamAway": "Дельта-2",
+    "date": "2025-10-26",
+    "time": "16:00",
+    "location": "Зал УлГУ",
+    "datetime": "2025-10-26 16:00",
+    "timestamp": 1761480000.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "27.10.2025 14:44"
+}
