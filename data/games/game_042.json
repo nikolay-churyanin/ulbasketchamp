@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "Дельта-2",
+    "team_b": "Триумф-2",
+    "score": "82:66",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2025-11-22",
+    "venue": "Зал УлГУ",
+    "time": "19:30"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "Дельта-2",
+    "teamAway": "Триумф-2",
+    "date": "2025-11-22",
+    "time": "19:30",
+    "location": "Зал УлГУ",
+    "datetime": "2025-11-22 19:30",
+    "timestamp": 1763825400.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "23.11.2025 17:01"
+}
