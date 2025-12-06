@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "УлГПУ-2",
+    "team_b": "Авангард",
+    "score": "64:57",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2025-12-06",
+    "venue": "Манеж УлГПУ",
+    "time": "14:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "УлГПУ-2",
+    "teamAway": "Авангард",
+    "date": "2025-12-06",
+    "time": "14:00",
+    "location": "Манеж УлГПУ",
+    "datetime": "2025-12-06 14:00",
+    "timestamp": 1765018800.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "06.12.2025 18:13"
+}
