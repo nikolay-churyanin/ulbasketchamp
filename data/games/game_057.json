@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "АВВА-МЧС",
+    "team_b": "БК Петровск",
+    "score": "65:68",
+    "competition": "Муж. Чемп. Ульян. области A",
+    "date": "2025-12-07",
+    "venue": "ФОК Фаворит",
+    "time": "13:30"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A",
+    "teamHome": "АВВА-МЧС",
+    "teamAway": "БК Петровск",
+    "date": "2025-12-07",
+    "time": "13:30",
+    "location": "ФОК Фаворит",
+    "datetime": "2025-12-07 13:30",
+    "timestamp": 1765103400.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "07.12.2025 14:51"
+}
