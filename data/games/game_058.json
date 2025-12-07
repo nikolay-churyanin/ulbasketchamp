@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "УИГА-Дельта",
+    "team_b": "УлГУ",
+    "score": "43:107",
+    "competition": "Муж. Чемп. Ульян. области A",
+    "date": "2025-12-07",
+    "venue": "Зал УлГУ",
+    "time": "16:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A",
+    "teamHome": "УИГА-Дельта",
+    "teamAway": "УлГУ",
+    "date": "2025-12-07",
+    "time": "16:00",
+    "location": "Зал УлГУ",
+    "datetime": "2025-12-07 16:00",
+    "timestamp": 1765112400.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "07.12.2025 17:16"
+}
