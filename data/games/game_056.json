@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "УлГТУ",
+    "team_b": "УУОР-2",
+    "score": "67:63",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2025-12-07",
+    "venue": "ФОК Фаворит",
+    "time": "12:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "УлГТУ",
+    "teamAway": "УУОР-2",
+    "date": "2025-12-07",
+    "time": "12:00",
+    "location": "ФОК Фаворит",
+    "datetime": "2025-12-07 12:00",
+    "timestamp": 1765098000.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "07.12.2025 14:51"
+}
