@@ -1,21 +1,21 @@
 {
   "match_info": {
-    "team_a": "ТРИУМФ",
+    "team_a": "Триумф",
     "team_b": "УИГА-Дельта",
     "score": "111:84",
     "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-10-12",
-    "venue": "ФОК ФАВОРИТ",
+    "venue": "ФОК Фаворит",
     "time": "10:30"
   },
   "original_match": {
     "stage": "Регулярный сезон",
     "league": "A",
-    "teamHome": "ТРИУМФ",
+    "teamHome": "Триумф",
     "teamAway": "УИГА-Дельта",
     "date": "2025-10-12",
     "time": "10:30",
-    "location": "ФОК ФАВОРИТ",
+    "location": "ФОК Фаворит",
     "datetime": "2025-10-12 10:30",
     "timestamp": 1760250600.0
   },
