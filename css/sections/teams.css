@@ -1,9 +1,22 @@
+@media (max-width: 600px) {
+    /* Турнирная таблица команд */
+    .standings-table th:nth-child(3),
+    .standings-table td:nth-child(3),
+    .standings-table th:nth-child(5),
+    .standings-table td:nth-child(5),
+    .standings-table th:nth-child(7),
+    .standings-table td:nth-child(7),
+    .standings-table th:nth-child(8),
+    .standings-table td:nth-child(8)
+    { display: none; }
+}
+
 .dot {
-    width: 15px;
-    height: 15px;
+    width: 8.5px;
+    height: 8.5px;
     border-radius: 50%;
     display: inline-block;
-    margin: 2px;
+    margin: 0.5px;
 }
 .green { background-color: #4CAF50; }
 .red { background-color: #f44336; }
@@ -200,15 +213,11 @@
     background: linear-gradient(135deg, #0055a5, #0077cc);
     color: white;
     font-weight: 600;
-    padding: 15px 12px;
     text-align: left;
-    font-size: 0.9rem;
 }
 
 .standings-table td {
-    padding: 12px;
     border-bottom: 1px solid #f0f0f0;
-    font-size: 0.95rem;
 }
 
 .standings-table tr:last-child td {
@@ -306,15 +315,6 @@
     .team-logo {
         width: 70px;
         height: 70px;
-    }
-    
-    .standings-table {
-        font-size: 0.85rem;
-    }
-    
-    .standings-table th,
-    .standings-table td {
-        padding: 10px 8px;
     }
     
     .team-logo-small {

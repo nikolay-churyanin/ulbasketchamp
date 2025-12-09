@@ -118,14 +118,13 @@ class BasketballUI {
                             <th>#</th>
                             <th>Команда</th>
                             <th>И</th>
-                            <th>В</th>
-                            <th>П</th>
+                            <th>В&frasl;П</th>
                             <th>%</th>
-                            <th>Последние<br/>5 игр</th>
+                            <th>Последние</br>5 игр</th>
                             <th>Забито</th>
                             <th>Пропущено</th>
                             <th>+/-</th>
-                            <th>Очки</th>
+                            <th>О</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -139,8 +138,7 @@ class BasketballUI {
                                     </div>
                                 </td>
                                 <td>${stand.played}</td>
-                                <td>${stand.wins}</td>
-                                <td>${stand.losses}</td>
+                                <td>${stand.wins}/${stand.losses}</td>
                                 <td>${Math.round(stand.wins / Math.max(stand.played, 1) * 1000) / 10}</td>
                                 <td>
                                     ${stand.trand.slice(-5).split('').map((char, index) => `
@@ -582,7 +580,7 @@ class BasketballUI {
                 <div class="team-section">
                     <h4>Матчи</h4>
                     <div class="team-games-list">
-                        ${games.slice(0, 5).map(game => {
+                        ${games.map(game => {
                             const opponentName = this.dataManager.normalizeTeamName(game.teamHome) === this.dataManager.normalizeTeamName(team.name) ? game.teamAway : game.teamHome;
                             const isHome = this.dataManager.normalizeTeamName(game.teamHome) === this.dataManager.normalizeTeamName(team.name);
                             const hasScore = game.scoreHome !== null && game.scoreAway !== null;

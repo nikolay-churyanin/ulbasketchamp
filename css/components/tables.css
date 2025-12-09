@@ -61,17 +61,19 @@ tr:hover {
 
 /* Сокрытие второстепенных колонок на очень узких экранах */
 @media (max-width: 600px) {
-    /* Турнирная таблица команд */
-    .standings-table th:nth-child(3),
-    .standings-table td:nth-child(3), /* И */
-    .standings-table th:nth-child(6),
-    .standings-table td:nth-child(6)  /* О */
-    { display: none; }
-
     /* Статистика игроков: скрываем "Игры" и "Всего <метрика>" */
     #stats .table-container table th:nth-child(4),
     #stats .table-container table td:nth-child(4),
     #stats .table-container table th:nth-child(6),
     #stats .table-container table td:nth-child(6)
     { display: none; }
+}
+
+@media (max-width: 468px) {
+    table {
+        font-size: 10px;
+    }
+    th, td {
+        padding: 4px 6px;
+    }
 }
