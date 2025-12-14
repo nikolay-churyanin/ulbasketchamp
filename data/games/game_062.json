@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "УлГТУ",
+    "team_b": "Авангард",
+    "score": "73:57",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2025-12-14",
+    "venue": "ФОК Фаворит",
+    "time": "10:30"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "УлГТУ",
+    "teamAway": "Авангард",
+    "date": "2025-12-14",
+    "time": "10:30",
+    "location": "ФОК Фаворит",
+    "datetime": "2025-12-14 10:30",
+    "timestamp": 1765697400.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "14.12.2025 11:46"
+}
