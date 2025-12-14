@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "Триумф",
+    "team_b": "БК Петровск",
+    "score": "98:48",
+    "competition": "Муж. Чемп. Ульян. области A",
+    "date": "2025-12-14",
+    "venue": "ФОК Фаворит",
+    "time": "13:30"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A",
+    "teamHome": "Триумф",
+    "teamAway": "БК Петровск",
+    "date": "2025-12-14",
+    "time": "13:30",
+    "location": "ФОК Фаворит",
+    "datetime": "2025-12-14 13:30",
+    "timestamp": 1765708200.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "14.12.2025 15:07"
+}
