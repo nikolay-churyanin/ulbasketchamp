@@ -9,49 +9,56 @@
           "time": "12:00",
           "teamHome": "УлГТУ",
           "teamAway": "Ветераны",
-          "location": "Манеж УлГПУ"
+          "location": "Манеж УлГПУ",
+          "league": "B"
         },
         {
           "date": "2026-01-17",
           "time": "13:40",
           "teamHome": "УлГПУ-2",
           "teamAway": "УУОР-2",
-          "location": "Манеж УлГПУ"
+          "location": "Манеж УлГПУ",
+          "league": "B"
         },
         {
           "date": "2026-01-17",
           "time": "15:20",
           "teamHome": "УУОР",
           "teamAway": "Цементник-Марбакс",
-          "location": "Манеж УлГПУ"
+          "location": "Манеж УлГПУ",
+          "league": "A"
         },
         {
           "date": "2026-01-17",
           "time": "17:00",
           "teamHome": "Спарта-УлГПУ",
           "teamAway": "Триумф",
-          "location": "Манеж УлГПУ"
+          "location": "Манеж УлГПУ",
+          "league": "A"
         },
         {
           "date": "2026-01-18",
           "time": "16:00",
           "teamHome": "Феникс",
           "teamAway": "УСУТ",
-          "location": "Зал УлГУ"
+          "location": "Зал УлГУ",
+          "league": "F"
         },
         {
           "date": "2026-01-18",
           "time": "17:30",
           "teamHome": "УлГУ",
           "teamAway": "АВВА-МЧС",
-          "location": "Зал УлГУ"
+          "location": "Зал УлГУ",
+          "league": "A"
         },
         {
           "date": "2026-01-18",
           "time": "19:00",
           "teamHome": "Авангард",
           "teamAway": "ЦЕМРОС",
-          "location": "Зал УлГУ"
+          "location": "Зал УлГУ",
+          "league": "B"
         }
       ]
     }
