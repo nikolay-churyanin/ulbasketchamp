@@ -112,5 +112,35 @@
     "logo": "data/images/avangard.jpg",
     "city": "Ульяновск",
     "league": "B"
+  },
+  {
+    "name": "Old School",
+    "logo": "data/images/oldshcool.jpg",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "УлГПУ",
+    "logo": "data/images/sparta_f.jpg",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "УлГУ",
+    "logo": "data/images/ulsu.svg",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "УСУТ",
+    "logo": "data/images/usut.jpg",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "Феникс",
+    "logo": "data/images/feniks.jpg",
+    "city": "Ульяновск",
+    "league": "F"
   }
 ]

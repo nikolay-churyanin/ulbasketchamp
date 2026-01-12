@@ -50,7 +50,7 @@ class BasketballData {
             let gameNumber = 1;
             
             
-            while (gameNumber <= 100) {
+            while (gameNumber <= 200) {
                 const gameId = `game_${gameNumber.toString().padStart(3, '0')}`;
                 const gamePath = `data/games/${gameId}.json?${Date.now()}`;
                 
@@ -145,9 +145,7 @@ class BasketballData {
             game.time = game.match_info.time;
             game.location = game.match_info.venue;
             
-            const homeTeam = this.getTeamByName(game.teamHome);
-            const awayTeam = this.getTeamByName(game.teamAway);
-            game.league = homeTeam?.league || awayTeam?.league || 'A';
+            game.league = game.original_match?.league || 'A';
         }
         
         if (game.team_a_stats && game.team_b_stats) {
@@ -193,10 +191,20 @@ class BasketballData {
         return teamName.trim().toUpperCase();
     }
 
-    getTeamByName(teamName) {
+    getLeagueName(league) {
+        if (league === 'A') {
+            return 'Лига А'
+        } else if (league === 'B') {
+            return 'Лиги Б'
+        } else {
+            return 'Жен. Лига'
+        }
+    }
+
+    getTeamByName(teamName, league) {
         const normalizedName = this.normalizeTeamName(teamName);
         return this.teams.find(team => 
-            this.normalizeTeamName(team.name) === normalizedName
+            this.normalizeTeamName(team.name) === normalizedName && team.league === league
         );
     }
 
@@ -281,6 +289,7 @@ class BasketballData {
                     location: game.location,
                     teamHome: game.teamHome,
                     teamAway: game.teamAway,
+                    league: game.league,
                     scoreHome: null,
                     sccoreAway: null,
                     _id: `scheduled_${gameDateTime}`,
@@ -315,6 +324,7 @@ class BasketballData {
                 scoreHome: game.scoreHome,
                 scoreAway: game.scoreAway,
                 date: game.date,
+                league: game.league,
                 time: game.time || this.extractTimeFromDate(gameDate),
                 location: game.location || game.venue || 'Не указано',
                 _gameData: game
@@ -358,6 +368,10 @@ class BasketballData {
         const leagueTeams = this.getTeamsByLeague(league).map(team => team.name);
         
         const filteredGames = allGames.filter(game => {
+            if (game.league !== league) {
+                return false;
+            }
+
             const homeInLeague = leagueTeams.some(team => 
                 this.normalizeTeamName(team) === this.normalizeTeamName(game.teamHome)
             );
@@ -375,12 +389,13 @@ class BasketballData {
         return filteredGames;
     }
 
-    getGamesByTeam(teamName) {
+    getGamesByTeam(teamName, league) {
         const allGames = this.getAllGamesForDisplay();
         const normalizedTeamName = this.normalizeTeamName(teamName);
         return allGames.filter(game => 
+            game.league == league && (
             this.normalizeTeamName(game.teamHome) === normalizedTeamName || 
-            this.normalizeTeamName(game.teamAway) === normalizedTeamName
+            this.normalizeTeamName(game.teamAway) === normalizedTeamName)
         );
     }
 

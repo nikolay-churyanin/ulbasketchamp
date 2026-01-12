@@ -520,7 +520,7 @@ class BasketballUI {
     }
 
     showTeamModal(teamName) {
-        const team = this.dataManager.getTeamByName(teamName);
+        const team = this.dataManager.getTeamByName(teamName, this.currentLeague);
         if (!team) {
             console.error('Team not found:', teamName);
             return;
@@ -533,13 +533,14 @@ class BasketballUI {
         title.textContent = team.name;
 
         const players = this.dataManager.getPlayersByTeam(team.name);
-        const games = this.dataManager.getGamesByTeam(team.name);
+        const games = this.dataManager.getGamesByTeam(team.name, this.currentLeague);
         const completedGames = games.filter(game => game.scoreHome !== null && game.scoreAway !== null);
         const wins = completedGames.filter(game => {
             const isHome = game.teamHome === team.name;
             return isHome ? game.scoreHome > game.scoreAway : game.scoreAway > game.scoreHome;
         }).length;
         const losses = completedGames.length - wins;
+        const leagueName = this.dataManager.getLeagueName(this.currentLeague)
 
         let html = `
             <div class="team-info-header">
@@ -547,36 +548,12 @@ class BasketballUI {
                 <div class="team-info-details">
                     <h2>${team.name}</h2>
                     <p><strong>Город:</strong> ${team.city}</p>
-                    <p><strong>Лига:</strong> ${team.league === 'A' ? 'Лига А' : 'Лига Б'}</p>
+                    <p><strong>Лига:</strong> ${leagueName}</p>
                     <p><strong>Рекорд:</strong> ${wins}-${losses}</p>
                 </div>
             </div>
 
-            <div class="modal-tabs">
-                <button class="modal-tab active" data-tab="team-tab-players">Состав</button>
-                <button class="modal-tab" data-tab="team-tab-schedule">Расписание</button>
-            </div>
-
-            <div class="modal-tab-content active" id="team-tab-players">
-                <div class="team-section">
-                    <h4>Состав команды</h4>
-                    <div class="players-list">
-                        ${players.map(player => `
-                            <div class="player-item">
-                                <div class="player-info">
-                                    <div class="player-number">${player.number}</div>
-                                    <div>
-                                        <div class="player-name">${player.name}</div>
-                                        <div class="player-position">${player.position}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-tab-content" id="team-tab-schedule">
+            <div class="modal-tab-content active" id="team-tab-schedule">
                 <div class="team-section">
                     <h4>Матчи</h4>
                     <div class="team-games-list">

@@ -45,6 +45,7 @@ tr:hover {
 /* Обертка для горизонтальной прокрутки на мобильных */
 .table-container {
     width: 100%;
+    max-height:700px; /* ваше максимальное значение */
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }

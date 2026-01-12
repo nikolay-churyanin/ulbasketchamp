@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "УлГПУ",
+    "team_b": "УСУТ",
+    "score": "59:83",
+    "competition": "Чемп. Ульян. области Ж",
+    "date": "2025-12-01",
+    "venue": "Манеж УлГПУ",
+    "time": "12:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "F",
+    "teamHome": "УлГПУ",
+    "teamAway": "УСУТ",
+    "date": "2025-12-01",
+    "time": "12:00",
+    "location": "Манеж УлГПУ",
+    "datetime": "2025-12-01 12:00",
+    "timestamp": 1768137000.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "12.01.2026 14:28"
+}

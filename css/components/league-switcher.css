@@ -50,15 +50,18 @@
     color: #0055a5;
 }
 
-#league-a:checked ~ .tab-indicator {
+#league-a:checked ~ .tab-indicator { 
     background: linear-gradient(135deg, #0055a5, #0077cc);
-    left: 33.33%;
+    left: 4px; 
 }
-
-#league-b:checked ~ .tab-indicator {
+#league-b:checked ~ .tab-indicator { 
     background: linear-gradient(135deg, #28a745, #20c997);
-    left: 66.66%;
+    left: calc(33.33% + 4px); 
 }
+#league-f:checked ~ .tab-indicator { 
+    left: calc(66.66% + 4px); 
+}
+#league-a:checked + label.league-tab, #league-b:checked + label.league-tab, #league-f:checked + label.league-tab { color: #0055a5; }
 
 .tab-indicator {
     position: absolute;
