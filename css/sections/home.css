@@ -1,0 +1,1354 @@
+/* home.css - полная версия с карточками по времени */
+/* Стили для главной страницы и страниц лиг */
+
+/* Герой-секция на главной */
+.home-hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(0, 85, 165, 0.9), rgba(0, 119, 204, 0.9));
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 85, 165, 0.3);
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-item {
+    text-align: center;
+    min-width: 120px;
+    padding: 10px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+}
+
+/* Улучшаем читаемость текста в герое */
+.home-hero p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto 25px;
+    opacity: 0.95;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.home-hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+/* Блоки лиг на главной */
+.league-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.league-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.league-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.league-card-header {
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+.league-card-header.league-a {
+    background: linear-gradient(135deg, #0055a5, #0077cc);
+}
+
+.league-card-header.league-b {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.league-card-header.league-f {
+    background: linear-gradient(135deg, #e91e63, #ff4081);
+}
+
+.league-card-header h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+}
+
+.league-card-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.league-card-body {
+    padding: 20px;
+}
+
+.league-teams-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.league-team-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.league-team-preview:hover {
+    background: #e9ecef;
+}
+
+.league-team-preview img {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: white;
+    padding: 3px;
+    border: 1px solid #dee2e6;
+}
+
+.league-team-preview span {
+    font-weight: 600;
+    flex: 1;
+}
+
+.league-team-preview .team-record {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.league-card-footer {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    text-align: center;
+}
+
+.league-link {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #0055a5, #0077cc);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.league-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 85, 165, 0.3);
+}
+
+/* БЛИЖАЙШИЕ МАТЧИ НА ГЛАВНОЙ - ПОСЛЕДОВАТЕЛЬНО ПО ВРЕМЕНИ */
+.upcoming-games-section {
+    margin-bottom: 40px;
+}
+
+/* Заголовок дня */
+.upcoming-day-header {
+    margin: 30px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.upcoming-day-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.upcoming-day-title svg {
+    color: #0055a5;
+}
+
+.upcoming-day-matches-count {
+    font-size: 0.9rem;
+    color: #6c757d;
+    background: #f8f9fa;
+    padding: 4px 12px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+/* Сетка карточек матчей */
+.upcoming-matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+/* Карточка матча */
+.upcoming-match-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.upcoming-match-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-color: #dee2e6;
+}
+
+/* Бейдж лиги в карточке */
+.upcoming-match-league-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Заголовок с временем */
+.upcoming-match-time-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.upcoming-match-time {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.match-exact-time {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.match-time-left {
+    font-size: 0.8rem;
+    color: #28a745;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Команды */
+.upcoming-match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.upcoming-match-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.upcoming-match-team img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    object-fit: contain;
+    background: #f8f9fa;
+    padding: 4px;
+    border: 1px solid #e9ecef;
+    transition: transform 0.3s ease;
+}
+
+.upcoming-match-card:hover .upcoming-match-team img {
+    transform: scale(1.05);
+}
+
+.upcoming-match-team span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.upcoming-match-vs {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #adb5bd;
+    min-width: 40px;
+    text-align: center;
+}
+
+/* Место проведения */
+.upcoming-match-footer {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f3f5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.upcoming-match-location {
+    font-size: 0.85rem;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.upcoming-match-league-info {
+    font-size: 0.8rem;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Цвета для лиг */
+.league-badge-a {
+    background: rgba(0, 85, 165, 0.1);
+    color: #0055a5;
+    border: 1px solid rgba(0, 85, 165, 0.2);
+}
+
+.league-badge-b {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.league-badge-f {
+    background: rgba(233, 30, 99, 0.1);
+    color: #e91e63;
+    border: 1px solid rgba(233, 30, 99, 0.2);
+}
+
+/* Сегодняшние матчи - особый стиль */
+.today-matches .upcoming-day-title {
+    color: #0055a5;
+}
+
+.today-matches .upcoming-match-card {
+    border-left: 3px solid #0055a5;
+}
+
+/* Завтрашние матчи */
+.tomorrow-matches .upcoming-day-title {
+    color: #28a745;
+}
+
+.tomorrow-matches .upcoming-match-card {
+    border-left: 3px solid #28a745;
+}
+
+/* Стили для страниц лиг */
+.league-section {
+    animation: fadeInUp 0.5s ease;
+}
+
+.league-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.league-header h2 {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.league-header h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    margin: 15px auto;
+    border-radius: 2px;
+}
+
+.league-header.league-a h2::after {
+    background: linear-gradient(135deg, #0055a5, #0077cc);
+}
+
+.league-header.league-b h2::after {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.league-header.league-f h2::after {
+    background: linear-gradient(135deg, #e91e63, #ff4081);
+}
+
+/* Секции на страницах лиг */
+.league-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 40px 0 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+    color: #2c3e50;
+    font-size: 1.8rem;
+}
+
+.league-section-title span {
+    font-size: 1rem;
+    color: #6c757d;
+    font-weight: normal;
+}
+
+/* Разделитель между таблицами */
+.league-content-divider {
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        #e9ecef 20%, 
+        #e9ecef 80%, 
+        transparent 100%
+    );
+    margin: 30px 0;
+}
+
+/* Убираем старые стили для таблиц игр */
+.games-container table {
+    display: none !important;
+}
+
+.games-tabs,
+.games-tab-contents {
+    display: none !important;
+}
+
+/* Анимации для карточек */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Утилиты для главной страницы */
+.text-center { text-align: center; }
+.mb-30 { margin-bottom: 30px; }
+.mt-30 { margin-top: 30px; }
+.mb-20 { margin-bottom: 20px; }
+.mt-20 { margin-top: 20px; }
+
+/* Пустое состояние для лиг */
+.no-upcoming-games {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px dashed #dee2e6;
+    margin-top: 20px;
+}
+
+.no-upcoming-games-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+    color: #adb5bd;
+}
+
+.no-upcoming-games h3 {
+    margin: 0 0 10px 0;
+    color: #495057;
+}
+
+.no-upcoming-games p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #6c757d;
+}
+
+// Добавляем в конец файла home.css или обновляем медиазапросы:
+
+/* Адаптивность для главной страницы */
+@media (max-width: 992px) {
+    .home-hero {
+        padding: 30px 15px;
+        margin-bottom: 30px;
+    }
+    
+    .home-hero h1 {
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+    
+    .home-hero p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .hero-stats {
+        gap: 20px;
+        padding: 15px;
+        margin-top: 20px;
+    }
+    
+    .stat-item {
+        min-width: 100px;
+        padding: 8px;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    .league-overview {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .league-card {
+        border-radius: 15px;
+    }
+    
+    .league-card-header {
+        padding: 15px;
+    }
+    
+    .league-card-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .league-card-body {
+        padding: 15px;
+    }
+    
+    .league-team-preview {
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .league-team-preview img {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .league-card-footer {
+        padding: 12px 15px;
+    }
+    
+    .league-link {
+        padding: 6px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .upcoming-games-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+    
+    .upcoming-matches-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 14px;
+    }
+    
+    .upcoming-match-card {
+        padding: 14px;
+        border-radius: 10px;
+    }
+    
+    .upcoming-match-time-header {
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+    }
+    
+    .match-exact-time {
+        font-size: 0.9rem;
+    }
+    
+    .match-time-left {
+        font-size: 0.75rem;
+    }
+    
+    .upcoming-match-team img {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .upcoming-match-team span {
+        font-size: 0.9rem;
+    }
+    
+    .upcoming-match-vs {
+        font-size: 0.85rem;
+        min-width: 35px;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-hero {
+        padding: 25px 12px;
+        margin-bottom: 25px;
+        border-radius: 15px;
+    }
+    
+    .home-hero h1 {
+        font-size: 1.7rem;
+        line-height: 1.3;
+    }
+    
+    .home-hero p {
+        font-size: 0.95rem;
+        margin-bottom: 18px;
+    }
+    
+    .hero-stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        padding: 12px;
+    }
+    
+    .stat-item {
+        min-width: 90px;
+        padding: 6px;
+    }
+    
+    .stat-number {
+        font-size: 1.7rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .league-overview {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .league-card {
+        border-radius: 12px;
+    }
+    
+    .league-card-header {
+        padding: 12px;
+    }
+    
+    .league-card-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .league-card-header p {
+        font-size: 0.85rem;
+    }
+    
+    .league-card-body {
+        padding: 12px;
+    }
+    
+    .league-team-preview {
+        padding: 6px 8px;
+        gap: 6px;
+        border-radius: 8px;
+    }
+    
+    .league-team-preview span {
+        font-size: 0.9rem;
+    }
+    
+    .league-team-preview .team-record {
+        font-size: 0.8rem;
+    }
+    
+    .league-card-footer {
+        padding: 10px 12px;
+    }
+    
+    .league-link {
+        padding: 5px 14px;
+        font-size: 0.85rem;
+    }
+    
+    .upcoming-games-section {
+        margin-bottom: 25px;
+    }
+    
+    .upcoming-games-section h2 {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+    
+    .upcoming-day-header {
+        margin: 20px 0 12px 0;
+        padding-bottom: 8px;
+    }
+    
+    .upcoming-day-title {
+        font-size: 1.1rem;
+        gap: 6px;
+    }
+    
+    .upcoming-day-title svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .upcoming-day-matches-count {
+        font-size: 0.8rem;
+        padding: 3px 10px;
+    }
+    
+    .upcoming-matches-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .upcoming-match-card {
+        padding: 12px;
+        border-radius: 10px;
+    }
+    
+    .upcoming-match-league-badge {
+        top: 8px;
+        right: 8px;
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .upcoming-match-time-header {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+    }
+    
+    .upcoming-match-team img {
+        width: 38px;
+        height: 38px;
+        margin-bottom: 6px;
+    }
+    
+    .upcoming-match-team span {
+        font-size: 0.85rem;
+    }
+    
+    .upcoming-match-vs {
+        font-size: 0.8rem;
+        min-width: 30px;
+    }
+    
+    .upcoming-match-footer {
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+    
+    .upcoming-match-location {
+        font-size: 0.8rem;
+    }
+    
+    .match-exact-time {
+        font-size: 0.85rem;
+    }
+    
+    .match-time-left {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-hero {
+        padding: 20px 10px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+    }
+    
+    .home-hero h1 {
+        font-size: 1.5rem;
+        line-height: 1.2;
+    }
+    
+    .home-hero p {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+    
+    .hero-stats {
+        gap: 10px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .stat-item {
+        min-width: 75px;
+        padding: 5px;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+        margin-bottom: 3px;
+    }
+    
+    .stat-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.3px;
+    }
+    
+    .league-overview {
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .league-card-header {
+        padding: 10px;
+    }
+    
+    .league-card-header h3 {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+    
+    .league-card-header p {
+        font-size: 0.8rem;
+    }
+    
+    .league-card-body {
+        padding: 10px;
+    }
+    
+    .league-teams-preview {
+        gap: 8px;
+    }
+    
+    .league-team-preview {
+        padding: 5px 6px;
+        gap: 5px;
+        border-radius: 6px;
+    }
+    
+    .league-team-preview img {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+    }
+    
+    .league-team-preview span {
+        font-size: 0.85rem;
+    }
+    
+    .league-team-preview .team-record {
+        font-size: 0.75rem;
+    }
+    
+    .league-card-footer {
+        padding: 8px 10px;
+    }
+    
+    .league-link {
+        padding: 4px 12px;
+        font-size: 0.8rem;
+        border-radius: 20px;
+    }
+    
+    .upcoming-games-section h2 {
+        font-size: 1.4rem;
+        margin-bottom: 12px;
+    }
+    
+    .upcoming-day-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        margin: 15px 0 10px 0;
+    }
+    
+    .upcoming-day-title {
+        font-size: 1rem;
+    }
+    
+    .upcoming-day-matches-count {
+        align-self: flex-start;
+    }
+    
+    .upcoming-matches-grid {
+        gap: 10px;
+    }
+    
+    .upcoming-match-card {
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    .upcoming-match-league-badge {
+        top: 6px;
+        right: 6px;
+        padding: 2px 6px;
+        font-size: 0.65rem;
+    }
+    
+    .upcoming-match-time-header {
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+    }
+    
+    .upcoming-match-team img {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 4px;
+    }
+    
+    .upcoming-match-team span {
+        font-size: 0.8rem;
+    }
+    
+    .upcoming-match-vs {
+        font-size: 0.75rem;
+        min-width: 25px;
+    }
+    
+    .upcoming-match-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-top: 8px;
+        padding-top: 8px;
+    }
+    
+    .upcoming-match-location {
+        font-size: 0.75rem;
+    }
+    
+    .match-exact-time {
+        font-size: 0.8rem;
+    }
+    
+    .match-time-left {
+        font-size: 0.65rem;
+    }
+    
+    .upcoming-match-location svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .home-hero h1 {
+        font-size: 1.3rem;
+    }
+    
+    .home-hero p {
+        font-size: 0.85rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .stat-item {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+    }
+    
+    .stat-number {
+        font-size: 1.4rem;
+        margin-bottom: 0;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    .league-card-header h3 {
+        font-size: 1rem;
+    }
+    
+    .league-team-preview {
+        flex-direction: column;
+        text-align: center;
+        padding: 8px;
+        gap: 4px;
+    }
+    
+    .league-team-preview span:first-child {
+        order: -1;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+    
+    .league-team-preview img {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .league-team-preview .team-record {
+        font-size: 0.7rem;
+        background: rgba(0, 0, 0, 0.05);
+        padding: 2px 6px;
+        border-radius: 10px;
+    }
+    
+    .upcoming-day-title {
+        font-size: 0.95rem;
+    }
+    
+    .upcoming-day-title svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .upcoming-match-card {
+        padding: 8px;
+    }
+    
+    .upcoming-match-team img {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .upcoming-match-team span {
+        font-size: 0.75rem;
+    }
+    
+    .upcoming-match-vs {
+        font-size: 0.7rem;
+        min-width: 22px;
+    }
+    
+    .compact-team-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .compact-team {
+        flex-direction: row;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+    }
+    
+    .compact-team img {
+        margin-bottom: 0;
+        width: 25px;
+        height: 25px;
+    }
+    
+    .compact-team-name {
+        text-align: left;
+        font-size: 0.8rem;
+    }
+}
+
+/* Улучшаем навигацию на мобильных */
+@media (max-width: 768px) {
+    .main-nav {
+        gap: 10px;
+        margin: 15px 0;
+        padding: 10px;
+        border-radius: 12px;
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+    
+    .nav-link {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        white-space: nowrap;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-nav {
+        gap: 8px;
+        padding: 8px;
+        margin: 12px 0;
+    }
+    
+    .nav-link {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Улучшаем секции лиг на мобильных */
+@media (max-width: 768px) {
+    .league-section {
+        padding: 20px 15px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .league-header {
+        margin-bottom: 20px;
+    }
+    
+    .league-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .league-section-title {
+        margin: 25px 0 15px 0;
+        font-size: 1.4rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .league-section-title span {
+        align-self: flex-end;
+        font-size: 0.9rem;
+    }
+    
+    .league-content-divider {
+        margin: 20px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .league-section {
+        padding: 15px 12px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .league-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .league-section-title {
+        margin: 20px 0 12px 0;
+        font-size: 1.2rem;
+    }
+}
+
+/* Улучшаем таблицу на мобильных */
+@media (max-width: 768px) {
+    .table-container {
+        max-height: 500px;
+    }
+    
+    .standings-table th,
+    .standings-table td {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+    }
+    
+    .team-logo-small {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .team-row {
+        gap: 6px;
+    }
+    
+    /* Скрываем некоторые колонки на мобильных */
+    .standings-table th:nth-child(6),
+    .standings-table td:nth-child(6), /* Последние 5 игр */
+    .standings-table th:nth-child(8),
+    .standings-table td:nth-child(8), /* +/- */
+    .standings-table th:nth-child(9),
+    .standings-table td:nth-child(9)  /* Очки */
+    { 
+        display: none; 
+    }
+}
+
+@media (max-width: 480px) {
+    .standings-table th,
+    .standings-table td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+    }
+    
+    .team-logo-small {
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Скрываем еще больше колонок на очень маленьких экранах */
+    .standings-table th:nth-child(3),
+    .standings-table td:nth-child(3), /* Игры */
+    .standings-table th:nth-child(5),
+    .standings-table td:nth-child(5), /* % */
+    .standings-table th:nth-child(7),
+    .standings-table td:nth-child(7)  /* Пропущено */
+    { 
+        display: none; 
+    }
+}
+
+/* Улучшаем вкладки матчей на мобильных */
+@media (max-width: 768px) {
+    .matches-tabs {
+        padding: 3px;
+        margin-bottom: 20px;
+    }
+    
+    .matches-tab {
+        min-width: 110px;
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .tab-badge {
+        font-size: 0.7rem;
+        padding: 1px 6px;
+    }
+    
+    .matches-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .match-card {
+        padding: 12px;
+        border-radius: 10px;
+    }
+    
+    .team-logo-wrapper {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .team-name {
+        font-size: 0.85rem;
+    }
+    
+    .match-score {
+        font-size: 1.1rem;
+        gap: 6px;
+    }
+    
+    .score-home,
+    .score-away {
+        min-width: 26px;
+        padding: 3px 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .matches-tabs {
+        margin-bottom: 15px;
+    }
+    
+    .matches-tab {
+        min-width: 100px;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .tab-badge {
+        font-size: 0.65rem;
+        padding: 1px 5px;
+    }
+    
+    .match-card {
+        padding: 10px;
+    }
+    
+    .team-logo-wrapper {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .match-score {
+        font-size: 1rem;
+    }
+    
+    .match-location {
+        font-size: 0.75rem;
+    }
+}

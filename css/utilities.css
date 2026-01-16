@@ -1,3 +1,4 @@
+/* utilities.css - обновленная версия */
 /* Анимации */
 @keyframes fadeInUp {
     from {
@@ -32,30 +33,417 @@
     100% { transform: rotate(360deg); }
 }
 
-/* Индикатор загрузки */
-.loading-indicator {
-    position: absolute;
-    top: 100%;
+/* Fullscreen loading overlay */
+.fullscreen-loading {
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 10px;
+    bottom: 0;
+    background: rgba(0, 85, 165, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loading-content {
+    text-align: center;
+    max-width: 500px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: fadeInUp 0.5s ease;
+}
+
+.loading-spinner {
+    width: 80px;
+    height: 80px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top: 5px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 30px;
+}
+
+.loading-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.loading-content p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.loading-progress {
+    margin-top: 30px;
+    width: 100%;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00ccff);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* Индикатор загрузки в хедере */
+.loading-indicator {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
     display: none;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    z-index: 1000;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .loading-indicator.active {
     display: flex;
+    opacity: 1;
 }
 
 .spinner {
     width: 20px;
     height: 20px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid #0077cc;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+.loading-indicator span {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Адаптивность для loading */
+@media (max-width: 768px) {
+    .loading-content {
+        padding: 30px 20px;
+        margin: 20px;
+        max-width: 90%;
+    }
+    
+    .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border-width: 4px;
+    }
+    
+    .loading-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .loading-content p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .loading-content {
+        padding: 25px 15px;
+    }
+    
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border-width: 3px;
+    }
+    
+    .loading-content h3 {
+        font-size: 1.3rem;
+    }
+    
+    .loading-indicator span {
+        font-size: 0.85rem;
+    }
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    animation: slideIn 0.3s ease;
+    max-width: 300px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Дополнительные утилиты */
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mt-10 { margin-top: 10px; }
+.mb-10 { margin-bottom: 10px; }
+.mt-20 { margin-top: 20px; }
+.mb-20 { margin-bottom: 20px; }
+.mt-30 { margin-top: 30px; }
+.mb-30 { margin-bottom: 30px; }
+.mt-40 { margin-top: 40px; }
+.mb-40 { margin-bottom: 40px; }
+
+.p-20 { padding: 20px; }
+.p-30 { padding: 30px; }
+
+/* Цветовые утилиты */
+.bg-primary { background: #0055a5 !important; }
+.bg-success { background: #28a745 !important; }
+.bg-danger { background: #dc3545 !important; }
+.bg-warning { background: #ffc107 !important; }
+.bg-info { background: #17a2b8 !important; }
+
+.text-primary { color: #0055a5 !important; }
+.text-success { color: #28a745 !important; }
+.text-danger { color: #dc3545 !important; }
+.text-warning { color: #ffc107 !important; }
+.text-info { color: #17a2b8 !important; }
+.text-white { color: white !important; }
+.text-muted { color: #6c757d !important; }
+
+/* Градиенты */
+.gradient-primary {
+    background: linear-gradient(135deg, #0055a5, #0077cc) !important;
+}
+
+.gradient-success {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+}
+
+.gradient-danger {
+    background: linear-gradient(135deg, #dc3545, #e83e8c) !important;
+}
+
+/* Тени */
+.shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+.shadow-md {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Скругления */
+.rounded-sm { border-radius: 8px !important; }
+.rounded-md { border-radius: 12px !important; }
+.rounded-lg { border-radius: 16px !important; }
+.rounded-xl { border-radius: 20px !important; }
+.rounded-full { border-radius: 9999px !important; }
+
+/* Скрытие элементов */
+.hidden {
+    display: none !important;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Адаптивные изображения */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.img-contain {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Сетка */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -10px;
+}
+
+.col {
+    flex: 1;
+    padding: 10px;
+    min-width: 0;
+}
+
+/* Текст */
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text-ellipsis-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.text-ellipsis-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Позиционирование */
+.position-relative {
+    position: relative !important;
+}
+
+.position-absolute {
+    position: absolute !important;
+}
+
+.position-fixed {
+    position: fixed !important;
+}
+
+.position-sticky {
+    position: sticky !important;
+}
+
+/* Z-index */
+.z-index-1 { z-index: 1; }
+.z-index-10 { z-index: 10; }
+.z-index-100 { z-index: 100; }
+.z-index-1000 { z-index: 1000; }
+.z-index-9999 { z-index: 9999; }
+
+/* Анимация появления */
+.fade-in {
+    animation: fadeIn 0.3s ease;
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease;
+}
+
+.scale-in {
+    animation: scaleIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Плавные переходы */
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+.transition-transform {
+    transition: transform 0.3s ease;
+}
+
+.transition-opacity {
+    transition: opacity 0.3s ease;
+}
+
+.transition-colors {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }

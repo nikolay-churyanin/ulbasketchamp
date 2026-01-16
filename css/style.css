@@ -1,19 +1,42 @@
-/* Главный файл стилей - импорт всех модулей */
+/* style.css - полная версия */
 @import url('base.css');
 @import url('layout.css');
 @import url('components/header.css');
 @import url('components/navigation.css');
-@import url('components/league-switcher.css');
 @import url('components/modals.css');
 @import url('components/tables.css');
-/* @import url('components/cards.css'); */
-/* @import url('components/chips.css'); */
 @import url('sections/teams.css');
 @import url('sections/schedule.css');
-@import url('sections/stats.css');
+@import url('sections/matches.css'); /* Карточки матчей */
+@import url('sections/home.css'); /* Главная страница */
 @import url('utilities.css');
 
-/* Адаптивность */
-@media (max-width: 768px) {
-    /* Мобильные стили остаются здесь или могут быть вынесены в отдельные файлы */
+/* Скрытые секции (будут показываться через JavaScript) */
+.hidden-section {
+    display: none;
+}
+
+/* Дополнительные утилиты */
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-30 {
+    margin-bottom: 30px;
+}
+
+.mt-30 {
+    margin-top: 30px;
 }

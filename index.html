@@ -9,45 +9,23 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Чемпионат по баскетболу</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Чемпионат по баскетболу - Главная</title>
+    <link rel="stylesheet" href="css/style.css?v=2.0">
+    <link rel="stylesheet" href="css/home.css?v=2.0">
 </head>
 <body>
     <header>
+        <div class="current-league-indicator" id="league-indicator"></div>
+        
         <h1>Чемпионат Ульяновской области по баскетболу<br/>Сезон 2025-2026</h1>
         <div class="header-hero"></div>
         
-        
-
-        <!-- Переключатель лиг в исходном стиле (только А и Б) -->
-        <div class="league-switcher">
-            <div class="league-tabs">
-                <input type="radio" id="league-a" name="league" value="A" checked>
-                <label for="league-a" class="league-tab">
-                    <span class="tab-icon">⭐</span>
-                    Лига А
-                </label>
-                
-                <input type="radio" id="league-b" name="league" value="B">
-                <label for="league-b" class="league-tab">
-                    <span class="tab-icon">🔥</span>
-                    Лига Б
-                </label>
-
-                <input type="radio" id="league-f" name="league" value="F">
-                <label for="league-f" class="league-tab">
-                    <span class="tab-icon">💥</span>
-                    Жен. Лига
-                </label>
-                
-                <div class="tab-indicator"></div>
-            </div>
-        </div>
-
+        <!-- Навигация по лигам -->
         <nav class="main-nav">
-            <a href="#teams" class="nav-link">Положение команд</a>
-            <a href="#schedule" class="nav-link">Расписание</a>
-            <!-- <a href="#stats" class="nav-link">Статистика</a> -->
+            <a href="#home" class="nav-link active" data-section="home">🏠 Все лиги</a>
+            <a href="#league-a" class="nav-link" data-section="league-a">⭐ Лига А</a>
+            <a href="#league-b" class="nav-link" data-section="league-b">🔥 Лига Б</a>
+            <a href="#league-f" class="nav-link" data-section="league-f">💥 Женская лига</a>
         </nav>
 
         <div class="loading-indicator" id="loading-indicator">
@@ -57,61 +35,108 @@
     </header>
 
     <main>
-        <section id="teams">
-            <h2>Положение команд</h2>
-            <div id="teams-view-toggle"></div>
-            <div class="teams-container" id="teams-container">
-                <!-- Сюда JavaScript вставит карточки команд или таблицу -->
+        <!-- Главная страница (Все лиги) -->
+        <section id="home" class="home-section">
+            <div class="home-hero">
+                <h1>Добро пожаловать на чемпионат!</h1>
+                <p>Следите за лучшими баскетбольными командами Ульяновской области. Три лиги, десятки команд и сотни захватывающих матчей!</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="active-leagues">3</span>
+                        <span class="stat-label">Лиги</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-teams">0</span>
+                        <span class="stat-label">Команд</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-games">0</span>
+                        <span class="stat-label">Матчей</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-players">0</span>
+                        <span class="stat-label">Игроков</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Обзор лиг -->
+            <div class="league-overview" id="league-overview">
+                <!-- Лиги будут загружены через JavaScript -->
+            </div>
+
+            <!-- Ближайшие матчи -->
+            <div class="upcoming-games-section">
+                <h2>Ближайшие матчи</h2>
+                <div class="upcoming-games-grid" id="upcoming-games">
+                    <!-- Матчи будут загружены через JavaScript -->
+                </div>
             </div>
         </section>
 
-        <section id="schedule">
-            <h2>Расписание и результаты</h2>
-            <div class="games-container" id="games-container">
-                <!-- Сюда JavaScript вставит таблицу матчей -->
+        <!-- В секциях лиг заменяем старый контент на новый -->
+        <!-- Лига А -->
+        <section id="league-a" class="league-section hidden-section">
+            <div class="league-header league-a">
+                <h2>Лига А</h2>
+            </div>
+            
+            <!-- Положение команд -->
+            <h3 class="league-section-title">🏆 Положение команд</h3>
+            <div class="teams-container" id="league-a-teams">
+                <!-- Таблица положения будет загружена через JavaScript -->
+            </div>
+            
+            <!-- Разделитель -->
+            <div class="league-content-divider"></div>
+            
+            <!-- Расписание и результаты -->
+            <h3 class="league-section-title">📅 Матчи</h3>
+            <div class="matches-container" id="league-a-matches">
+                <!-- Карточки матчей будут загружены через JavaScript -->
             </div>
         </section>
-<!-- 
-        <section id="stats">
-            <h2>ТОП 10</h2>
-            <div class="stats-filters modern">
-                <div class="stat-type-chips" role="tablist" aria-label="Тип статистики">
-                    <button class="stat-chip active" data-stat="points" role="tab" aria-selected="true">Очки</button>
-                    <button class="stat-chip" data-stat="rebounds" role="tab" aria-selected="false">Подборы</button>
-                    <button class="stat-chip" data-stat="assists" role="tab" aria-selected="false">Передачи</button>
-                    <button class="stat-chip" data-stat="steals" role="tab" aria-selected="false">Перехваты</button>
-                    <button class="stat-chip" data-stat="blocks" role="tab" aria-selected="false">Блоки</button>
-                </div>
-                Скрытые элементы для совместимости
-                <select id="stat-type" class="stat-filter" style="display:none">
-                    <option value="points" selected>points</option>
-                    <option value="rebounds">rebounds</option>
-                    <option value="assists">assists</option>
-                    <option value="steals">steals</option>
-                    <option value="blocks">blocks</option>
-                </select>
-                <input type="number" id="min-games" class="stat-filter" min="1" value="1" style="display:none">
+
+        <!-- Лига Б -->
+        <section id="league-b" class="league-section hidden-section">
+            <div class="league-header league-b">
+                <h2>Лига Б</h2>
             </div>
-            <div class="stats-container" id="stats-container">
-                Сюда JavaScript вставит таблицу статистики
+            
+            <h3 class="league-section-title">🏆 Положение команд</h3>
+            <div class="teams-container" id="league-b-teams">
+                <!-- Таблица положения будет загружена через JavaScript -->
+            </div>
+            
+            <div class="league-content-divider"></div>
+            
+            <h3 class="league-section-title">📅 Матчи</h3>
+            <div class="matches-container" id="league-b-matches">
+                <!-- Карточки матчей будут загружены через JavaScript -->
             </div>
         </section>
-         -->
+
+        <!-- Женская лига -->
+        <section id="league-f" class="league-section hidden-section">
+            <div class="league-header league-f">
+                <h2>Женская лига</h2>
+            </div>
+            
+            <h3 class="league-section-title">🏆 Положение команд</h3>
+            <div class="teams-container" id="league-f-teams">
+                <!-- Таблица положения будет загружена через JavaScript -->
+            </div>
+            
+            <div class="league-content-divider"></div>
+            
+            <h3 class="league-section-title">📅 Матчи</h3>
+            <div class="matches-container" id="league-f-matches">
+                <!-- Карточки матчей будут загружены через JavaScript -->
+            </div>
+        </section>
     </main>
-<!-- 
-    Модальное окно деталей игры
-    <div id="game-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title">Детали игры</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body" id="modal-body">
-                Содержимое модального окна
-            </div>
-        </div>
-    </div>
- -->
+
     <!-- Модальное окно информации о команде -->
     <div id="team-modal" class="modal">
         <div class="modal-content">
@@ -119,8 +144,26 @@
                 <h3 id="team-modal-title">Информация о команде</h3>
                 <span class="close">&times;</span>
             </div>
-            <div class="modal-body" id="team-modal-body">
-                <!-- Содержимое модального окна -->
+            <div class="modal-body" id="team-modal-body"></div>
+        </div>
+    </div>
+
+    <div class="loading-indicator" id="loading-indicator">
+        <div class="spinner"></div>
+        <span>Загрузка данных...</span>
+    </div>
+
+    <!-- Fullscreen loading overlay (оставляем как есть) -->
+    <div id="fullscreen-loading" class="fullscreen-loading">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Загрузка данных чемпионата</h3>
+            <p>Пожалуйста, подождите...</p>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="progress-text" id="progress-text">0%</span>
             </div>
         </div>
     </div>
@@ -128,6 +171,7 @@
     <script src="js/utils.js"></script>
     <script src="js/data.js"></script>
     <script src="js/ui.js"></script>
-    <!-- <script src="script.js"></script> -->
+    <script src="js/matches.js"></script>
+    <script src="js/home.js"></script>
 </body>
 </html>

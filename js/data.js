@@ -10,21 +10,60 @@ class BasketballData {
     }
 
     async init() {
-        await this.loadData();
-        this.collectPlayersFromGames();
-        this.calculatePlayerStats();
+        try {
+            this.showLoading();
+            await this.loadData();
+            this.collectPlayersFromGames();
+            this.calculatePlayerStats();
+            this.hideLoading();
+        } catch (error) {
+            console.error('Error in init:', error);
+            this.hideLoading();
+        }
+    }
+
+    showLoading() {
+        // Показываем оба индикатора
+        document.getElementById('fullscreen-loading').style.display = 'flex';
+        document.getElementById('loading-indicator').classList.add('active');
+    }
+
+    updateProgress(percent, text) {
+        const fill = document.getElementById('progress-fill');
+        const textElem = document.getElementById('progress-text');
+        if (fill) fill.style.width = percent + '%';
+        if (textElem) textElem.textContent = text;
+        
+        // Также обновляем текст в индикаторе хедера
+        const headerIndicator = document.getElementById('loading-indicator');
+        if (headerIndicator) {
+            const span = headerIndicator.querySelector('span');
+            if (span) span.textContent = text;
+        }
+    }
+
+    hideLoading() {
+        // Скрываем оба индикатора
+        document.getElementById('fullscreen-loading').style.display = 'none';
+        document.getElementById('loading-indicator').classList.remove('active');
     }
 
     async loadData() {
         try {
+            this.updateProgress(10, 'Загрузка команд...');
             this.teams = await this.loadJSON('data/teams.json?' + Date.now());
             
+            this.updateProgress(30, 'Загрузка расписания...');
             this.schedule = await this.loadJSON('data/schedule.json?' + Date.now());
             
+            this.updateProgress(50, 'Загрузка матчей...');
             await this.loadGameFiles();
+            
+            this.updateProgress(100, 'Готово!');
             
         } catch (error) {
             console.error('Ошибка загрузки данных:', error);
+            throw error;
         }
     }
 
@@ -49,7 +88,7 @@ class BasketballData {
             const gameFiles = [];
             let gameNumber = 1;
             
-            
+            // Определяем какие файлы игр существуют
             while (gameNumber <= 200) {
                 const gameId = `game_${gameNumber.toString().padStart(3, '0')}`;
                 const gamePath = `data/games/${gameId}.json?${Date.now()}`;
@@ -68,10 +107,17 @@ class BasketballData {
                 gameNumber++;
             }
             
-            for (const file of gameFiles) {
+            // Загружаем найденные файлы
+            const totalFiles = gameFiles.length;
+            for (let i = 0; i < totalFiles; i++) {
+                const file = gameFiles[i];
+                const progress = 50 + Math.floor((i / totalFiles) * 40);
+                this.updateProgress(progress, `Загрузка матча ${i + 1}/${totalFiles}...`);
+                
                 try {
+                    const gameId = file.split('/').pop().split('.')[0];
                     const game = await this.loadJSON(file);
-                    this.normalizeGameData(game);
+                    this.normalizeGameData(game, gameId);
                     this.games.push(game);
                 } catch (error) {
                     console.warn(`Не удалось загрузить игру из файла ${file}:`, error);
@@ -135,8 +181,9 @@ class BasketballData {
         return 'Защитник'; // По умолчанию
     }
 
-    normalizeGameData(game) {
+    normalizeGameData(game, gameId) {
         if (game.match_info) {
+            game.id = gameId
             game.teamHome = game.match_info.team_a;
             game.teamAway = game.match_info.team_b;
             game.scoreHome = parseInt(game.match_info.score.split(':')[0]);
@@ -292,7 +339,7 @@ class BasketballData {
                     league: game.league,
                     scoreHome: null,
                     sccoreAway: null,
-                    _id: `scheduled_${gameDateTime}`,
+                    id: `scheduled_${gameDateTime}`,
                     _stageName: stage.name || 'Регулярный сезон',
                     _fullDate: gameDateTime,
                     _hasResult: false
@@ -314,6 +361,7 @@ class BasketballData {
             const gameDate = this.createValidDate(game.date, game.time);
             
             return {
+                id: game.id,
                 _id: `result_${gameDate}`,
                 _stageName: 'Результаты',
                 _fullDate: gameDate,
@@ -403,6 +451,7 @@ class BasketballData {
         const teamsInLeague = this.getTeamsByLeague(league);
         const standings = new Map();
         
+        // Инициализируем все команды лиги
         teamsInLeague.forEach(team => {
             standings.set(this.normalizeTeamName(team.name), {
                 teamName: team.name,
@@ -417,11 +466,11 @@ class BasketballData {
             });
         });
         
+        // Обрабатываем все игры с результатами
         this.games
+        .filter(game => game.scoreHome !== null && game.scoreAway !== null && game.league === league)
         .sort((a, b) => new Date(a.date) - new Date(b.date))
         .forEach(game => {
-            if (!game.scoreHome || !game.scoreAway) return;
-            
             const homeTeamName = game.teamHome;
             const awayTeamName = game.teamAway;
             
@@ -456,16 +505,29 @@ class BasketballData {
                 } else {
                     home.points += 1; 
                     away.points += 1;
+                    home.trand += "0";
+                    away.trand += "0";
                 }
             }
         });
         
+        // Сортируем по очкам, затем по разнице очков
         return Array.from(standings.values()).sort((a, b) => {
             if (b.points !== a.points) return b.points - a.points;
             const diffA = a.pointsFor - a.pointsAgainst;
             const diffB = b.pointsFor - b.pointsAgainst;
-            return diffB - diffA;
+            if (diffB !== diffA) return diffB - diffA;
+            return b.pointsFor - a.pointsFor;
         });
+    }
+
+    getTotalGamesPlayedByLeague(league) {
+        const gamesInLeague = this.games.filter(game => 
+            game.league === league && 
+            game.scoreHome !== null && 
+            game.scoreAway !== null
+        );
+        return gamesInLeague.length;
     }
 
     extractTimeFromDate(date) {
@@ -613,14 +675,14 @@ class BasketballData {
         // Для scheduled игр
         if (gameId.startsWith('scheduled_')) {
             const allGames = this.getAllGamesForDisplay();
-            const foundGame = allGames.find(game => game._id === gameId);
+            const foundGame = allGames.find(game => game.id === gameId);
             return foundGame || null;
         }
         
         // Для result игр
-        if (gameId.startsWith('result_')) {
+        if (gameId.startsWith('game_')) {
             const allGames = this.getAllGamesForDisplay();
-            const foundGame = allGames.find(game => game._id === gameId);
+            const foundGame = allGames.find(game => game.id === gameId);
             
             if (foundGame && foundGame._gameData) {
                 console.log('Found result game with full data');
@@ -656,5 +718,24 @@ class BasketballData {
             console.error('Error creating date:', error);
             return null;
         }
+    }
+
+    // Новые методы для работы с изображениями результатов
+    getGameResultImage(gameId) {
+        // gameId может быть в формате "game_001" или "result_2024-01-15T12:00:00.000Z"
+        
+        // Возвращаем путь к изображению
+        return `data/result/${gameId}.jpg`;
+    }
+
+    // Метод проверки существования изображения
+    async checkImageExists(url) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            // Добавляем timestamp для избежания кеширования
+            img.src = url + '?t=' + Date.now();
+        });
     }
 }
