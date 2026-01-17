@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "УлГПУ-2",
+    "team_b": "УУОР-2",
+    "score": "67:47",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2026-01-17",
+    "venue": "Манеж УлГПУ",
+    "time": "17:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "УлГПУ-2",
+    "teamAway": "УУОР-2",
+    "date": "2026-01-17",
+    "time": "17:00",
+    "location": "Манеж УлГПУ",
+    "datetime": "2026-01-17 17:00",
+    "timestamp": 1768658400.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "17.01.2026 17:30"
+}
