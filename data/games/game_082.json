@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "Феникс",
+    "team_b": "УСУТ",
+    "score": "50:70",
+    "competition": "Муж. Чемп. Ульян. области F",
+    "date": "2026-01-18",
+    "venue": "Зал УлГУ",
+    "time": "16:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "F",
+    "teamHome": "Феникс",
+    "teamAway": "УСУТ",
+    "date": "2026-01-18",
+    "time": "16:00",
+    "location": "Зал УлГУ",
+    "datetime": "2026-01-18 16:00",
+    "timestamp": 1768741200.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "18.01.2026 19:52"
+}
