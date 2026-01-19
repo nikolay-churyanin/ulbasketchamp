@@ -16,6 +16,10 @@
     "max_lead": {"team_a": 2, "team_b": 24},
     "timeouts": {"team_a": 1, "team_b": 1}
   },
+    "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A"
+  },
   "team_a_stats": {
     "team_name": "Спарта-УлГПУ",
     "players": [

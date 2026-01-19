@@ -16,6 +16,10 @@
     "max_lead": {"team_a": 2, "team_b": 17},
     "timeouts": {"team_a": 2, "team_b": 3}
   },
+    "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B"
+  },
   "team_a_stats": {
     "team_name": "УлГПУ-2",
     "players": [

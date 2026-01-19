@@ -16,6 +16,10 @@
     "max_lead": {"team_a": 0, "team_b": 20},
     "timeouts": {"team_a": 1, "team_b": 2}
   },
+    "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A"
+  },
   "team_a_stats": {
     "team_name": "Перевалбаскет",
     "players": [

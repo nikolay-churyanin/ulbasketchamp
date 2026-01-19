@@ -16,6 +16,10 @@
     "max_lead": {"team_a": 6, "team_b": 12},
     "timeouts": {"team_a": 3, "team_b": 2}
   },
+    "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A"
+  },
   "team_a_stats": {
     "team_name": "УУОР",
     "players": [

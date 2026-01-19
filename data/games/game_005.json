@@ -16,6 +16,10 @@
     "max_lead": {"team_a": 0, "team_b": 0},
     "timeouts": {"team_a": 0, "team_b": 0}
   },
+    "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B"
+  },
   "team_a_stats": {
     "team_name": "7 Ветров",
     "players": [

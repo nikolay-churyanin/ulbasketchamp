@@ -16,6 +16,10 @@
     "max_lead": {"team_a": 0, "team_b": 39},
     "timeouts": {"team_a": 2, "team_b": 1}
   },
+    "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B"
+  },
   "team_a_stats": {
     "team_name": "Авангард",
     "players": [
