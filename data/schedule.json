@@ -67,6 +67,78 @@
           "teamAway": "УУОР-2",
           "location": "Зал УлГУ",
           "league": "B"
+        },
+        {
+          "date": "2026-01-31",
+          "time": "12:00",
+          "teamHome": "Old School",
+          "teamAway": "Феникс",
+          "location": "Манеж УлГПУ",
+          "league": "F"
+        },
+        {
+          "date": "2026-01-31",
+          "time": "13:40",
+          "teamHome": "УлГУ",
+          "teamAway": "УлГПУ",
+          "location": "Манеж УлГПУ",
+          "league": "F"
+        },
+        {
+          "date": "2026-01-31",
+          "time": "15:20",
+          "teamHome": "Цементник-Марбакс",
+          "teamAway": "Спарта-УлГПУ",
+          "location": "Манеж УлГПУ",
+          "league": "A"
+        },
+        {
+          "date": "2026-01-31",
+          "time": "17:00",
+          "teamHome": "Авангард",
+          "teamAway": "Ветераны",
+          "location": "Манеж УлГПУ",
+          "league": "B"
+        },
+        {
+          "date": "2026-02-01",
+          "time": "09:00",
+          "teamHome": "Дельта-2",
+          "teamAway": "УлГТУ",
+          "location": "ФОК Фаворит",
+          "league": "B"
+        },
+        {
+          "date": "2026-02-01",
+          "time": "10:30",
+          "teamHome": "7 Ветров",
+          "teamAway": "Приборка",
+          "location": "ФОК Фаворит",
+          "league": "B"
+        },
+        {
+          "date": "2026-02-01",
+          "time": "12:00",
+          "teamHome": "Триумф",
+          "teamAway": "УлГУ",
+          "location": "ФОК Фаворит",
+          "league": "A"
+        },
+        {
+          "date": "2026-02-01",
+          "time": "13:30",
+          "teamHome": "УУОР",
+          "teamAway": "УИГА-Дельта",
+          "location": "ФОК Фаворит",
+          "league": "A"
+        },
+        {
+          "date": "2026-02-01",
+          "time": "14:00",
+          "teamHome": "БК Петровск",
+          "teamAway": "Перевалбаскет",
+          "location": "ДС Дельфин",
+          "league": "A"
         }
       ]
     }
