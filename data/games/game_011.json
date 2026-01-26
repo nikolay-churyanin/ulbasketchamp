@@ -16,7 +16,7 @@
     "max_lead": {"team_a": 18, "team_b": 0},
     "timeouts": {"team_a": 2, "team_b": 4}
   },
-    "original_match": {
+  "original_match": {
     "stage": "Регулярный сезон",
     "league": "A"
   },
