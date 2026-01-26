@@ -12,14 +12,53 @@ class BasketballData {
     async init() {
         try {
             this.showLoading();
-            await this.loadData();
-            this.collectPlayersFromGames();
-            this.calculatePlayerStats();
+            
+            // Разбиваем загрузку на этапы с прогрессом
+            await this.loadDataWithProgress();
+            
+            // Параллельные вычисления
+            await Promise.all([
+                this.collectPlayersFromGames(),
+                this.calculatePlayerStats()
+            ]);
+            
             this.hideLoading();
         } catch (error) {
             console.error('Error in init:', error);
             this.hideLoading();
         }
+    }
+
+    async loadDataWithProgress() {
+        const steps = [
+            { name: 'Загрузка команд', weight: 15 },
+            { name: 'Загрузка расписания', weight: 15 },
+            { name: 'Поиск матчей', weight: 20 },
+            { name: 'Загрузка матчей', weight: 40 },
+            { name: 'Обработка данных', weight: 10 }
+        ];
+        
+        let currentProgress = 0;
+        
+        // Шаг 1: Команды
+        this.updateProgress(currentProgress, steps[0].name);
+        this.teams = await this.loadJSON('data/teams.json?' + Date.now());
+        currentProgress += steps[0].weight;
+        
+        // Шаг 2: Расписание
+        this.updateProgress(currentProgress, steps[1].name);
+        this.schedule = await this.loadJSON('data/schedule.json?' + Date.now());
+        currentProgress += steps[1].weight;
+        
+        // Шаг 3: Игры
+        this.updateProgress(currentProgress, steps[2].name);
+        await this.loadGameFiles(); // Этот метод теперь обновляет прогресс внутри
+        currentProgress = 80; // После loadGameFiles мы должны быть на ~80%
+        
+        // Шаг 4: Финальная обработка
+        this.updateProgress(currentProgress, steps[4].name);
+        currentProgress = 100;
+        this.updateProgress(currentProgress, 'Готово!');
     }
 
     showLoading() {
@@ -31,8 +70,16 @@ class BasketballData {
     updateProgress(percent, text) {
         const fill = document.getElementById('progress-fill');
         const textElem = document.getElementById('progress-text');
-        if (fill) fill.style.width = percent + '%';
-        if (textElem) textElem.textContent = text;
+        
+        if (fill) {
+            // Плавная анимация
+            fill.style.transition = 'width 0.3s ease';
+            fill.style.width = percent + '%';
+        }
+        
+        if (textElem) {
+            textElem.textContent = text;
+        }
         
         // Также обновляем текст в индикаторе хедера
         const headerIndicator = document.getElementById('loading-indicator');
@@ -88,44 +135,58 @@ class BasketballData {
             const gameFiles = [];
             let gameNumber = 1;
             
-            // Определяем какие файлы игр существуют
-            while (gameNumber <= 200) {
-                const gameId = `game_${gameNumber.toString().padStart(3, '0')}`;
+            // Определяем какие файлы игр существуют БЫСТРЕЕ
+            const checkPromises = [];
+            for (let i = 1; i <= 200; i++) {
+                const gameId = `game_${i.toString().padStart(3, '0')}`;
                 const gamePath = `data/games/${gameId}.json?${Date.now()}`;
                 
-                try {
-                    const response = await fetch(gamePath, { method: 'HEAD' });
-                    if (response.ok) {
-                        gameFiles.push(`data/games/${gameId}.json`);
-                    } else {
-                        break;
-                    }
-                } catch (error) {
-                    break;
-                }
+                checkPromises.push(
+                    fetch(gamePath, { method: 'HEAD' })
+                        .then(response => {
+                            if (response.ok) {
+                                gameFiles.push(`data/games/${gameId}.json`);
+                            }
+                        })
+                        .catch(() => {}) // Игнорируем ошибки
+                );
                 
-                gameNumber++;
+                // Разбиваем на группы по 10 для обновления прогресса
+                if (i % 10 === 0) {
+                    await Promise.all(checkPromises);
+                    const progress = 50 + Math.floor((i / 200) * 30);
+                    this.updateProgress(progress, `Поиск файлов... (${i}/200)`);
+                }
             }
             
-            // Загружаем найденные файлы
+            await Promise.all(checkPromises);
+            
+            // Загружаем найденные файлы параллельно, но с ограничением
             const totalFiles = gameFiles.length;
-            for (let i = 0; i < totalFiles; i++) {
-                const file = gameFiles[i];
-                const progress = 50 + Math.floor((i / totalFiles) * 40);
-                this.updateProgress(progress, `Загрузка матча ${i + 1}/${totalFiles}...`);
+            const BATCH_SIZE = 5; // Загружаем по 5 файлов одновременно
+            
+            for (let i = 0; i < totalFiles; i += BATCH_SIZE) {
+                const batch = gameFiles.slice(i, i + BATCH_SIZE);
+                const loadPromises = batch.map(async (file, batchIndex) => {
+                    try {
+                        const gameId = file.split('/').pop().split('.')[0];
+                        const game = await this.loadJSON(file);
+                        this.normalizeGameData(game, gameId);
+                        this.games.push(game);
+                        
+                        // Обновляем прогресс для каждого файла в батче
+                        const currentProgress = 60 + Math.floor(((i + batchIndex) / totalFiles) * 35);
+                        this.updateProgress(currentProgress, `Загрузка ${i + batchIndex + 1}/${totalFiles}`);
+                    } catch (error) {
+                        console.warn(`Не удалось загрузить игру: ${file}`);
+                    }
+                });
                 
-                try {
-                    const gameId = file.split('/').pop().split('.')[0];
-                    const game = await this.loadJSON(file);
-                    this.normalizeGameData(game, gameId);
-                    this.games.push(game);
-                } catch (error) {
-                    console.warn(`Не удалось загрузить игру из файла ${file}:`, error);
-                }
+                await Promise.all(loadPromises);
             }
             
         } catch (error) {
-            console.warn('Ошибка обнаружения файлов игр:', error);
+            console.warn('Ошибка загрузки файлов игр:', error);
         }
     }
 
