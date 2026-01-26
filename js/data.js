@@ -523,15 +523,22 @@ class BasketballData {
                 pointsFor: 0,
                 pointsAgainst: 0,
                 points: 0,
-                trand: ""
+                trand: "",
+                headToHead: { // Добавляем для личных встреч
+                    wins: 0,
+                    losses: 0,
+                    pointsFor: 0,
+                    pointsAgainst: 0
+                }
             });
         });
         
         // Обрабатываем все игры с результатами
-        this.games
-        .filter(game => game.scoreHome !== null && game.scoreAway !== null && game.league === league)
-        .sort((a, b) => new Date(a.date) - new Date(b.date))
-        .forEach(game => {
+        const leagueGames = this.games
+            .filter(game => game.scoreHome !== null && game.scoreAway !== null && game.league === league)
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        leagueGames.forEach(game => {
             const homeTeamName = game.teamHome;
             const awayTeamName = game.teamAway;
             
@@ -542,6 +549,7 @@ class BasketballData {
             const away = standings.get(awayNormalized);
             
             if (home && away) {
+                // Обновляем общую статистику
                 home.played++; 
                 away.played++;
                 home.pointsFor += game.scoreHome; 
@@ -549,37 +557,142 @@ class BasketballData {
                 away.pointsFor += game.scoreAway; 
                 away.pointsAgainst += game.scoreHome;
                 
+                // Обновляем статистику личных встреч
+                home.headToHead.pointsFor += game.scoreHome;
+                home.headToHead.pointsAgainst += game.scoreAway;
+                away.headToHead.pointsFor += game.scoreAway;
+                away.headToHead.pointsAgainst += game.scoreHome;
+                
                 if (game.scoreHome > game.scoreAway) {
                     home.wins++; 
                     home.points += 2;
                     home.trand += "1"; 
+                    home.headToHead.wins++;
+                    
                     away.losses++; 
                     away.points += 1;
                     away.trand += "0";
+                    away.headToHead.losses++;
                 } else if (game.scoreHome < game.scoreAway) {
                     away.wins++; 
                     away.points += 2;
                     away.trand += "1";
+                    away.headToHead.wins++;
+                    
                     home.losses++; 
                     home.points += 1;
                     home.trand += "0";
+                    home.headToHead.losses++;
                 } else {
                     home.points += 1; 
                     away.points += 1;
                     home.trand += "0";
                     away.trand += "0";
+                    // Ничья - не учитываем в личных встречах
                 }
             }
         });
         
-        // Сортируем по очкам, затем по разнице очков
-        return Array.from(standings.values()).sort((a, b) => {
+        // Конвертируем в массив для сортировки
+        let standingsArray = Array.from(standings.values());
+        
+        // Сортируем по сложному алгоритму
+        standingsArray.sort((a, b) => {
+            // 1. По очкам (главный критерий)
             if (b.points !== a.points) return b.points - a.points;
+            
+            // 2. По результатам личных встреч (если команды играли друг с другом)
+            const haveHeadToHead = this.haveHeadToHeadGames(a.teamName, b.teamName, leagueGames);
+            if (haveHeadToHead) {
+                // Сравниваем результаты личных встреч
+                const headToHeadComparison = this.compareHeadToHead(a, b, leagueGames);
+                if (headToHeadComparison !== 0) return headToHeadComparison;
+            }
+            
+            // 3. По разнице очков во всех играх
             const diffA = a.pointsFor - a.pointsAgainst;
             const diffB = b.pointsFor - b.pointsAgainst;
             if (diffB !== diffA) return diffB - diffA;
-            return b.pointsFor - a.pointsFor;
+            
+            // 4. По количеству набранных очков
+            if (b.pointsFor !== a.pointsFor) return b.pointsFor - a.pointsFor;
+            
+            // 5. По алфавиту (последний критерий)
+            return a.teamName.localeCompare(b.teamName);
         });
+        
+        return standingsArray;
+    }
+
+    // Вспомогательный метод: проверяем, играли ли команды друг с другом
+    haveHeadToHeadGames(teamA, teamB, games) {
+        const normA = this.normalizeTeamName(teamA);
+        const normB = this.normalizeTeamName(teamB);
+        
+        return games.some(game => {
+            const home = this.normalizeTeamName(game.teamHome);
+            const away = this.normalizeTeamName(game.teamAway);
+            return (home === normA && away === normB) || (home === normB && away === normA);
+        });
+    }
+
+    // Вспомогательный метод: сравниваем результаты личных встреч
+    compareHeadToHead(teamA, teamB, games) {
+        const normA = this.normalizeTeamName(teamA.teamName);
+        const normB = this.normalizeTeamName(teamB.teamName);
+        
+        // Собираем статистику личных встреч
+        let aWins = 0, bWins = 0;
+        let aPointsFor = 0, aPointsAgainst = 0;
+        let bPointsFor = 0, bPointsAgainst = 0;
+        
+        games.forEach(game => {
+            const home = this.normalizeTeamName(game.teamHome);
+            const away = this.normalizeTeamName(game.teamAway);
+            
+            // Проверяем, что это матч между этими двумя командами
+            if ((home === normA && away === normB) || (home === normB && away === normA)) {
+                const isAHome = home === normA;
+                
+                if (isAHome) {
+                    aPointsFor += game.scoreHome;
+                    aPointsAgainst += game.scoreAway;
+                    bPointsFor += game.scoreAway;
+                    bPointsAgainst += game.scoreHome;
+                    
+                    if (game.scoreHome > game.scoreAway) {
+                        aWins++;
+                    } else if (game.scoreHome < game.scoreAway) {
+                        bWins++;
+                    }
+                } else {
+                    aPointsFor += game.scoreAway;
+                    aPointsAgainst += game.scoreHome;
+                    bPointsFor += game.scoreHome;
+                    bPointsAgainst += game.scoreAway;
+                    
+                    if (game.scoreAway > game.scoreHome) {
+                        aWins++;
+                    } else if (game.scoreAway < game.scoreHome) {
+                        bWins++;
+                    }
+                }
+            }
+        });
+        
+        // 1. По победам в личных встречах
+        if (aWins !== bWins) return bWins - aWins;
+        
+        // 2. По разнице очков в личных встречах
+        const aDiff = aPointsFor - aPointsAgainst;
+        const bDiff = bPointsFor - bPointsAgainst;
+        if (bDiff !== aDiff) return bDiff - aDiff;
+        
+        // 3. По количеству набранных очков в личных встречах
+        if (bPointsFor !== aPointsFor) return bPointsFor - aPointsFor;
+        
+        // 4. Равны
+        return 0;
     }
 
     getTotalGamesPlayedByLeague(league) {
