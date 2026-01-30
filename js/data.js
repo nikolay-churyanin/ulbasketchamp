@@ -84,11 +84,20 @@ class BasketballData {
 
     async loadJSON(url) {
         try {
-            const cacheBusterUrl = url.includes('?') ? url + '&' + Date.now() : url + '?' + Date.now();
-            const response = await fetch(cacheBusterUrl);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // Таймаут 5 секунд
+            
+            const response = await fetch(url, { 
+                signal: controller.signal,
+                cache: 'no-cache'
+            });
+            
+            clearTimeout(timeoutId);
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status} for ${url}`);
             }
+            
             const text = await response.text();
             const cleanedText = text.trim().replace(/^\uFEFF/, '');
             return JSON.parse(cleanedText);
@@ -100,10 +109,7 @@ class BasketballData {
 
     async loadGameFiles() {
         try {
-            const gameFiles = [];
-
-            // 1. Быстро определяем максимальный номер игры (бинарный поиск)
-            this.updateProgress(50, 'Поиск файлов игр...');
+            this.updateProgress(50, 'Определение количества игр...');
             const maxGameNumber = await this.findMaxGameNumber();
             
             if (maxGameNumber === 0) {
@@ -111,150 +117,146 @@ class BasketballData {
                 return;
             }
             
-            console.log(`Будет загружено ${maxGameNumber} игр`);
+            console.log(`Найдено ${maxGameNumber} игр для загрузки`);
             
-            // 2. Загружаем все существующие игры параллельно
-            const loadPromises = [];
-            const batchSize = 5; // Загружаем по 5 файлов за раз
+            // Загружаем игры параллельными блоками
+            const batchSize = 10; // Увеличиваем размер блока
+            const totalBatches = Math.ceil(maxGameNumber / batchSize);
             
-            for (let i = 1; i <= maxGameNumber; i++) {
-                const gameId = `game_${i.toString().padStart(3, '0')}`;
-                const gamePath = `data/games/${gameId}.json?${Date.now()}`;
+            for (let batch = 0; batch < totalBatches; batch++) {
+                const start = batch * batchSize + 1;
+                const end = Math.min(start + batchSize - 1, maxGameNumber);
                 
-                loadPromises.push((async () => {
-                    try {
-                        const game = await this.loadJSON(gamePath);
-                        this.normalizeGameData(game, gameId);
-                        this.games.push(game);
-                        
-                        // Обновляем прогресс каждые N игр
-                        if (i % batchSize === 0) {
-                            const progress = 50 + Math.floor((i / maxGameNumber) * 40);
-                            this.updateProgress(progress, `Загрузка игры ${i}/${maxGameNumber}`);
-                        }
-                    } catch (error) {
-                        console.warn(`Не удалось загрузить игру ${gameId}:`, error);
-                    }
-                })());
+                // Создаем промисы для текущего блока
+                const batchPromises = [];
+                for (let i = start; i <= end; i++) {
+                    batchPromises.push(this.loadGameFile(i, maxGameNumber));
+                }
+                
+                // Ждем завершения текущего блока
+                await Promise.allSettled(batchPromises);
+                
+                // Обновляем прогресс после каждого блока
+                const progress = 50 + Math.floor((end / maxGameNumber) * 40);
+                this.updateProgress(progress, `Загружено ${end}/${maxGameNumber} игр`);
             }
             
-            // Ждем завершения всех загрузок
-            await Promise.all(loadPromises);
-            
-            this.updateProgress(90, 'Обработка игр...');
+            this.updateProgress(90, 'Обработка данных игр...');
         } catch (error) {
             console.warn('Ошибка загрузки файлов игр:', error);
         }
     }
 
-    // Быстрый бинарный поиск максимального номера игры
-    async findMaxGameNumber() {
-        // Проверяем несколько ключевых точек
-        const checkPoints = [
-            1, 2, 3, 4, 5,    // Первые 5
-            10, 20, 30, 40, 50, // Десятки
-            100, 150, 200        // Сотни
-        ];
-        
-        let maxFound = 0;
-        
-        // Быстрая проверка ключевых точек
-        const checkPromises = checkPoints.map(async (num) => {
-            const exists = await this.checkGameFileExists(num);
-            if (exists) {
-                maxFound = Math.max(maxFound, num);
-            }
-            return exists;
-        });
-        
-        await Promise.all(checkPromises);
-        
-        if (maxFound === 0) return 0;
-        
-        // Если нашли игру на 200, значит все файлы существуют
-        if (maxFound === 200) return 200;
-        
-        // Если нашли игру на 150, проверяем от 151 до 200
-        if (maxFound === 150) {
-            for (let i = 151; i <= 200; i++) {
-                if (!await this.checkGameFileExists(i)) {
-                    return i - 1;
-                }
-                maxFound = i;
-            }
-            return 200;
+    // Новый метод для загрузки одного файла игры
+    async loadGameFile(gameNumber, totalGames) {
+        try {
+            const gameId = `game_${gameNumber.toString().padStart(3, '0')}`;
+            const gamePath = `data/games/${gameId}.json?${Date.now()}`;
+            
+            const game = await this.loadJSON(gamePath);
+            this.normalizeGameData(game, gameId);
+            this.games.push(game);
+        } catch (error) {
+            console.warn(`Не удалось загрузить игру ${gameNumber}:`, error);
         }
-        
-        // Если нашли игру на 100, проверяем от 101 до 150
-        if (maxFound === 100) {
-            for (let i = 101; i <= 150; i++) {
-                if (!await this.checkGameFileExists(i)) {
-                    return i - 1;
-                }
-                maxFound = i;
-            }
-            return 150;
-        }
-        
-        // Если нашли игру на 50, проверяем от 51 до 100
-        if (maxFound === 50) {
-            for (let i = 51; i <= 100; i++) {
-                if (!await this.checkGameFileExists(i)) {
-                    return i - 1;
-                }
-                maxFound = i;
-            }
-            return 100;
-        }
-        
-        // Если нашли игру на 5, проверяем от 6 до 50
-        if (maxFound === 5) {
-            for (let i = 6; i <= 50; i++) {
-                if (!await this.checkGameFileExists(i)) {
-                    return i - 1;
-                }
-                maxFound = i;
-            }
-            return 50;
-        }
-        
-        // По умолчанию возвращаем найденный максимум
-        return maxFound;
     }
 
-    // Проверка существования файла
+    async findMaxGameNumber() {
+        // Используем бинарный поиск для быстрого определения максимального номера
+        let low = 1;
+        let high = 200; // Максимально возможное количество игр (можно увеличить)
+        let lastFound = 0;
+        
+        // Быстрая проверка: если нет первой игры, значит игр нет
+        if (!await this.checkGameFileExists(1)) {
+            return 0;
+        }
+        
+        // Если есть последняя возможная игра, возвращаем её
+        if (await this.checkGameFileExists(high)) {
+            // Проверяем, есть ли игры выше этого номера
+            let current = high;
+            while (await this.checkGameFileExists(current + 100)) {
+                current += 100;
+            }
+            while (await this.checkGameFileExists(current + 10)) {
+                current += 10;
+            }
+            while (await this.checkGameFileExists(current + 1)) {
+                current++;
+            }
+            return current;
+        }
+        
+        // Бинарный поиск между 1 и high
+        while (low <= high) {
+            const mid = Math.floor((low + high) / 2);
+            const exists = await this.checkGameFileExists(mid);
+            
+            if (exists) {
+                lastFound = mid;
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        
+        return lastFound;
+    }
+
+    // Улучшенная проверка файла с таймаутом
     async checkGameFileExists(gameNumber) {
         const gameId = `game_${gameNumber.toString().padStart(3, '0')}`;
         const gamePath = `data/games/${gameId}.json`;
         
         try {
-            const response = await fetch(gamePath, { method: 'HEAD' });
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000); // Таймаут 2 секунды
+            
+            const response = await fetch(gamePath, { 
+                method: 'HEAD',
+                signal: controller.signal,
+                cache: 'no-cache'
+            });
+            
+            clearTimeout(timeoutId);
             return response.ok;
-        } catch {
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log(`Таймаут проверки файла ${gameId}`);
+            }
             return false;
         }
     }
 
-    // Упрощенный loadDataWithProgress
     async loadDataWithProgress() {
-        this.updateProgress(10, 'Загрузка команд...');
-        this.teams = await this.loadJSON('data/teams.json?' + Date.now());
-        
-        this.updateProgress(30, 'Загрузка расписания...');
-        this.schedule = await this.loadJSON('data/schedule.json?' + Date.now());
-        
-        this.updateProgress(50, 'Загрузка игр...');
-        await this.loadGameFiles(); // Здесь уже есть свой прогресс
-        
-        this.updateProgress(95, 'Обработка данных...');
-        
-        // Параллельные вычисления
-        await Promise.all([
-            this.collectPlayersFromGames(),
-            this.calculatePlayerStats()
-        ]);
-        
-        this.updateProgress(100, 'Готово!');
+        try {
+            this.updateProgress(10, 'Загрузка команд...');
+            this.teams = await this.loadJSON('data/teams.json?' + Date.now());
+            
+            this.updateProgress(30, 'Загрузка расписания...');
+            this.schedule = await this.loadJSON('data/schedule.json?' + Date.now());
+            
+            this.updateProgress(50, 'Загрузка игр...');
+            await this.loadGameFiles(); // Здесь уже есть свой прогресс
+            
+            this.updateProgress(95, 'Обработка данных...');
+            
+            // Параллельные вычисления
+            await Promise.all([
+                this.collectPlayersFromGames(),
+                this.calculatePlayerStats()
+            ]);
+            
+            this.updateProgress(100, 'Готово!');
+            
+            // Добавляем небольшую задержку для плавного завершения
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+        } catch (error) {
+            console.error('Ошибка в loadDataWithProgress:', error);
+            throw error;
+        }
     }
 
     collectPlayersFromGames() {
