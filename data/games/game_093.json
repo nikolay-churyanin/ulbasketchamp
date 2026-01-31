@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "Old School",
+    "team_b": "Феникс",
+    "score": "60:55",
+    "competition": "Муж. Чемп. Ульян. области F",
+    "date": "2026-01-31",
+    "venue": "Манеж УлГПУ",
+    "time": "13:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "F",
+    "teamHome": "Old School",
+    "teamAway": "Феникс",
+    "date": "2026-01-31",
+    "time": "13:00",
+    "location": "Манеж УлГПУ",
+    "datetime": "2026-01-31 13:00",
+    "timestamp": 1769853600.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "31.01.2026 14:36"
+}
