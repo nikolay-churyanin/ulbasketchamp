@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "Авангард",
+    "team_b": "Ветераны",
+    "score": "65:90",
+    "competition": "Муж. Чемп. Ульян. области B",
+    "date": "2026-01-31",
+    "venue": "Манеж УлГПУ",
+    "time": "18:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "B",
+    "teamHome": "Авангард",
+    "teamAway": "Ветераны",
+    "date": "2026-01-31",
+    "time": "18:00",
+    "location": "Манеж УлГПУ",
+    "datetime": "2026-01-31 18:00",
+    "timestamp": 1769871600.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "31.01.2026 19:16"
+}
