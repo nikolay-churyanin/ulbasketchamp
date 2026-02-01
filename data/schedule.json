@@ -6,14 +6,6 @@
       "games": [
         {
           "date": "2026-02-01",
-          "time": "12:00",
-          "teamHome": "Триумф",
-          "teamAway": "УлГУ",
-          "location": "ФОК Фаворит",
-          "league": "A"
-        },
-        {
-          "date": "2026-02-01",
           "time": "13:30",
           "teamHome": "УУОР",
           "teamAway": "УИГА-Дельта",
