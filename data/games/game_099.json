@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "Триумф",
+    "team_b": "УлГУ",
+    "score": "74:82",
+    "competition": "Муж. Чемп. Ульян. области A",
+    "date": "2026-02-01",
+    "venue": "ФОК Фаворит",
+    "time": "12:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A",
+    "teamHome": "Триумф",
+    "teamAway": "УлГУ",
+    "date": "2026-02-01",
+    "time": "12:00",
+    "location": "ФОК Фаворит",
+    "datetime": "2026-02-01 12:00",
+    "timestamp": 1769936400.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "01.02.2026 12:50"
+}
