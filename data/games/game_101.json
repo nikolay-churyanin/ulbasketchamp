@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "БК Петровск",
+    "team_b": "Перевалбаскет",
+    "score": "76:78",
+    "competition": "Муж. Чемп. Ульян. области A",
+    "date": "2026-02-01",
+    "venue": "ДС Дельфин",
+    "time": "14:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A",
+    "teamHome": "БК Петровск",
+    "teamAway": "Перевалбаскет",
+    "date": "2026-02-01",
+    "time": "14:00",
+    "location": "ДС Дельфин",
+    "datetime": "2026-02-01 14:00",
+    "timestamp": 1769943600.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "02.02.2026 07:28"
+}
