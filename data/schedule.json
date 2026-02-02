@@ -11,6 +11,38 @@
           "teamAway": "Перевалбаскет",
           "location": "ДС Дельфин",
           "league": "A"
+        },
+        {
+          "date": "2026-02-08",
+          "time": "09:00",
+          "teamHome": "Триумф-2",
+          "teamAway": "УлГТУ",
+          "location": "ФОК Фаворит",
+          "league": "B"
+        },
+        {
+          "date": "2026-02-08",
+          "time": "10:30",
+          "teamHome": "Триумф",
+          "teamAway": "УИГА-Дельта",
+          "location": "ФОК Фаворит",
+          "league": "A"
+        },
+        {
+          "date": "2026-02-08",
+          "time": "16:00",
+          "teamHome": "АВВА-МЧС",
+          "teamAway": "БК Петровск",
+          "location": "Манеж УлГПУ",
+          "league": "A"
+        },
+        {
+          "date": "2026-02-08",
+          "time": "17:30",
+          "teamHome": "ЦЕМРОС",
+          "teamAway": "7 Ветров",
+          "location": "Манеж УлГПУ",
+          "league": "B"
         }
       ]
     }
