@@ -1,0 +1,24 @@
+{
+  "match_info": {
+    "team_a": "АВВА-МЧС",
+    "team_b": "БК Петровск",
+    "score": "71:56",
+    "competition": "Муж. Чемп. Ульян. области A",
+    "date": "2026-02-08",
+    "venue": "Манеж УлГПУ",
+    "time": "16:00"
+  },
+  "original_match": {
+    "stage": "Регулярный сезон",
+    "league": "A",
+    "teamHome": "АВВА-МЧС",
+    "teamAway": "БК Петровск",
+    "date": "2026-02-08",
+    "time": "16:00",
+    "location": "Манеж УлГПУ",
+    "datetime": "2026-02-08 16:00",
+    "timestamp": 1770555600.0
+  },
+  "added_by": "cgnikolay",
+  "added_at": "08.02.2026 17:18"
+}
