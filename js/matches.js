@@ -95,7 +95,7 @@ class MatchesRenderer {
                                 <path d="M19 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM16 2v4M8 2v4M3 10h18"/>
                             </svg>
                             ${dateStr}
-                            <span class="matches-group-subtitle">${dateGames.length} матч${this.getPluralForm(dateGames.length)}</span>
+                            <span class="matches-group-subtitle">${dateGames.length} ${this.getPluralForm(dateGames.length)}</span>
                         </h4>
                         <div class="matches-grid">
                             ${dateGames.map(game => this.renderMatchCard(game, league, type)).join('')}
@@ -160,22 +160,7 @@ class MatchesRenderer {
 
     // Получение правильной формы слова
     getPluralForm(count) {
-        const lastDigit = count % 10;
-        const lastTwoDigits = count % 100;
-        
-        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
-            return 'ей';
-        }
-        
-        if (lastDigit === 1) {
-            return '';
-        }
-        
-        if (lastDigit >= 2 && lastDigit <= 4) {
-            return 'а';
-        }
-        
-        return 'ей';
+        return BasketballUtils.getPluralForm(count, ['матч','матча','матчей']);
     }
 
     // Рендер одной компактной карточки матча

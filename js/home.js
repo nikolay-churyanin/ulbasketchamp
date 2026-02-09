@@ -158,7 +158,7 @@ class HomePage {
                 <div class="league-card">
                     <div class="league-card-header ${league.color}">
                         <h3>${league.icon} ${league.name}</h3>
-                        <p>${teams.length} команд • ${totalGames} матчей сыграно</p>
+                        <p>${teams.length} команд • ${totalGames} ${this.getPluralFormMatch(totalGames)} ${this.getPluralFormPlayed(totalGames)}</p>
                     </div>
                     <div class="league-card-body">
                         <div class="league-teams-preview">
@@ -291,7 +291,7 @@ class HomePage {
                             ${dateStr}
                         </div>
                         <span class="upcoming-day-matches-count">
-                            ${dateGames.length} матч${this.getPluralForm(dateGames.length)}
+                            ${dateGames.length} ${this.getPluralFormMatch(dateGames.length)}
                         </span>
                     </div>
                     
@@ -463,23 +463,16 @@ class HomePage {
     }
 
     // Получение правильной формы слова
-    getPluralForm(count) {
-        const lastDigit = count % 10;
-        const lastTwoDigits = count % 100;
-        
-        if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
-            return 'ей';
-        }
-        
-        if (lastDigit === 1) {
-            return '';
-        }
-        
-        if (lastDigit >= 2 && lastDigit <= 4) {
-            return 'а';
-        }
-        
-        return 'ей';
+    getPluralFormMatch(count) {
+        return BasketballUtils.getPluralForm(count, ['матч','матча','матчей']);
+    }
+
+    getPluralFormTeam(count) {
+        return BasketballUtils.getPluralForm(count, ['команда','команды','команды']);
+    }
+
+    getPluralFormPlayed(count) {
+        return BasketballUtils.getPluralForm(count, ['сыгран','сыграно','сыграно']);
     }
 
     // Рендер карточки матча для главной страницы
@@ -716,7 +709,9 @@ class HomePage {
         const estimatedPlayers = totalTeams * 12;
         
         document.getElementById('total-teams').textContent = totalTeams;
+        document.getElementById('total-teams-label').textContent = this.getPluralFormTeam(totalTeams);;
         document.getElementById('total-games').textContent = totalGames;
+        document.getElementById('total-games-label').textContent = this.getPluralFormMatch(totalGames);
         document.getElementById('total-players').textContent = `${estimatedPlayers}+`;
     }
 

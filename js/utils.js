@@ -238,6 +238,35 @@ class BasketballUtils {
     static clearStorage() {
         localStorage.clear();
     }
+
+        // Получение правильной формы слова
+    static getPluralForm(count, forms) {
+        if (!Array.isArray(forms) || forms.length !== 3) {
+            throw new Error('Forms должен быть массивом из 3 элементов');
+        }
+        
+        if (typeof count !== 'number') {
+            throw new Error('Count должен быть числом');
+        }
+        
+        const absCount = Math.abs(count);
+        const lastTwo = absCount % 100;
+        const lastOne = absCount % 10;
+        
+        // Особый случай для чисел 11-19
+        if (lastTwo >= 11 && lastTwo <= 19) {
+            return forms[2];
+        }
+        
+        // Для остальных чисел
+        if (lastOne === 1) {
+            return forms[0];
+        } else if (lastOne >= 2 && lastOne <= 4) {
+            return forms[1];
+        } else {
+            return forms[2];
+        }
+    }
 }
 
 // Полифиллы для старых браузеров
