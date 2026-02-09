@@ -9,6 +9,8 @@
 @import url('sections/schedule.css');
 @import url('sections/matches.css'); /* Карточки матчей */
 @import url('sections/home.css'); /* Главная страница */
+@import url('match-details.css');
+@import url('team-modal.css');
 @import url('utilities.css');
 
 /* Скрытые секции (будут показываться через JavaScript) */

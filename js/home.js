@@ -475,95 +475,6 @@ class HomePage {
         return BasketballUtils.getPluralForm(count, ['сыгран','сыграно','сыграно']);
     }
 
-    // Рендер карточки матча для главной страницы
-    renderGamePreviewCard(game) {
-        const gameDate = new Date(game._fullDate);
-        const homeLogo = this.getTeamLogo(game.teamHome, game.league);
-        const awayLogo = this.getTeamLogo(game.teamAway, game.league);
-        
-        const leagueColors = {
-            'A': '#0055a5',
-            'B': '#28a745',
-            'F': '#e91e63'
-        };
-        
-        const leagueColor = leagueColors[game.league] || '#6c757d';
-        const leagueName = this.getLeagueName(game.league);
-        
-        const now = new Date();
-
-        // Нормализуем даты до начала дня в UTC для правильного сравнения
-        const gameDay = new Date(Date.UTC(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate()));
-        const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-
-        // Вычисляем разницу в днях
-        const diffTime = gameDay - today;
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-        let timeStatus = '';
-        if (diffDays === 0) {
-            // Для сегодня показываем точное время
-            const timeDiff = game._fullDate - now;
-            const hoursDiff = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            timeStatus = `Через ${hoursDiff} ч`;
-        } else if (diffDays === 1) {
-            timeStatus = 'Завтра';
-        } else if (diffDays <= 7) {
-            timeStatus = `Через ${diffDays} д`;
-        } else {
-            timeStatus = `${diffDays} д`;
-        }
-
-        return `
-            <div class="game-preview-card" data-game-id="${game._id}" data-league="${game.league}">
-                <div class="game-preview-header">
-                    <div class="game-date-time">
-                        <div class="date">
-                            ${gameDate.toLocaleDateString('ru-RU', {
-                                weekday: 'short',
-                                day: 'numeric',
-                                month: 'short'
-                            })}
-                        </div>
-                        <div class="time">
-                            ${gameDate.toLocaleTimeString('ru-RU', {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            })} • ${timeStatus}
-                        </div>
-                    </div>
-                    <div class="game-league-badge" style="background: ${leagueColor}20; color: ${leagueColor};">
-                        ${leagueName}
-                    </div>
-                </div>
-                
-                <div class="game-preview-teams">
-                    <div class="game-preview-team">
-                        <img src="${homeLogo}" alt="${game.teamHome}" onerror="this.onImageError(this)">
-                        <span>${game.teamHome}</span>
-                    </div>
-                    
-                    <div class="game-preview-vs">VS</div>
-                    
-                    <div class="game-preview-team">
-                        <img src="${awayLogo}" alt="${game.teamAway}" onerror="this.onImageError(this)">
-                        <span>${game.teamAway}</span>
-                    </div>
-                </div>
-                
-                <div class="game-preview-footer">
-                    <div class="game-location">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        ${game.location || 'Место уточняется'}
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
     setupGamePreviewClickHandlers() {
         document.querySelectorAll('.game-preview-card').forEach(card => {
             card.addEventListener('click', () => {
@@ -602,6 +513,7 @@ class HomePage {
         if (!container) return;
 
         const standings = this.dataManager.getLeagueStandings(league);
+        const config = this.dataManager.getLeagueConfig(league);
         
         if (standings.length === 0) {
             container.innerHTML = '<p class="no-teams">Команды не найдены</p>';
@@ -626,8 +538,11 @@ class HomePage {
                         </tr>
                     </thead>
                     <tbody>
-                        ${standings.map((stand, index) => `
-                            <tr class="clickable-row" data-team-name="${stand.teamName}">
+                        ${standings.map((stand, index) => {
+                            const isPlayoffTeam = index < config.playoffTeams;
+                            const style = isPlayoffTeam ? 'background-color: rgba(40, 167, 69, 0.05);' : '';
+
+                            return `<tr class="clickable-row" data-team-name="${stand.teamName}" style="${style}">
                                 <td>${index + 1}</td>
                                 <td>
                                     <div class="team-row">
@@ -647,8 +562,9 @@ class HomePage {
                                     ${stand.pointsFor - stand.pointsAgainst >= 0 ? '+' : ''}${stand.pointsFor - stand.pointsAgainst}
                                 </td>
                                 <td><strong>${stand.points}</strong></td>
-                            </tr>
-                        `).join('')}
+                                </tr>
+                            `;
+                        }).join('')}
                     </tbody>
                 </table>
             </div>

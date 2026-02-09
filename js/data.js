@@ -5,6 +5,7 @@ class BasketballData {
         this.games = [];
         this.schedule = [];
         this.playerStats = {};
+        this.leagueConfigs = {};
         this.dataVersion = '2.1';
         this.ready = this.init();
     }
@@ -13,6 +14,8 @@ class BasketballData {
         try {
             this.showLoading();
             
+            await this.loadLeagueConfigs();
+
             // Разбиваем загрузку на этапы с прогрессом
             await this.loadDataWithProgress();
             
@@ -33,6 +36,34 @@ class BasketballData {
         // Показываем оба индикатора
         document.getElementById('fullscreen-loading').style.display = 'flex';
         document.getElementById('loading-indicator').classList.add('active');
+    }
+
+    async loadLeagueConfigs() {
+        try {
+            this.updateProgress(5, 'Загрузка конфигурации лиг...');
+            
+            const response = await fetch('data/leagues-config.json?' + Date.now(), {
+                cache: 'no-cache'
+            });
+            
+            if (response.ok) {
+                this.leagueConfigs = await response.json();
+                console.log('Конфигурация лиг загружена:', this.leagueConfigs);
+            } else {
+                console.warn('Не удалось загрузить конфигурацию лиг, используем значения по умолчанию');
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки конфигурации лиг:', error)
+        }
+    }
+
+    getLeagueConfig(league) {
+        return this.leagueConfigs[league];
+    }
+
+    getLeagueName(league) {
+        const config = this.getLeagueConfig(league);
+        return config.name;
     }
 
     updateProgress(percent, text) {

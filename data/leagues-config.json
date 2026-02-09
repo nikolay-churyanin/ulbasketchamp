@@ -1,0 +1,20 @@
+{
+  "A": {
+    "name": "Лига А",
+    "color": "#0055a5",
+    "icon": "⭐",
+    "playoffTeams": 6
+  },
+  "B": {
+    "name": "Лига Б",
+    "color": "#28a745",
+    "icon": "🔥",
+    "playoffTeams": 6
+  },
+  "F": {
+    "name": "Женская лига",
+    "color": "#e91e63",
+    "icon": "💥",
+    "playoffTeams": 4
+  }
+}
