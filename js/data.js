@@ -1,10 +1,8 @@
 class BasketballData {
     constructor() {
         this.teams = [];
-        this.players = [];
         this.games = [];
         this.schedule = [];
-        this.playerStats = {};
         this.leagueConfigs = {};
         this.dataVersion = '2.1';
         this.ready = this.init();
@@ -18,12 +16,6 @@ class BasketballData {
 
             // Разбиваем загрузку на этапы с прогрессом
             await this.loadDataWithProgress();
-            
-            // Параллельные вычисления
-            await Promise.all([
-                this.collectPlayersFromGames(),
-                this.calculatePlayerStats()
-            ]);
             
             this.hideLoading();
         } catch (error) {
@@ -273,12 +265,6 @@ class BasketballData {
             
             this.updateProgress(95, 'Обработка данных...');
             
-            // Параллельные вычисления
-            await Promise.all([
-                this.collectPlayersFromGames(),
-                this.calculatePlayerStats()
-            ]);
-            
             this.updateProgress(100, 'Готово!');
             
             // Добавляем небольшую задержку для плавного завершения
@@ -288,58 +274,6 @@ class BasketballData {
             console.error('Ошибка в loadDataWithProgress:', error);
             throw error;
         }
-    }
-
-    collectPlayersFromGames() {
-        const playersMap = new Map();
-        
-        this.games.forEach(game => {
-            if (game.team_a_stats && game.team_a_stats.players) {
-                game.team_a_stats.players.forEach(playerData => {
-                    const playerName = this.normalizePlayerName(playerData.name);
-                    if (!playersMap.has(playerName)) {
-                        playersMap.set(playerName, {
-                            name: playerData.name, // Оригинальное имя
-                            teamName: game.team_a_stats.team_name,
-                            position: this.determinePosition(playerData), // Определяем позицию по статистике
-                            number: playerData.number || 0
-                        });
-                    }
-                });
-            }
-            
-            if (game.team_b_stats && game.team_b_stats.players) {
-                game.team_b_stats.players.forEach(playerData => {
-                    const playerName = this.normalizePlayerName(playerData.name);
-                    if (!playersMap.has(playerName)) {
-                        playersMap.set(playerName, {
-                            name: playerData.name, // Оригинальное имя
-                            teamName: game.team_b_stats.team_name,
-                            position: this.determinePosition(playerData),
-                            number: playerData.number || 0
-                        });
-                    }
-                });
-            }
-        });
-        
-        this.players = Array.from(playersMap.values());
-    }
-
-    determinePosition(playerData) {
-        // Простая эвристика для определения позиции по статистике
-        const points = playerData.points || 0;
-        const rebounds = playerData.rebounds?.total || 0;
-        const assists = playerData.assists || 0;
-        const blocks = playerData.blocks || 0;
-        
-        if (assists > 5 && points > 10) return 'Разыгрывающий';
-        if (points > 15 && rebounds < 5) return 'Атакующий защитник';
-        if (rebounds > 8 && blocks > 2) return 'Центровой';
-        if (rebounds > 6 && points > 10) return 'Тяжелый форвард';
-        if (points > 12 && rebounds > 4) return 'Легкий форвард';
-        
-        return 'Защитник'; // По умолчанию
     }
 
     normalizeGameData(game, gameId) {
@@ -352,47 +286,10 @@ class BasketballData {
             game.date = game.match_info.date;
             game.time = game.match_info.time;
             game.location = game.match_info.venue;
+            game.gameType = game.original_match?.gameType || 'regular';
             
             game.league = game.original_match?.league || 'A';
         }
-        
-        if (game.team_a_stats && game.team_b_stats) {
-            game.playerStats = {};
-            
-            // Обрабатываем команду A
-            game.team_a_stats.players.forEach(player => {
-                const playerName = this.normalizePlayerName(player.name);
-                game.playerStats[playerName] = {
-                    teamName: game.team_a_stats.team_name,
-                    points: player.points || 0,
-                    rebounds: player.rebounds?.total || 0,
-                    assists: player.assists || 0,
-                    steals: player.steals || 0,
-                    blocks: player.blocks || 0,
-                    fouls: player.fouls || 0,
-                    number: player.number || 0
-                };
-            });
-            
-            // Обрабатываем команду B
-            game.team_b_stats.players.forEach(player => {
-                const playerName = this.normalizePlayerName(player.name);
-                game.playerStats[playerName] = {
-                    teamName: game.team_b_stats.team_name,
-                    points: player.points || 0,
-                    rebounds: player.rebounds?.total || 0,
-                    assists: player.assists || 0,
-                    steals: player.steals || 0,
-                    blocks: player.blocks || 0,
-                    fouls: player.fouls || 0,
-                    number: player.number || 0
-                };
-            });
-        }
-    }
-
-    normalizePlayerName(name) {
-        return name.trim().toUpperCase();
     }
 
     normalizeTeamName(teamName) {
@@ -416,59 +313,11 @@ class BasketballData {
         );
     }
 
-    getPlayerByName(playerName) {
-        const normalizedName = this.normalizePlayerName(playerName);
-        return this.players.find(player => 
-            this.normalizePlayerName(player.name) === normalizedName
-        );
-    }
-
-    calculatePlayerStats() {
-        this.playerStats = {};
-        
-        this.games.forEach(game => {
-            if (game.playerStats) {
-                Object.entries(game.playerStats).forEach(([playerName, stats]) => {
-                    if (!this.playerStats[playerName]) {
-                        this.playerStats[playerName] = {
-                            playerName: playerName,
-                            gamesPlayed: 0,
-                            totalPoints: 0,
-                            totalRebounds: 0,
-                            totalAssists: 0,
-                            totalSteals: 0,
-                            totalBlocks: 0,
-                            totalFouls: 0,
-                            teamName: stats.teamName
-                        };
-                    }
-                    
-                    const playerStat = this.playerStats[playerName];
-                    playerStat.gamesPlayed++;
-                    playerStat.totalPoints += stats.points || 0;
-                    playerStat.totalRebounds += stats.rebounds || 0;
-                    playerStat.totalAssists += stats.assists || 0;
-                    playerStat.totalSteals += stats.steals || 0;
-                    playerStat.totalBlocks += stats.blocks || 0;
-                    playerStat.totalFouls += stats.fouls || 0;
-                });
-            }
-        });
-    }
-
     getTeamsByLeague(league) {
         if (league === 'all') {
             return this.teams;
         }
         return this.teams.filter(team => team.league === league);
-    }
-
-    getPlayersByTeam(teamName) {
-        const normalizedTeamName = this.normalizeTeamName(teamName);
-        return this.players.filter(player => {
-            const playerTeamName = this.normalizeTeamName(player.teamName);
-            return playerTeamName === normalizedTeamName;
-        });
     }
 
     getAllScheduledGames() {
@@ -532,6 +381,7 @@ class BasketballData {
                 teamAway: game.teamAway,
                 scoreHome: game.scoreHome,
                 scoreAway: game.scoreAway,
+                gameType: game.gameType,
                 date: game.date,
                 league: game.league,
                 time: game.time || this.extractTimeFromDate(gameDate),
@@ -635,7 +485,7 @@ class BasketballData {
         
         // Обрабатываем все игры с результатами
         const leagueGames = this.games
-            .filter(game => game.scoreHome !== null && game.scoreAway !== null && game.league === league)
+            .filter(game => game.scoreHome !== null && game.scoreAway !== null && game.league === league && game.gameType != 'playoff')
             .sort((a, b) => new Date(a.date) - new Date(b.date));
         
         leagueGames.forEach(game => {
@@ -816,74 +666,6 @@ class BasketballData {
         });
     }
 
-    getPlayerStatsByLeague(league, statType, minGames = 1, hideZeroStats = true) {
-        let playersToShow = Object.values(this.playerStats).filter(stats => 
-            stats.gamesPlayed >= minGames
-        );
-        
-        if (league !== 'all') {
-            const teamNamesInLeague = this.getTeamsByLeague(league).map(team => team.name);
-            playersToShow = playersToShow.filter(player => 
-                teamNamesInLeague.some(teamName => 
-                    this.normalizeTeamName(teamName) === this.normalizeTeamName(player.teamName)
-                )
-            );
-        }
-        
-        // Фильтруем игроков с нулевыми показателями, если включена опция
-        if (hideZeroStats) {
-            playersToShow = playersToShow.filter(playerStats => {
-                const statValue = statType === 'points' ? playerStats.totalPoints :
-                                statType === 'rebounds' ? playerStats.totalRebounds :
-                                statType === 'assists' ? playerStats.totalAssists :
-                                statType === 'steals' ? playerStats.totalSteals :
-                                statType === 'blocks' ? playerStats.totalBlocks : 0;
-                
-                return statValue > 0;
-            });
-        }
-        
-        const sortedPlayers = playersToShow
-            .map(playerStats => {
-                const player = this.getPlayerByName(playerStats.playerName) || {
-                    name: playerStats.playerName,
-                    teamName: playerStats.teamName,
-                    position: 'Неизвестно'
-                };
-                
-                const pointsPerGame = playerStats.gamesPlayed > 0 ? playerStats.totalPoints / playerStats.gamesPlayed : 0;
-                const reboundsPerGame = playerStats.gamesPlayed > 0 ? playerStats.totalRebounds / playerStats.gamesPlayed : 0;
-                const assistsPerGame = playerStats.gamesPlayed > 0 ? playerStats.totalAssists / playerStats.gamesPlayed : 0;
-                const stealsPerGame = playerStats.gamesPlayed > 0 ? playerStats.totalSteals / playerStats.gamesPlayed : 0;
-                const blocksPerGame = playerStats.gamesPlayed > 0 ? playerStats.totalBlocks / playerStats.gamesPlayed : 0;
-                
-                return {
-                    ...player,
-                    teamName: player.teamName,
-                    gamesPlayed: playerStats.gamesPlayed,
-                    pointsPerGame: pointsPerGame,
-                    reboundsPerGame: reboundsPerGame,
-                    assistsPerGame: assistsPerGame,
-                    stealsPerGame: stealsPerGame,
-                    blocksPerGame: blocksPerGame,
-                    pointsTotal: playerStats.totalPoints,
-                    reboundsTotal: playerStats.totalRebounds,
-                    assistsTotal: playerStats.totalAssists,
-                    stealsTotal: playerStats.totalSteals,
-                    blocksTotal: playerStats.totalBlocks,
-                    sortValue: statType === 'points' ? pointsPerGame :
-                              statType === 'rebounds' ? reboundsPerGame :
-                              statType === 'assists' ? assistsPerGame :
-                              statType === 'steals' ? stealsPerGame :
-                              statType === 'blocks' ? blocksPerGame : 0
-                };
-            })
-            .sort((a, b) => b.sortValue - a.sortValue)
-            .slice(0, 10);
-
-        return sortedPlayers;
-    }
-
     findGameResult(teamHome, teamAway, gameDateTime) {
         if (!gameDateTime || isNaN(gameDateTime.getTime())) {
             return null;
@@ -1011,5 +793,618 @@ class BasketballData {
             // Добавляем timestamp для избежания кеширования
             img.src = url + '?t=' + Date.now();
         });
+    }
+
+    getPlayoffBracket(league) {
+        // 1. Получаем все игры плей-офф для лиги
+        const playoffGames = this.games.filter(game => 
+            game.gameType === 'playoff' && 
+            game.league === league &&
+            game.scoreHome !== null && 
+            game.scoreAway !== null
+        ).sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        if (playoffGames.length === 0) {
+            return this.generateEmptyBracket(league);
+        }
+        
+        // 2. Анализируем игры и строим сетку
+        return this.buildBracketFromGames(playoffGames, league);
+    }
+
+    generateEmptyBracket(league) {
+        const standings = this.getLeagueStandings(league);
+        const config = this.getLeagueConfig(league);
+        const playoffTeamsCount = config.playoffTeams || 6;
+        
+        // Берем топ команд
+        const topTeams = standings.slice(0, playoffTeamsCount);
+        
+        if (playoffTeamsCount === 6) {
+            // ПРАВИЛЬНАЯ СЕТКА ДЛЯ 6 КОМАНД:
+            // 3-6 и 4-5 играют в 1/4
+            // 1 играет с победителем 4-5
+            // 2 играет с победителем 3-6
+            
+            return {
+                quarterfinals: [
+                    {
+                        id: 'qf_1',
+                        team1: topTeams[2]?.teamName, // 3-е место
+                        team1Seed: 3,
+                        team2: topTeams[5]?.teamName, // 6-е место
+                        team2Seed: 6,
+                        winner: null,
+                        games: []
+                    },
+                    {
+                        id: 'qf_2',
+                        team1: topTeams[3]?.teamName, // 4-е место
+                        team1Seed: 4,
+                        team2: topTeams[4]?.teamName, // 5-е место
+                        team2Seed: 5,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                semifinals: [
+                    {
+                        id: 'sf_1',
+                        team1: topTeams[0]?.teamName, // 1-е место
+                        team1Seed: 1,
+                        team2: null, // Победитель qf_2 (4-5)
+                        team2Seed: null,
+                        winner: null,
+                        games: []
+                    },
+                    {
+                        id: 'sf_2',
+                        team1: topTeams[1]?.teamName, // 2-е место
+                        team1Seed: 2,
+                        team2: null, // Победитель qf_1 (3-6)
+                        team2Seed: null,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                thirdPlace: [
+                    {
+                        id: 'tp',
+                        team1: null, // Проигравший sf_1
+                        team1Seed: null,
+                        team2: null, // Проигравший sf_2
+                        team2Seed: null,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                final: [
+                    {
+                        id: 'final',
+                        team1: null, // Победитель sf_1
+                        team1Seed: null,
+                        team2: null, // Победитель sf_2
+                        team2Seed: null,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                champion: null
+            };
+        } else if (playoffTeamsCount === 4) {
+            // Сетка для 4 команд: 1-4 и 2-3 в 1/2
+            return {
+                quarterfinals: [],
+                semifinals: [
+                    {
+                        id: 'sf_1',
+                        team1: topTeams[0]?.teamName, // 1-е место
+                        team1Seed: 1,
+                        team2: topTeams[3]?.teamName, // 4-е место
+                        team2Seed: 4,
+                        winner: null,
+                        games: []
+                    },
+                    {
+                        id: 'sf_2',
+                        team1: topTeams[1]?.teamName, // 2-е место
+                        team1Seed: 2,
+                        team2: topTeams[2]?.teamName, // 3-е место
+                        team2Seed: 3,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                thirdPlace: [
+                    {
+                        id: 'tp',
+                        team1: null,
+                        team1Seed: null,
+                        team2: null,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                final: [
+                    {
+                        id: 'final',
+                        team1: null,
+                        team1Seed: null,
+                        team2: null,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                champion: null
+            };
+        }
+        
+        return {
+            quarterfinals: [],
+            semifinals: [],
+            thirdPlace: [],
+            final: [],
+            champion: null
+        };
+    }
+
+
+
+    buildBracketFromGames(games, league) {
+        // Начинаем с пустой сетки
+        let bracket = this.generateEmptyBracket(league);
+        
+        // 1. Сначала собираем все игры плей-офф в мапу для быстрого поиска
+        const gamesMap = new Map();
+        games.forEach(game => {
+            const key1 = `${this.normalizeTeamName(game.teamHome)}_${this.normalizeTeamName(game.teamAway)}`;
+            const key2 = `${this.normalizeTeamName(game.teamAway)}_${this.normalizeTeamName(game.teamHome)}`;
+            gamesMap.set(key1, game);
+            gamesMap.set(key2, game);
+        });
+        
+        // 2. Обрабатываем четвертьфиналы (если есть)
+        if (bracket.quarterfinals && bracket.quarterfinals.length > 0) {
+            bracket.quarterfinals.forEach(qf => {
+                if (!qf.team1 || !qf.team2) return;
+                
+                const gameKey = `${this.normalizeTeamName(qf.team1)}_${this.normalizeTeamName(qf.team2)}`;
+                const game = gamesMap.get(gameKey);
+                
+                if (game) {
+                    const winner = game.scoreHome > game.scoreAway ? game.teamHome : game.teamAway;
+                    qf.winner = winner;
+                    qf.games.push(this.createGameData(game));
+                    
+                    // Продвигаем победителя в полуфинал
+                    const winnerSeed = this.getTeamSeed(winner, league);
+                    this.placeQuarterfinalWinner(bracket, qf, winner, winnerSeed);
+                }
+            });
+        }
+        
+        // 3. Обрабатываем полуфиналы
+        bracket.semifinals.forEach(sf => {
+            // Если команда 2 еще не определена (из четвертьфинала), пропускаем
+            if (!sf.team1 || !sf.team2) return;
+            
+            const gameKey = `${this.normalizeTeamName(sf.team1)}_${this.normalizeTeamName(sf.team2)}`;
+            const game = gamesMap.get(gameKey);
+            
+            if (game) {
+                const winner = game.scoreHome > game.scoreAway ? game.teamHome : game.teamAway;
+                const loser = winner === sf.team1 ? sf.team2 : sf.team1;
+                
+                sf.winner = winner;
+                sf.games.push(this.createGameData(game));
+                
+                // Получаем seed команд
+                const winnerSeed = this.getTeamSeed(winner, league);
+                const loserSeed = this.getTeamSeed(loser, league);
+                
+                // ВАЖНО: Определяем индекс полуфинала по составу команд
+                const sfIndex = bracket.semifinals.findIndex(s => 
+                    this.normalizeTeamName(s.team1) === this.normalizeTeamName(sf.team1) &&
+                    this.normalizeTeamName(s.team2) === this.normalizeTeamName(sf.team2)
+                );
+                
+                if (sfIndex !== -1) {
+                    // Продвигаем победителя в финал
+                    this.placeSemifinalWinner(bracket, sfIndex, winner, winnerSeed);
+                    
+                    // Продвигаем проигравшего в матч за 3-е место
+                    this.placeSemifinalLoser(bracket, sfIndex, loser, loserSeed);
+                }
+            }
+        });
+        
+        // 4. Обрабатываем матч за 3-е место
+        const thirdPlace = bracket.thirdPlace[0];
+        if (thirdPlace && thirdPlace.team1 && thirdPlace.team2) {
+            const gameKey = `${this.normalizeTeamName(thirdPlace.team1)}_${this.normalizeTeamName(thirdPlace.team2)}`;
+            const game = gamesMap.get(gameKey);
+            
+            if (game) {
+                const winner = game.scoreHome > game.scoreAway ? game.teamHome : game.teamAway;
+                thirdPlace.winner = winner;
+                thirdPlace.games.push(this.createGameData(game));
+            }
+        }
+        
+        // 5. Обрабатываем финал
+        const final = bracket.final[0];
+        if (final && final.team1 && final.team2) {
+            const gameKey = `${this.normalizeTeamName(final.team1)}_${this.normalizeTeamName(final.team2)}`;
+            const game = gamesMap.get(gameKey);
+            
+            if (game) {
+                const winner = game.scoreHome > game.scoreAway ? game.teamHome : game.teamAway;
+                final.winner = winner;
+                final.games.push(this.createGameData(game));
+                bracket.champion = winner;
+            }
+        }
+        
+        return bracket;
+    }
+
+    placeQuarterfinalWinner(bracket, quarterfinal, winner, winnerSeed) {
+        const qfIndex = bracket.quarterfinals.indexOf(quarterfinal);
+        
+        if (qfIndex === 0) {
+            // Победитель qf_1 (3-6) идет к 2-му месту (sf_2)
+            if (bracket.semifinals[1]) {
+                bracket.semifinals[1].team2 = winner;
+                bracket.semifinals[1].team2Seed = winnerSeed;
+            }
+        } else if (qfIndex === 1) {
+            // Победитель qf_2 (4-5) идет к 1-му месту (sf_1)
+            if (bracket.semifinals[0]) {
+                bracket.semifinals[0].team2 = winner;
+                bracket.semifinals[0].team2Seed = winnerSeed;
+            }
+        }
+    }
+
+    placeSemifinalWinner(bracket, semifinalIndex, winner, winnerSeed) {
+        const final = bracket.final[0];
+        if (!final) return;
+        
+        if (final.team1) {
+            if (final.team1Seed > winnerSeed) {
+                final.team2 = final.team1;
+                final.team2Seed = final.team1Seed;
+                final.team1 = winner;
+                final.team1Seed = winnerSeed;    
+            } else {
+                final.team2 = winner;
+                final.team2Seed = winnerSeed;
+            }
+        } else {
+            final.team1 = winner;
+            final.team1Seed = winnerSeed;
+        }
+    }
+
+    placeSemifinalLoser(bracket, semifinalIndex, loser, loserSeed) {
+        const thirdPlace = bracket.thirdPlace[0];
+        if (!thirdPlace) return;
+        
+        if (semifinalIndex === 0) {
+            // Проигравший первого полуфинала идет в первую позицию матча за 3-е место
+            thirdPlace.team1 = loser;
+            thirdPlace.team1Seed = loserSeed;
+        } else if (semifinalIndex === 1) {
+            // Проигравший второго полуфинала идет во вторую позицию матча за 3-е место
+            thirdPlace.team2 = loser;
+            thirdPlace.team2Seed = loserSeed;
+        }
+    }
+
+    // Новый метод для определения раунда на основе seed команд
+    determinePlayoffRound(homeSeed, awaySeed, bracket) {
+        // 1. Проверяем, есть ли такая пара в четвертьфиналах
+        for (const qf of bracket.quarterfinals) {
+            if ((qf.team1Seed === homeSeed && qf.team2Seed === awaySeed) ||
+                (qf.team1Seed === awaySeed && qf.team2Seed === homeSeed)) {
+                return 'quarterfinal';
+            }
+        }
+        
+        // 2. Проверяем полуфиналы
+        for (const sf of bracket.semifinals) {
+            if ((sf.team1Seed === homeSeed && sf.team2Seed === awaySeed) ||
+                (sf.team1Seed === awaySeed && sf.team2Seed === homeSeed)) {
+                return 'semifinal';
+            }
+        }
+        
+        // 3. Если это финал или матч за 3-е место, определим позже
+        return 'unknown';
+    }
+
+    // Методы для поиска матчей по командам
+    findQuarterfinalByTeams(bracket, team1, team2) {
+        return bracket.quarterfinals.find(qf => 
+            (this.normalizeTeamName(qf.team1) === this.normalizeTeamName(team1) && 
+             this.normalizeTeamName(qf.team2) === this.normalizeTeamName(team2)) ||
+            (this.normalizeTeamName(qf.team1) === this.normalizeTeamName(team2) && 
+             this.normalizeTeamName(qf.team2) === this.normalizeTeamName(team1))
+        );
+    }
+
+    findSemifinalByTeams(bracket, team1, team2) {
+        return bracket.semifinals.find(sf => 
+            (this.normalizeTeamName(sf.team1) === this.normalizeTeamName(team1) && 
+             this.normalizeTeamName(sf.team2) === this.normalizeTeamName(team2)) ||
+            (this.normalizeTeamName(sf.team1) === this.normalizeTeamName(team2) && 
+             this.normalizeTeamName(sf.team2) === this.normalizeTeamName(team1))
+        );
+    }
+
+    createGameData(game) {
+        return {
+            id: game.id,
+            teamHome: game.teamHome,
+            teamAway: game.teamAway,
+            scoreHome: game.scoreHome,
+            scoreAway: game.scoreAway,
+            gameType: game.gameType,
+            date: game.date,
+            time: game.time,
+            location: game.location,
+            winner: game.scoreHome > game.scoreAway ? game.teamHome : game.teamAway
+        };
+    }
+
+    getTeamSeed(teamName, league) {
+        const standings = this.getLeagueStandings(league);
+        const teamIndex = standings.findIndex(team => 
+            this.normalizeTeamName(team.teamName) === this.normalizeTeamName(teamName)
+        );
+        return teamIndex >= 0 ? teamIndex + 1 : null;
+    }
+
+    calculateRegularSeasonCompleted(league) {
+        const config = this.getLeagueConfig(league);
+        if (!config || !config.regularSeasonRounds) return false;
+        
+        const teams = this.getTeamsByLeague(league);
+        const totalTeams = teams.length;
+        
+        // Общее количество игр в регулярке
+        const totalRegularGames = (totalTeams * (totalTeams - 1) * config.regularSeasonRounds) / 2;
+        
+        // Подсчитываем сыгранные игры в регулярке (без playoff)
+        const playedRegularGames = this.games.filter(game => 
+            game.league === league && 
+            game.scoreHome !== null && 
+            game.scoreAway !== null &&
+            game.gameType !== 'playoff'
+        ).length;
+        
+        return playedRegularGames >= totalRegularGames;
+    }
+
+    generatePlayoffBracket(league) {
+        const standings = this.getLeagueStandings(league);
+        const config = this.getLeagueConfig(league);
+        const playoffTeamsCount = config.playoffTeams || 6;
+        
+        // Берем топ команд для плей-офф с их местами
+        const playoffTeams = standings.slice(0, playoffTeamsCount).map((team, index) => ({
+            ...team,
+            seed: index + 1 // Добавляем номер посева
+        }));
+        
+        let bracket = {
+            quarterfinals: [],
+            semifinals: [],
+            thirdPlace: [],
+            final: [],
+            champion: null
+        };
+        
+        if (playoffTeamsCount === 6) {
+            // Формат для 6 команд: 3-6, 4-5 в четвертьфинале
+            bracket.quarterfinals = [
+                {
+                    team1: playoffTeams[2]?.teamName || "TBD",
+                    team1Seed: 3,
+                    team2: playoffTeams[5]?.teamName || "TBD",
+                    team2Seed: 6,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                },
+                {
+                    team1: playoffTeams[3]?.teamName || "TBD",
+                    team1Seed: 4,
+                    team2: playoffTeams[4]?.teamName || "TBD",
+                    team2Seed: 5,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                }
+            ];
+            
+            bracket.semifinals = [
+                {
+                    team1: playoffTeams[0]?.teamName || "TBD",
+                    team1Seed: 1,
+                    team2: "Победитель 1/4 1",
+                    team2Seed: null,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                },
+                {
+                    team1: playoffTeams[1]?.teamName || "TBD",
+                    team1Seed: 2,
+                    team2: "Победитель 1/4 2",
+                    team2Seed: null,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                }
+            ];
+            
+            // Матч за 3-е место (проигравшие в полуфиналах)
+            bracket.thirdPlace = [
+                {
+                    team1: "Проигравший 1/2 1",
+                    team1Seed: null,
+                    team2: "Проигравший 1/2 2",
+                    team2Seed: null,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null,
+                    isThirdPlace: true
+                }
+            ];
+            
+        } else if (playoffTeamsCount === 4) {
+            // Формат для 4 команд: 1-4, 2-3 в полуфинале
+            bracket.semifinals = [
+                {
+                    team1: playoffTeams[0]?.teamName || "TBD",
+                    team1Seed: 1,
+                    team2: playoffTeams[3]?.teamName || "TBD",
+                    team2Seed: 4,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                },
+                {
+                    team1: playoffTeams[1]?.teamName || "TBD",
+                    team1Seed: 2,
+                    team2: playoffTeams[2]?.teamName || "TBD",
+                    team2Seed: 3,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                }
+            ];
+            
+            // Матч за 3-е место для формата 4 команд
+            bracket.thirdPlace = [
+                {
+                    team1: "Проигравший 1/2 1",
+                    team1Seed: null,
+                    team2: "Проигравший 1/2 2",
+                    team2Seed: null,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null,
+                    isThirdPlace: true
+                }
+            ];
+        }
+        
+        bracket.final = [
+            {
+                team1: "Победитель 1/2 1",
+                team1Seed: null,
+                team2: "Победитель 1/2 2",
+                team2Seed: null,
+                score1: 0,
+                score2: 0,
+                winner: null,
+                winnerSeed: null
+            }
+        ];
+        
+        return bracket;
+    }
+
+    // Обновляем метод продвижения команд
+    advancePlayoffTeams(league, matchType, matchIndex, winner, winnerSeed) {
+        const config = this.getLeagueConfig(league);
+        if (!config || !config.playoffBracket) return;
+        
+        const bracket = config.playoffBracket;
+        
+        if (matchType === 'quarterfinal' && bracket.quarterfinals[matchIndex]) {
+            const match = bracket.quarterfinals[matchIndex];
+            match.winner = winner;
+            match.winnerSeed = winnerSeed;
+            
+            // Победитель идет в полуфинал
+            const semifinalIndex = matchIndex === 0 ? 0 : 1;
+            if (bracket.semifinals[semifinalIndex]) {
+                const targetTeam = matchIndex === 0 ? 'team2' : 'team2';
+                const targetSeed = matchIndex === 0 ? 'team2Seed' : 'team2Seed';
+                
+                bracket.semifinals[semifinalIndex][targetTeam] = winner;
+                bracket.semifinals[semifinalIndex][targetSeed] = winnerSeed;
+            }
+        } else if (matchType === 'semifinal' && bracket.semifinals[matchIndex]) {
+            const match = bracket.semifinals[matchIndex];
+            match.winner = winner;
+            match.winnerSeed = winnerSeed;
+            
+            // Определяем проигравшего для матча за 3-е место
+            const loser = winner === match.team1 ? match.team2 : match.team1;
+            const loserSeed = winner === match.team1 ? match.team2Seed : match.team1Seed;
+            
+            // Добавляем проигравшего в матч за 3-е место
+            if (bracket.thirdPlace[0]) {
+                const targetTeam = matchIndex === 0 ? 'team1' : 'team2';
+                const targetSeed = matchIndex === 0 ? 'team1Seed' : 'team2Seed';
+                
+                bracket.thirdPlace[0][targetTeam] = loser;
+                bracket.thirdPlace[0][targetSeed] = loserSeed;
+            }
+            
+            // Победитель идет в финал
+            if (bracket.final[0]) {
+                const targetTeam = matchIndex === 0 ? 'team1' : 'team2';
+                const targetSeed = matchIndex === 0 ? 'team1Seed' : 'team2Seed';
+                
+                bracket.final[0][targetTeam] = winner;
+                bracket.final[0][targetSeed] = winnerSeed;
+            }
+        } else if (matchType === 'thirdplace' && bracket.thirdPlace[matchIndex]) {
+            const match = bracket.thirdPlace[matchIndex];
+            match.winner = winner;
+            match.winnerSeed = winnerSeed;
+        } else if (matchType === 'final' && bracket.final[matchIndex]) {
+            const match = bracket.final[matchIndex];
+            match.winner = winner;
+            match.winnerSeed = winnerSeed;
+            bracket.champion = winner;
+        }
+        
+        this.updatePlayoffBracket(league, bracket);
+    }
+
+    // Получаем команду с ее местом в регулярке
+    getTeamWithSeed(teamName, league) {
+        const standings = this.getLeagueStandings(league);
+        const teamIndex = standings.findIndex(team => 
+            this.normalizeTeamName(team.teamName) === this.normalizeTeamName(teamName)
+        );
+        
+        return {
+            teamName,
+            seed: teamIndex + 1,
+            teamData: standings[teamIndex]
+        };
+    }
+
+    updatePlayoffBracket(league, bracket) {
+        const config = this.getLeagueConfig(league);
+        if (!config) return;
+        
+        config.playoffBracket = bracket;
+        config.showPlayoffTab = true;
     }
 }

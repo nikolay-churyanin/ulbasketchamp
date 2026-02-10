@@ -1,0 +1,634 @@
+/* playoff.css - обновленная адаптивная версия с сериями */
+
+/* Стили вкладок плей-офф (без изменений) */
+.playoff-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.playoff-tab {
+    padding: 12px 24px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-weight: 600;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.playoff-tab:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.playoff-tab.active {
+    background: #0055a5;
+    color: white;
+    border-color: #0055a5;
+}
+
+.playoff-tab-icon {
+    font-size: 18px;
+}
+
+/* Контент вкладок */
+.playoff-tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.playoff-tab-content.active {
+    display: block;
+}
+
+/* Адаптивный контейнер сетки плей-офф */
+.playoff-bracket-container {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Сетка плей-офф - теперь вертикальная для мобильных */
+.playoff-bracket {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-width: 0;
+    width: 100%;
+}
+
+/* Раунд - горизонтальный на десктопе, вертикальный на мобильных */
+.playoff-round {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.playoff-round-title {
+    text-align: center;
+    font-weight: 600;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    position: sticky;
+    left: 0;
+}
+
+/* Цвета для разных раундов */
+.playoff-round-quartefinals .playoff-round-title {
+    background: linear-gradient(135deg, #0055a5, #007bff);
+}
+
+.playoff-round-semifinals .playoff-round-title {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.playoff-round-finals .playoff-round-title {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    border: 2px solid #ffc107;
+}
+
+.playoff-round-third-place .playoff-round-title {
+    background: linear-gradient(135deg, #6c757d, #495057);
+}
+
+/* Матчи внутри раунда - горизонтальные на десктопе */
+.playoff-round-matches {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Матч в сетке - адаптивный */
+.playoff-match {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    width: 100%;
+    border: 1px solid #e9ecef;
+}
+
+.playoff-match:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Заголовок матча */
+.playoff-match-header {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.playoff-match-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #495057;
+}
+
+.playoff-match-series {
+    font-size: 12px;
+    color: #6c757d;
+    background: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Серия до одной победы - новая секция */
+.playoff-series-info {
+    background: #f1f8ff;
+    padding: 10px 15px;
+    border-bottom: 1px solid #cfe2ff;
+    font-size: 13px;
+    color: #004085;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.playoff-series-icon {
+    font-size: 16px;
+}
+
+/* Команда в матче - адаптивная */
+.playoff-team {
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #f8f9fa;
+    transition: background 0.2s ease;
+    min-height: 60px;
+}
+
+.playoff-team:last-child {
+    border-bottom: none;
+}
+
+.playoff-team.winner {
+    background: rgba(40, 167, 69, 0.1);
+    border-left: 4px solid #28a745;
+}
+
+.playoff-team.loser {
+    background: rgba(220, 53, 69, 0.05);
+    opacity: 0.9;
+    border-left: 4px solid #dc3545;
+}
+
+.playoff-team.active {
+    background: rgba(13, 110, 253, 0.1);
+}
+
+/* Бадж места в плей-офф - компактный */
+.playoff-seed-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.playoff-seed-1 {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #000;
+    border: 2px solid #ffc107;
+}
+
+.playoff-seed-2 {
+    background: linear-gradient(135deg, #c0c0c0, #e0e0e0);
+    color: #000;
+    border: 2px solid #a0a0a0;
+}
+
+.playoff-seed-3 {
+    background: linear-gradient(135deg, #cd7f32, #e69c5c);
+    color: #000;
+    border: 2px solid #b87333;
+}
+
+.playoff-seed-4, .playoff-seed-5, .playoff-seed-6 {
+    background: linear-gradient(135deg, #0055a5, #007bff);
+    color: white;
+    border: 2px solid #004085;
+}
+
+/* Команда с баджем */
+.playoff-team-with-seed {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+}
+
+.playoff-team-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    min-width: 0;
+    gap: 10px;
+}
+
+.playoff-team-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid #e9ecef;
+}
+
+.playoff-team-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.playoff-team-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #212529;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playoff-team-seed-text {
+    font-size: 11px;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* Счет команды */
+.playoff-team-score {
+    background: #0055a5;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    min-width: 32px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,85,165,0.3);
+}
+
+.playoff-team.winner .playoff-team-score {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.playoff-team.loser .playoff-team-score {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+/* Индикатор серии (счет в серии) */
+.playoff-series-score {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+    padding-left: 10px;
+    border-left: 1px solid #e9ecef;
+}
+
+.series-game {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e9ecef;
+}
+
+.series-game.won {
+    background: #28a745;
+}
+
+.series-game.lost {
+    background: #dc3545;
+}
+
+.series-game.pending {
+    background: #ffc107;
+}
+
+/* Футер матча */
+.playoff-match-footer {
+    background: #f8f9fa;
+    padding: 10px 15px;
+    border-top: 1px solid #e9ecef;
+    font-size: 12px;
+    color: #6c757d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.playoff-match-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.playoff-match-status.completed {
+    background: #28a745;
+    color: white;
+}
+
+.playoff-match-status.live {
+    background: #dc3545;
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+.playoff-match-status.scheduled {
+    background: #ffc107;
+    color: #212529;
+}
+
+/* Матч за 3-е место - особые стили */
+.third-place-match {
+    border: 2px solid #6c757d;
+    background: linear-gradient(135deg, #fff, #f8f9fa);
+}
+
+.third-place-match .playoff-team-logo {
+    width: 36px;
+    height: 36px;
+}
+
+.third-place-match .playoff-team-name {
+    font-size: 15px;
+}
+
+.third-place-match .playoff-match-header {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+}
+
+.bronze-icon {
+    color: #cd7f32;
+    font-size: 18px;
+    margin-right: 8px;
+}
+
+/* Финал - особые стили */
+.final-match {
+    border: 3px solid #ffc107;
+    background: linear-gradient(135deg, #fff8e1, #ffecb3);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.final-match .playoff-team-logo {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ffc107;
+}
+
+.final-match .playoff-team-name {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.final-match .playoff-match-header {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    color: #212529;
+    font-weight: 700;
+}
+
+/* Чемпион */
+.champion-team {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #212529;
+    font-weight: 700;
+    text-align: center;
+    padding: 25px 20px;
+    border-radius: 12px;
+    margin-top: 30px;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    border: 3px solid #ffc107;
+}
+
+.champion-team h3 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    color: #212529;
+}
+
+.champion-team .trophy {
+    font-size: 48px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.champion-seed-info {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.3);
+    padding: 8px 15px;
+    border-radius: 20px;
+}
+
+/* Медиа-запросы для адаптивности */
+@media (min-width: 768px) {
+    .playoff-round {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 30px;
+    }
+    
+    .playoff-round-matches {
+        flex: 1;
+        max-width: calc(33.333% - 20px);
+    }
+    
+    .playoff-bracket-container {
+        padding: 20px;
+    }
+    
+    .playoff-team {
+        padding: 15px 20px;
+    }
+    
+    .playoff-team-logo {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .playoff-team-name {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .playoff-bracket {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .playoff-round {
+        flex-direction: column;
+        flex: 1;
+    }
+    
+    .playoff-round-matches {
+        max-width: 100%;
+    }
+    
+    .playoff-team-logo {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .playoff-tab {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    .playoff-match {
+        border-radius: 8px;
+    }
+    
+    .playoff-team {
+        padding: 10px 12px;
+        min-height: 50px;
+    }
+    
+    .playoff-team-logo {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .playoff-team-name {
+        font-size: 13px;
+    }
+    
+    .playoff-team-score {
+        padding: 4px 8px;
+        font-size: 13px;
+        min-width: 28px;
+    }
+    
+    .playoff-seed-badge {
+        min-width: 20px;
+        height: 20px;
+        font-size: 10px;
+        margin-right: 6px;
+    }
+    
+    .champion-team {
+        padding: 20px 15px;
+    }
+    
+    .champion-team h3 {
+        font-size: 18px;
+    }
+    
+    .champion-team .trophy {
+        font-size: 36px;
+    }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Специальные классы для горизонтального скролла на мобильных */
+.playoff-scroll-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.playoff-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+    gap: 20px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.playoff-scroll-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.playoff-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.playoff-scroll-container::-webkit-scrollbar-thumb {
+    background: #0055a5;
+    border-radius: 3px;
+}
+
+.playoff-round-scrollable {
+    min-width: 300px;
+    flex-shrink: 0;
+}

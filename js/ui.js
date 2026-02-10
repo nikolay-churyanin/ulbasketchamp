@@ -127,30 +127,11 @@ class BasketballUI {
                         let matchStatus = '';
                         let statusClass = '';
                         
-                        if (hasScore) {
-                            matchStatus = 'Завершен';
-                            statusClass = 'status-finished';
+                        if (game.gameType === 'playoff') {
+                            matchStatus = 'ПЛЕЙ-ОФФ';
+                            statusClass = 'status-upcoming';
                         } else {
-                            const now = new Date();
-                            const gameDate = game._fullDate ? new Date(game._fullDate) : null;
-                            
-                            if (gameDate) {
-                                // Нормализуем даты до начала дня в UTC
-                                const gameDay = new Date(Date.UTC(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate()));
-                                const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-                                const diffTime = gameDay - today;
-                                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                                
-                                if (diffDays === 0) {
-                                    matchStatus = 'Сегодня';
-                                } else if (diffDays === 1) {
-                                    matchStatus = 'Завтра';
-                                } else {
-                                    matchStatus = 'Предстоящий';
-                                }
-                            } else {
-                                matchStatus = 'Предстоящий';
-                            }
+                            matchStatus = 'Регулярный сезон';
                             statusClass = 'status-upcoming';
                         }
 

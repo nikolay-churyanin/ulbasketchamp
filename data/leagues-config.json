@@ -3,18 +3,45 @@
     "name": "Лига А",
     "color": "#0055a5",
     "icon": "⭐",
-    "playoffTeams": 6
+    "playoffTeams": 6,
+    "regularSeasonRounds": 2,
+    "showPlayoffTab": false,
+    "playoffBracket": {
+      "quarterfinals": [],
+      "semifinals": [],
+      "thirdPlace": [],
+      "final": [],
+      "champion": null
+    }
   },
   "B": {
     "name": "Лига Б",
     "color": "#28a745",
     "icon": "🔥",
-    "playoffTeams": 6
+    "playoffTeams": 6,
+    "regularSeasonRounds": 1,
+    "showPlayoffTab": false,
+    "playoffBracket": {
+      "quarterfinals": [],
+      "semifinals": [],
+      "thirdPlace": [],
+      "final": [],
+      "champion": null
+    }
   },
   "F": {
     "name": "Женская лига",
     "color": "#e91e63",
     "icon": "💥",
-    "playoffTeams": 4
+    "playoffTeams": 4,
+    "regularSeasonRounds": 1,
+    "showPlayoffTab": false,
+    "playoffBracket": {
+      "quarterfinals": [],
+      "semifinals": [],
+      "thirdPlace": [],
+      "final": [],
+      "champion": null
+    }
   }
 }

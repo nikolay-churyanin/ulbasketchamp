@@ -407,16 +407,6 @@ class HomePage {
         `;
     }
 
-    // Получение цвета для лиги
-    getLeagueColor(leagueCode) {
-        const colors = {
-            'A': '#0055a5',
-            'B': '#28a745',
-            'F': '#e91e63'
-        };
-        return colors[leagueCode] || '#6c757d';
-    }
-
     // Группировка матчей по датам
     groupGamesByDate(games) {
         const groups = {};
@@ -508,7 +498,7 @@ class HomePage {
         this.renderLeagueMatches(league);
     }
 
-    renderLeagueStandings(league) {
+    async renderLeagueStandings(league) {
         const container = document.getElementById(`league-${league.toLowerCase()}-teams`);
         if (!container) return;
 
@@ -520,61 +510,354 @@ class HomePage {
             return;
         }
 
-        container.innerHTML = `
-            <div class="table-container">
-                <table class="standings-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Команда</th>
-                            <th>И</th>
-                            <th>В/П</th>
-                            <th>%</th>
-                            <th>Последние<br>5 игр</th>
-                            <th>Забито</th>
-                            <th>Пропущено</th>
-                            <th>+/-</th>
-                            <th>О</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${standings.map((stand, index) => {
-                            const isPlayoffTeam = index < config.playoffTeams;
-                            const style = isPlayoffTeam ? 'background-color: rgba(40, 167, 69, 0.05);' : '';
+        // Проверяем, завершена ли регулярка
+        const regularSeasonCompleted = this.dataManager.calculateRegularSeasonCompleted(league);
+        
+        // Получаем сетку плей-офф (автоматически строится из игр)
+        const playoffBracket = this.dataManager.getPlayoffBracket(league);
+        
+        // Показываем вкладку плей-офф если регулярка завершена ИЛИ уже есть игры плей-офф
+        const hasPlayoffGames = this.dataManager.games.some(game => 
+            game.gameType === 'playoff' && game.league === league
+        );
+        
+        const shouldShowPlayoffTab = regularSeasonCompleted || hasPlayoffGames;
 
-                            return `<tr class="clickable-row" data-team-name="${stand.teamName}" style="${style}">
-                                <td>${index + 1}</td>
-                                <td>
-                                    <div class="team-row">
-                                        <img src="${stand.team.logo}" alt="${stand.teamName}" class="team-logo-small" onerror="this.onImageError(this)">
-                                        ${stand.teamName}
-                                    </div>
-                                </td>
-                                <td>${stand.played}</td>
-                                <td>${stand.wins}/${stand.losses}</td>
-                                <td>${stand.played > 0 ? Math.round(stand.wins / stand.played * 1000) / 10 : 0}</td>
-                                <td>
-                                    ${this.renderTrendDots(stand.trand)}
-                                </td>
-                                <td>${stand.pointsFor}</td>
-                                <td>${stand.pointsAgainst}</td>
-                                <td class="${stand.pointsFor - stand.pointsAgainst >= 0 ? 'positive' : 'negative'}">
-                                    ${stand.pointsFor - stand.pointsAgainst >= 0 ? '+' : ''}${stand.pointsFor - stand.pointsAgainst}
-                                </td>
-                                <td><strong>${stand.points}</strong></td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
+        let html = `
+            <div class="standings-container">
+                <div class="playoff-tabs">
+                    <button class="playoff-tab active" data-tab="regular">
+                        <span class="playoff-tab-icon">📊</span>
+                        Регулярный сезон
+                    </button>
+                    ${shouldShowPlayoffTab ? `
+                        <button class="playoff-tab" data-tab="playoff">
+                            <span class="playoff-tab-icon">🏆</span>
+                            Плей-офф
+                        </button>
+                    ` : ''}
+                </div>
+                
+                <!-- Вкладка регулярного сезона -->
+                <div class="playoff-tab-content active" id="regular-tab">
+                    <div class="table-container">
+                        <table class="standings-table">
+                            <!-- Таблица регулярки (без изменений) -->
+                            ${standings.map((stand, index) => {
+                                const isPlayoffTeam = index < config.playoffTeams;
+                                const style = isPlayoffTeam ? 'background-color: rgba(40, 167, 69, 0.05);' : '';
+
+                                return `<tr class="clickable-row" data-team-name="${stand.teamName}" style="${style}">
+                                    <td>${index + 1}</td>
+                                    <td>
+                                        <div class="team-row">
+                                            <img src="${stand.team.logo}" alt="${stand.teamName}" class="team-logo-small" onerror="this.onImageError(this)">
+                                            ${stand.teamName}
+                                        </div>
+                                    </td>
+                                    <td>${stand.played}</td>
+                                    <td>${stand.wins}/${stand.losses}</td>
+                                    <td>${stand.played > 0 ? Math.round(stand.wins / stand.played * 1000) / 10 : 0}</td>
+                                    <td>
+                                        ${this.renderTrendDots(stand.trand)}
+                                    </td>
+                                    <td>${stand.pointsFor}</td>
+                                    <td>${stand.pointsAgainst}</td>
+                                    <td class="${stand.pointsFor - stand.pointsAgainst >= 0 ? 'positive' : 'negative'}">
+                                        ${stand.pointsFor - stand.pointsAgainst >= 0 ? '+' : ''}${stand.pointsFor - stand.pointsAgainst}
+                                    </td>
+                                    <td><strong>${stand.points}</strong></td>
+                                </tr>`;
+                            }).join('')}
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Вкладка плей-офф -->
+                <div class="playoff-tab-content" id="playoff-tab">
+        `;
+
+        if (shouldShowPlayoffTab) {
+            html += this.renderPlayoffBracket(playoffBracket, league, standings);
+        } else {
+            html += `
+                <div class="playoff-not-available">
+                    <div class="playoff-locked">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <h3>Плей-офф еще не начался</h3>
+                        <p>Сетка плей-офф будет доступна после завершения регулярного сезона</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        html += `
+                </div>
             </div>
         `;
 
-        // Добавляем обработчики для кликов по командам
-        container.querySelectorAll('[data-team-name]').forEach(element => {
+        container.innerHTML = html;
+
+        // Настраиваем вкладки
+        this.setupPlayoffTabs(container);
+        
+        // Добавляем обработчики для кликов по командам в регулярке
+        container.querySelectorAll('.clickable-row').forEach(element => {
             element.addEventListener('click', (e) => {
                 const teamName = e.currentTarget.dataset.teamName;
                 this.ui.showTeamModal(teamName, league);
+            });
+        });
+        
+        // Добавляем обработчики для кликов по матчам плей-офф
+        setTimeout(() => {
+            this.setupPlayoffMatchClickHandlers(league);
+        }, 100);
+    }
+
+    getSeedBadgeClass(seed) {
+        if (!seed) return '';
+        if (seed === 1) return 'playoff-seed-1';
+        if (seed === 2) return 'playoff-seed-2';
+        if (seed === 3) return 'playoff-seed-3';
+        if (seed <= 6) return 'playoff-seed-4';
+        return '';
+    }
+
+    renderPlayoffBracket(bracket, league, standings) {
+        const quarterfinals = bracket.quarterfinals || [];
+        const semifinals = bracket.semifinals || [];
+        const thirdPlace = bracket.thirdPlace || [];
+        const final = bracket.final || [];
+        const champion = bracket.champion;
+
+        // Функция для получения seed команды
+        const getTeamSeed = (teamName) => {
+            if (!teamName) return null;
+            const teamIndex = standings.findIndex(t => 
+                this.dataManager.normalizeTeamName(t.teamName) === this.dataManager.normalizeTeamName(teamName)
+            );
+            return teamIndex >= 0 ? teamIndex + 1 : null;
+        };
+        
+        const renderTeamForPlace = (title, place, game, team1Display, team2Display) => {
+            const isCompleted = place.winner !== null;
+            return `
+                <div class="playoff-match" data-game-id="${game.id}" data-league="${league}">
+                    <div class="playoff-match-header">
+                        <div class="playoff-match-title">${title}</div>
+                    </div>
+                    <!-- Команда 1 -->
+                    <div class="playoff-team ${place.team1 && place.winner === place.team1 ? 'winner' : ''}">
+                        <div class="playoff-team-with-seed">
+                            ${place.team1Seed ? `
+                                <div class="playoff-team-seed-info">
+                                    <div class="playoff-seed-badge ${this.getSeedBadgeClass(place.team1Seed)}" 
+                                         title="Место в регулярке: ${place.team1Seed}">
+                                        ${place.team1Seed}
+                                    </div>
+                                </div>
+                            ` : ''}
+                                        
+                            <div class="playoff-team-info">
+                                <img src="${place.team1 ? this.getTeamLogo(place.team1, league) : 
+                                        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEJEPC90ZXh0Pgo8L3N2Zz4='}" 
+                                     alt="${team1Display}" class="playoff-team-logo" onerror="this.onImageError(this)">
+                                <div class="playoff-team-details">
+                                    <span class="playoff-team-name">${team1Display}</span>
+                                </div>
+                            </div>
+                            
+                            ${game ? `
+                                <div class="playoff-team-score">
+                                    ${game.scoreHome}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    <!-- Команда 2 -->
+                    <div class="playoff-team ${place.team2 && place.winner === place.team2 ? 'winner' : ''}">
+                        <div class="playoff-team-with-seed">
+                            ${place.team2Seed ? `
+                                <div class="playoff-team-seed-info">
+                                    <div class="playoff-seed-badge ${this.getSeedBadgeClass(place.team2Seed)}" 
+                                         title="Место в регулярке: ${place.team2Seed}">
+                                        ${place.team2Seed}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                             <div class="playoff-team-info">
+                                <img src="${place.team2 ? this.getTeamLogo(place.team2, league) : 
+                                        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEJEPC90ZXh0Pgo8L3N2Zz4='}" 
+                                     alt="${team2Display}" class="playoff-team-logo" onerror="this.onImageError(this)">
+                                <div class="playoff-team-details">
+                                    <span class="playoff-team-name">${team2Display}</span>
+                                </div>
+                            </div>
+                            
+                            ${game ? `
+                                <div class="playoff-team-score">
+                                    ${game.scoreAway}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="playoff-match-footer">
+                        <div class="playoff-match-status ${isCompleted ? 'completed' : 'scheduled'}">
+                            ${isCompleted ? 'Завершено' : 'Запланировано'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        let html = `
+            <div class="playoff-bracket-container">
+                <div class="playoff-bracket">
+        `;
+        
+        // Четвертьфиналы (только для 6 команд)
+        if (quarterfinals.length > 0) {
+            html += `
+                <div class="playoff-round playoff-round-quartefinals">
+                    <div class="playoff-round-title">1/4 финала</div>
+                    <div class="playoff-round-matches">
+            `;
+            
+            quarterfinals.forEach((qf, index) => {
+                const game = qf.games && qf.games.length > 0 ? qf.games[0] : null;
+                
+                html += renderTeamForPlace(`1/4 финала ${index + 1}`, qf, game, qf.team1, qf.team2);
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Полуфиналы
+        if (semifinals.length > 0) {
+            html += `
+                <div class="playoff-round playoff-round-semifinals">
+                    <div class="playoff-round-title">1/2 финала</div>
+                    <div class="playoff-round-matches">
+            `;
+            
+            semifinals.forEach((sf, index) => {
+                const game = sf.games && sf.games.length > 0 ? sf.games[0] : null;
+                const team2Display = sf.team2 || (quarterfinals.length > 0 ? 
+                    (index === 0 ? 'Win 1/4 2' : 'Win 1/4 1') : 
+                    'TBD');
+                
+                html += renderTeamForPlace(`1/2 финала ${index + 1}`, sf, game, sf.team1, team2Display);
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Матч за 3-е место
+        if (thirdPlace.length > 0) {
+            const tp = thirdPlace[0];
+            const game = tp.games && tp.games.length > 0 ? tp.games[0] : null;
+            const team1Display = tp.team1 || 'Loss 1/2 1';
+            const team2Display = tp.team2 || 'Loss 1/2 2';
+            
+            html += `
+                <div class="playoff-third-place-container">
+                    <div class="playoff-third-place-match-wrapper">
+                        <div class="playoff-round playoff-round-third-place">
+                            <div class="playoff-round-title">
+                                <span class="bronze-icon">🥉</span> Матч за 3-е место
+                            </div>
+                            <div class="playoff-round-matches">
+                                ${renderTeamForPlace('Матч за 3-е место', tp, game, team1Display, team2Display)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Финал
+        if (final.length > 0) {
+            const finalMatch = final[0];
+            const game = finalMatch.games && finalMatch.games.length > 0 ? finalMatch.games[0] : null;
+            const team1Display = finalMatch.team1 || 'Win 1/2 1';
+            const team2Display = finalMatch.team2 || 'Win 1/2 2';
+            
+            html += `
+                <div class="playoff-round playoff-round-finals">
+                    <div class="playoff-round-title">Финал</div>
+                    <div class="playoff-round-matches">
+                        ${renderTeamForPlace('Финал', finalMatch, game, team1Display, team2Display)}
+                    </div>
+                </div>
+            `;
+        }
+        
+        html += `
+                </div>
+            </div>
+        `;
+        
+        // Чемпион
+        if (champion) {
+            const championSeed = getTeamSeed(champion);
+            
+            html += `
+                <div class="champion-team">
+                    <div class="trophy">🏆</div>
+                    <h3>Чемпион ${this.dataManager.getLeagueName(league)}</h3>
+                    <div class="champion-name">${champion}</div>
+                    ${championSeed ? `
+                        <div class="champion-seed-info">
+                            <span class="playoff-seed-badge ${this.getSeedBadgeClass(championSeed)}">
+                                ${championSeed}
+                            </span>
+                            <span>Место в регулярке</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+        
+        return html;
+    }
+
+    // Новый метод для настройки вкладок плей-офф
+    setupPlayoffTabs(container) {
+        const tabs = container.querySelector('.playoff-tabs');
+        
+        tabs?.querySelectorAll('.playoff-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabName = e.currentTarget.dataset.tab;
+                
+                // Убираем активный класс у всех вкладок
+                tabs.querySelectorAll('.playoff-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Добавляем активный класс текущей вкладке
+                e.currentTarget.classList.add('active');
+                
+                // Убираем активный класс у всех контентов
+                container.querySelectorAll('.playoff-tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Показываем нужный контент
+                container.querySelector(`#${tabName}-tab`).classList.add('active');
             });
         });
     }
@@ -650,6 +933,30 @@ class HomePage {
     showMatchDetailsModal(game, league) {
         // Используем тот же метод, что и в MatchesRenderer
         this.matchesRenderer.showMatchDetailsModal(game, league);
+    }
+
+    // Добавьте этот метод в класс HomePage после метода setupUpcomingMatchClickHandlers
+
+    setupPlayoffMatchClickHandlers(league) {
+        document.querySelectorAll('.playoff-match').forEach(card => {
+            card.addEventListener('click', async (e) => {
+                             
+                const gameId = card.dataset.gameId;
+                const game = this.dataManager.getGameById(gameId);
+
+                if (game) {
+                    // Проверяем наличие картинки результата
+                    const resultImageUrl = this.dataManager.getGameResultImage(game.id);
+                    const hasResultImage = await this.dataManager.checkImageExists(resultImageUrl);
+                
+                    if (hasResultImage) {
+                        window.homePage.matchesRenderer.showFullscreenImage(resultImageUrl, `${game.teamHome} vs ${game.teamAway}`);
+                    } else {
+                        this.showMatchDetailsModal(game, league);
+                    }
+                }           
+            });
+        });
     }
 }
 

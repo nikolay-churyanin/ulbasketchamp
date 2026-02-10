@@ -667,21 +667,6 @@ class MatchesRenderer {
 
     // Получение статистики команды
     getTeamStats(teamName, league) {
-        const standings = this.dataManager.getLeagueStandings(league);
-        const teamStanding = standings.find(team => 
-            this.dataManager.normalizeTeamName(team.teamName) === this.dataManager.normalizeTeamName(teamName)
-        );
-        
-        if (teamStanding) {
-            return {
-                wins: teamStanding.wins,
-                losses: teamStanding.losses,
-                avgPointsFor: teamStanding.played > 0 ? teamStanding.pointsFor / teamStanding.played : 0,
-                avgPointsAgainst: teamStanding.played > 0 ? teamStanding.pointsAgainst / teamStanding.played : 0
-            };
-        }
-        
-        // Если команда не найдена в таблице (новые команды)
         const teamGames = this.dataManager.getGamesByTeam(teamName, league)
             .filter(game => game.scoreHome !== null && game.scoreAway !== null);
         
@@ -718,28 +703,5 @@ class MatchesRenderer {
     onImageError(img) {
         img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
         img.onerror = null;
-    }
-
-    // Временное уведомление (можно заменить на модальное окно)
-    showMatchNotification(matchInfo) {
-        // Создаем временное уведомление
-        const notification = document.createElement('div');
-        notification.className = 'match-notification';
-        notification.innerHTML = `
-            <div class="notification-content">
-                <strong>${matchInfo}</strong><br>
-                <small>Статистика матча в разработке</small>
-            </div>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Удаляем через 3 секунды
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 3000);
     }
 }
