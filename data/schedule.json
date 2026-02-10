@@ -10,7 +10,8 @@
           "teamHome": "ЦЕМРОС",
           "teamAway": "УлГТУ",
           "location": "ФОК Фаворит",
-          "league": "B"
+          "league": "B",
+          "gameType": "playoff"
         },
         {
           "date": "2026-02-15",
@@ -18,7 +19,8 @@
           "teamHome": "Триумф-2",
           "teamAway": "7 Ветров",
           "location": "ФОК Фаворит",
-          "league": "B"
+          "league": "B",
+          "gameType": "playoff"
         },
         {
           "date": "2026-02-15",

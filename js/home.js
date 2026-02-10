@@ -542,33 +542,48 @@ class HomePage {
                 <div class="playoff-tab-content active" id="regular-tab">
                     <div class="table-container">
                         <table class="standings-table">
-                            <!-- Таблица регулярки (без изменений) -->
-                            ${standings.map((stand, index) => {
-                                const isPlayoffTeam = index < config.playoffTeams;
-                                const style = isPlayoffTeam ? 'background-color: rgba(40, 167, 69, 0.05);' : '';
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Команда</th>
+                                    <th>И</th>
+                                    <th>В/П</th>
+                                    <th>%</th>
+                                    <th>Последние<br>5 игр</th>
+                                    <th>Забито</th>
+                                    <th>Пропущено</th>
+                                    <th>+/-</th>
+                                    <th>О</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${standings.map((stand, index) => {
+                                    const isPlayoffTeam = index < config.playoffTeams;
+                                    const style = isPlayoffTeam ? 'background-color: rgba(40, 167, 69, 0.05);' : '';
 
-                                return `<tr class="clickable-row" data-team-name="${stand.teamName}" style="${style}">
-                                    <td>${index + 1}</td>
-                                    <td>
-                                        <div class="team-row">
-                                            <img src="${stand.team.logo}" alt="${stand.teamName}" class="team-logo-small" onerror="this.onImageError(this)">
-                                            ${stand.teamName}
-                                        </div>
-                                    </td>
-                                    <td>${stand.played}</td>
-                                    <td>${stand.wins}/${stand.losses}</td>
-                                    <td>${stand.played > 0 ? Math.round(stand.wins / stand.played * 1000) / 10 : 0}</td>
-                                    <td>
-                                        ${this.renderTrendDots(stand.trand)}
-                                    </td>
-                                    <td>${stand.pointsFor}</td>
-                                    <td>${stand.pointsAgainst}</td>
-                                    <td class="${stand.pointsFor - stand.pointsAgainst >= 0 ? 'positive' : 'negative'}">
-                                        ${stand.pointsFor - stand.pointsAgainst >= 0 ? '+' : ''}${stand.pointsFor - stand.pointsAgainst}
-                                    </td>
-                                    <td><strong>${stand.points}</strong></td>
-                                </tr>`;
-                            }).join('')}
+                                    return `<tr class="clickable-row" data-team-name="${stand.teamName}" style="${style}">
+                                        <td>${index + 1}</td>
+                                        <td>
+                                            <div class="team-row">
+                                                <img src="${stand.team.logo}" alt="${stand.teamName}" class="team-logo-small" onerror="this.onImageError(this)">
+                                                ${stand.teamName}
+                                            </div>
+                                        </td>
+                                        <td>${stand.played}</td>
+                                        <td>${stand.wins}/${stand.losses}</td>
+                                        <td>${stand.played > 0 ? Math.round(stand.wins / stand.played * 1000) / 10 : 0}</td>
+                                        <td>
+                                            ${this.renderTrendDots(stand.trand)}
+                                        </td>
+                                        <td>${stand.pointsFor}</td>
+                                        <td>${stand.pointsAgainst}</td>
+                                        <td class="${stand.pointsFor - stand.pointsAgainst >= 0 ? 'positive' : 'negative'}">
+                                            ${stand.pointsFor - stand.pointsAgainst >= 0 ? '+' : ''}${stand.pointsFor - stand.pointsAgainst}
+                                        </td>
+                                        <td><strong>${stand.points}</strong></td>
+                                    </tr>`;
+                                }).join('')}
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -646,7 +661,7 @@ class HomePage {
         const renderTeamForPlace = (title, place, game, team1Display, team2Display) => {
             const isCompleted = place.winner !== null;
             return `
-                <div class="playoff-match" data-game-id="${game.id}" data-league="${league}">
+                <div class="playoff-match" data-game-id="${game ? game.id : -1}" data-league="${league}">
                     <div class="playoff-match-header">
                         <div class="playoff-match-title">${title}</div>
                     </div>
@@ -671,7 +686,7 @@ class HomePage {
                                 </div>
                             </div>
                             
-                            ${game ? `
+                            ${game && game.scoreHome ? `
                                 <div class="playoff-team-score">
                                     ${game.scoreHome}
                                 </div>
@@ -700,7 +715,7 @@ class HomePage {
                                 </div>
                             </div>
                             
-                            ${game ? `
+                            ${game && game.scoreAway ? `
                                 <div class="playoff-team-score">
                                     ${game.scoreAway}
                                 </div>
