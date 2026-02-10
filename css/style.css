@@ -12,6 +12,7 @@
 @import url('match-details.css');
 @import url('team-modal.css');
 @import url('playoff.css');
+@import url('components/preview.css');
 @import url('utilities.css');
 
 /* Скрытые секции (будут показываться через JavaScript) */

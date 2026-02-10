@@ -53,6 +53,40 @@ class BasketballData {
         return this.leagueConfigs[league];
     }
 
+    async loadPlayoffPreview(league) {
+        try {
+            const previewPath = `data/league-${league.toLowerCase()}-preview.md?${Date.now()}`;
+            const response = await fetch(previewPath, {
+                cache: 'no-cache',
+                headers: {
+                    'Accept': 'text/markdown, text/plain'
+                }
+            });
+            
+            if (response.ok) {
+                return await response.text();
+            } else {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error(`Error loading playoff preview for league ${league}:`, error);
+            throw error;
+        }
+    }
+
+    async hasPreviewFile(league) {
+        try {
+            const previewPath = `data/league-${league.toLowerCase()}-preview.md`;
+            const response = await fetch(previewPath, {
+                method: 'HEAD',
+                cache: 'no-cache'
+            });
+            return response.ok;
+        } catch (error) {
+            return false;
+        }
+    }
+
     getLeagueName(league) {
         const config = this.getLeagueConfig(league);
         return config.name;
@@ -300,7 +334,7 @@ class BasketballData {
         if (league === 'A') {
             return 'Лига А'
         } else if (league === 'B') {
-            return 'Лиги Б'
+            return 'Лига Б'
         } else {
             return 'Жен. Лига'
         }
