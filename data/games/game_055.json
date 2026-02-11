@@ -3,22 +3,10 @@
     "team_a": "ЦЕМРОС",
     "team_b": "Триумф-2",
     "score": "54:49",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2025-12-07",
     "venue": "ФОК Фаворит",
-    "time": "10:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "ЦЕМРОС",
-    "teamAway": "Триумф-2",
-    "date": "2025-12-07",
     "time": "10:30",
-    "location": "ФОК Фаворит",
-    "datetime": "2025-12-07 10:30",
-    "timestamp": 1765092600.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "07.12.2025 11:07"
+  "added_by": "cgnikolay"
 }

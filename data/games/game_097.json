@@ -3,22 +3,10 @@
     "team_a": "Дельта-2",
     "team_b": "УлГТУ",
     "score": "79:71",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2026-02-01",
     "venue": "ФОК Фаворит",
-    "time": "09:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "Дельта-2",
-    "teamAway": "УлГТУ",
-    "date": "2026-02-01",
     "time": "09:00",
-    "location": "ФОК Фаворит",
-    "datetime": "2026-02-01 09:00",
-    "timestamp": 1769925600.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "01.02.2026 10:06"
+  "added_by": "cgnikolay"
 }

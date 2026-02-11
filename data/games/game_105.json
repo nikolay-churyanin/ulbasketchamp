@@ -3,22 +3,10 @@
     "team_a": "ЦЕМРОС",
     "team_b": "7 Ветров",
     "score": "59:69",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2026-02-08",
     "venue": "Манеж УлГПУ",
-    "time": "17:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "ЦЕМРОС",
-    "teamAway": "7 Ветров",
-    "date": "2026-02-08",
     "time": "17:30",
-    "location": "Манеж УлГПУ",
-    "datetime": "2026-02-08 17:30",
-    "timestamp": 1770561000.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "08.02.2026 18:28"
+  "added_by": "cgnikolay"
 }

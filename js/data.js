@@ -320,9 +320,9 @@ class BasketballData {
             game.date = game.match_info.date;
             game.time = game.match_info.time;
             game.location = game.match_info.venue;
-            game.gameType = game.original_match?.gameType || 'regular';
+            game.gameType = game.match_info.gameType || 'regular';
             
-            game.league = game.original_match?.league || 'A';
+            game.league = game.match_info.league || 'A';
         }
     }
 

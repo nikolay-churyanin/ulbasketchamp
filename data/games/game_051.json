@@ -3,22 +3,10 @@
     "team_a": "АВВА-МЧС",
     "team_b": "Спарта-УлГПУ",
     "score": "72:74",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-11-29",
     "venue": "Манеж УлГПУ",
-    "time": "17:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "АВВА-МЧС",
-    "teamAway": "Спарта-УлГПУ",
-    "date": "2025-11-29",
     "time": "17:00",
-    "location": "Манеж УлГПУ",
-    "datetime": "2025-11-29 17:00",
-    "timestamp": 1764421200.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "02.12.2025 21:48"
+  "added_by": "cgnikolay"
 }

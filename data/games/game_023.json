@@ -3,22 +3,10 @@
     "team_a": "ЦЕМРОС",
     "team_b": "Дельта-2",
     "score": "56:70",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2025-10-19",
     "venue": "Зал УлГУ",
-    "time": "19:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "ЦЕМРОС",
-    "teamAway": "Дельта-2",
-    "date": "2025-10-19",
     "time": "19:00",
-    "location": "Зал УлГУ",
-    "datetime": "2025-10-19 19:00",
-    "timestamp": 1760886000.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "20.10.2025 10:21"
+  "added_by": "cgnikolay"
 }

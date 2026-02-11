@@ -3,22 +3,10 @@
     "team_a": "АВВА-МЧС",
     "team_b": "УИГА-Дельта",
     "score": "74:50",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-11-22",
     "venue": "Зал УлГУ",
-    "time": "18:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "АВВА-МЧС",
-    "teamAway": "УИГА-Дельта",
-    "date": "2025-11-22",
     "time": "18:00",
-    "location": "Зал УлГУ",
-    "datetime": "2025-11-22 18:00",
-    "timestamp": 1763820000.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "23.11.2025 17:00"
+  "added_by": "cgnikolay"
 }

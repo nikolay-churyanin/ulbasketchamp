@@ -3,22 +3,10 @@
     "team_a": "УлГУ",
     "team_b": "УСУТ",
     "score": "87:47",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2026-01-25",
     "venue": "Зал УлГУ",
-    "time": "14:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "F",
-    "teamHome": "УлГУ",
-    "teamAway": "УСУТ",
-    "date": "2026-01-25",
     "time": "14:30",
-    "location": "Зал УлГУ",
-    "datetime": "2026-01-25 14:30",
-    "timestamp": 1769340600.0
+    "league": "F"
   },
-  "added_by": "cgnikolay",
-  "added_at": "25.01.2026 22:01"
+  "added_by": "cgnikolay"
 }

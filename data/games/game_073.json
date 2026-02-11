@@ -3,22 +3,10 @@
     "team_a": "Спарта-УлГПУ",
     "team_b": "БК Петровск",
     "score": "84:68",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2026-01-11",
     "venue": "Манеж УлГПУ",
-    "time": "16:10"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "Спарта-УлГПУ",
-    "teamAway": "БК Петровск",
-    "date": "2026-01-11",
     "time": "16:10",
-    "location": "Манеж УлГПУ",
-    "datetime": "2026-01-11 16:10",
-    "timestamp": 1768137000.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "12.01.2026 14:28"
+  "added_by": "cgnikolay"
 }

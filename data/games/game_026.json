@@ -3,22 +3,10 @@
     "team_a": "Приборка",
     "team_b": "Авангард",
     "score": "41:59",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2025-10-18",
     "venue": "Зал УлГУ",
-    "time": "19:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "Приборка",
-    "teamAway": "Авангард",
-    "date": "2025-10-18",
     "time": "19:30",
-    "location": "Зал УлГУ",
-    "datetime": "2025-10-18 19:30",
-    "timestamp": 1760801400.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "20.10.2025 10:22"
+  "added_by": "cgnikolay"
 }

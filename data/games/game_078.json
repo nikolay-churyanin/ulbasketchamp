@@ -3,22 +3,10 @@
     "team_a": "УлГТУ",
     "team_b": "Ветераны",
     "score": "69:94",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2026-01-17",
     "venue": "Манеж УлГПУ",
-    "time": "12:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "УлГТУ",
-    "teamAway": "Ветераны",
-    "date": "2026-01-17",
     "time": "12:00",
-    "location": "Манеж УлГПУ",
-    "datetime": "2026-01-17 12:00",
-    "timestamp": 1768640400.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "17.01.2026 13:15"
+  "added_by": "cgnikolay"
 }

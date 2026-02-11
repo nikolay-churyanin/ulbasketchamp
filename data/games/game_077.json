@@ -3,22 +3,10 @@
     "team_a": "УлГУ",
     "team_b": "Феникс",
     "score": "80:39",
-    "competition": "Чемп. Ульян. области Ж",
     "date": "2025-12-01",
     "venue": "Манеж УлГПУ",
-    "time": "12:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "F",
-    "teamHome": "УлГУ",
-    "teamAway": "Феникс",
-    "date": "2025-12-01",
     "time": "12:00",
-    "location": "Манеж УлГПУ",
-    "datetime": "2025-12-01 12:00",
-    "timestamp": 1768137000.0
+    "league": "F"
   },
-  "added_by": "cgnikolay",
-  "added_at": "12.01.2026 14:28"
+  "added_by": "cgnikolay"
 }

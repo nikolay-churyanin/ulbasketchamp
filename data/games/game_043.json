@@ -3,22 +3,10 @@
     "team_a": "УлГПУ-2",
     "team_b": "ЦЕМРОС",
     "score": "52:57",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2025-11-23",
     "venue": "Манеж УлГПУ",
-    "time": "11:40"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "УлГПУ-2",
-    "teamAway": "ЦЕМРОС",
-    "date": "2025-11-23",
     "time": "11:40",
-    "location": "Манеж УлГПУ",
-    "datetime": "2025-11-23 11:40",
-    "timestamp": 1763883600.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "23.11.2025 17:01"
+  "added_by": "cgnikolay"
 }

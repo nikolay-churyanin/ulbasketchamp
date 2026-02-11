@@ -3,22 +3,10 @@
     "team_a": "Перевалбаскет",
     "team_b": "АВВА-МЧС",
     "score": "32:62",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-12-13",
     "venue": "ДС Дельфин",
-    "time": "14:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "Перевалбаскет",
-    "teamAway": "АВВА-МЧС",
-    "date": "2025-12-13",
     "time": "14:00",
-    "location": "ДС Дельфин",
-    "datetime": "2025-12-13 14:00",
-    "timestamp": 1765623600.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "13.12.2025 14:31"
+  "added_by": "cgnikolay"
 }

@@ -3,22 +3,10 @@
     "team_a": "Триумф-2",
     "team_b": "Приборка",
     "score": "76:33",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2025-12-21",
     "venue": "Зал УлГУ",
-    "time": "16:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "Триумф-2",
-    "teamAway": "Приборка",
-    "date": "2025-12-21",
     "time": "16:00",
-    "location": "Зал УлГУ",
-    "datetime": "2025-12-21 16:00",
-    "timestamp": 1766322000.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "22.12.2025 09:41"
+  "added_by": "cgnikolay"
 }

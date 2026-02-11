@@ -3,22 +3,10 @@
     "team_a": "УУОР",
     "team_b": "Перевалбаскет",
     "score": "98:82",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2026-01-11",
     "venue": "Манеж УлГПУ",
-    "time": "14:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "УУОР",
-    "teamAway": "Перевалбаскет",
-    "date": "2026-01-11",
     "time": "14:30",
-    "location": "Манеж УлГПУ",
-    "datetime": "2026-01-11 14:30",
-    "timestamp": 1768131000.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "12.01.2026 14:27"
+  "added_by": "cgnikolay"
 }

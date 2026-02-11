@@ -3,22 +3,10 @@
     "team_a": "Перевалбаскет",
     "team_b": "УлГУ",
     "score": "52:86",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-10-19",
     "venue": "Зал УлГУ",
-    "time": "17:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "Перевалбаскет",
-    "teamAway": "УлГУ",
-    "date": "2025-10-19",
     "time": "17:30",
-    "location": "Зал УлГУ",
-    "datetime": "2025-10-19 17:30",
-    "timestamp": 1760880600.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "20.10.2025 10:22"
+  "added_by": "cgnikolay"
 }

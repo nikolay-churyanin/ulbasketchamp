@@ -3,22 +3,10 @@
     "team_a": "УлГУ",
     "team_b": "УлГПУ",
     "score": "105:33",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2026-01-31",
     "venue": "Манеж УлГПУ",
-    "time": "14:40"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "F",
-    "teamHome": "УлГУ",
-    "teamAway": "УлГПУ",
-    "date": "2026-01-31",
     "time": "14:40",
-    "location": "Манеж УлГПУ",
-    "datetime": "2026-01-31 14:40",
-    "timestamp": 1769859600.0
+    "league": "F"
   },
-  "added_by": "cgnikolay",
-  "added_at": "31.01.2026 15:31"
+  "added_by": "cgnikolay"
 }

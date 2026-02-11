@@ -3,22 +3,10 @@
     "team_a": "УУОР",
     "team_b": "БК Петровск",
     "score": "96:100",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2026-01-25",
     "venue": "Зал УлГУ",
-    "time": "16:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "УУОР",
-    "teamAway": "БК Петровск",
-    "date": "2026-01-25",
     "time": "16:00",
-    "location": "Зал УлГУ",
-    "datetime": "2026-01-25 16:00",
-    "timestamp": 1769346000.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "25.01.2026 21:31"
+  "added_by": "cgnikolay"
 }

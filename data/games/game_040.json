@@ -3,22 +3,10 @@
     "team_a": "Перевалбаскет",
     "team_b": "Цементник-Марбакс",
     "score": "71:49",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-11-09",
     "venue": "ФОК Фаворит",
-    "time": "13:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "Перевалбаскет",
-    "teamAway": "Цементник-Марбакс",
-    "date": "2025-11-09",
     "time": "13:30",
-    "location": "ФОК Фаворит",
-    "datetime": "2025-11-09 13:30",
-    "timestamp": 1762680600.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "09.11.2025 15:44"
+  "added_by": "cgnikolay"
 }

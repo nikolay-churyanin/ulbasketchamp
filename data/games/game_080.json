@@ -3,22 +3,10 @@
     "team_a": "УУОР",
     "team_b": "Цементник-Марбакс",
     "score": "79:87",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2026-01-17",
     "venue": "Манеж УлГПУ",
-    "time": "15:20"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "УУОР",
-    "teamAway": "Цементник-Марбакс",
-    "date": "2026-01-17",
     "time": "15:20",
-    "location": "Манеж УлГПУ",
-    "datetime": "2026-01-17 15:20",
-    "timestamp": 1768652400.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "17.01.2026 15:52"
+  "added_by": "cgnikolay"
 }

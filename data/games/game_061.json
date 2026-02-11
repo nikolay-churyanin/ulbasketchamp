@@ -3,22 +3,10 @@
     "team_a": "Ветераны",
     "team_b": "Приборка",
     "score": "91:26",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2025-12-14",
     "venue": "ФОК Фаворит",
-    "time": "09:00"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "Ветераны",
-    "teamAway": "Приборка",
-    "date": "2025-12-14",
     "time": "09:00",
-    "location": "ФОК Фаворит",
-    "datetime": "2025-12-14 09:00",
-    "timestamp": 1765692000.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "14.12.2025 11:46"
+  "added_by": "cgnikolay"
 }

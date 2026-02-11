@@ -3,22 +3,10 @@
     "team_a": "БК Петровск",
     "team_b": "Перевалбаскет",
     "score": "64:65",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-11-23",
     "venue": "Зал УлГУ",
-    "time": "14:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "БК Петровск",
-    "teamAway": "Перевалбаскет",
-    "date": "2025-11-23",
     "time": "14:30",
-    "location": "Зал УлГУ",
-    "datetime": "2025-11-23 14:30",
-    "timestamp": 1763893800.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "23.11.2025 17:02"
+  "added_by": "cgnikolay"
 }

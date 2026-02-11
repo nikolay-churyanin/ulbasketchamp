@@ -3,22 +3,10 @@
     "team_a": "Приборка",
     "team_b": "УУОР-2",
     "score": "48:67",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2025-11-23",
     "venue": "Зал УлГУ",
-    "time": "17:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "Приборка",
-    "teamAway": "УУОР-2",
-    "date": "2025-11-23",
     "time": "17:30",
-    "location": "Зал УлГУ",
-    "datetime": "2025-11-23 17:30",
-    "timestamp": 1763904600.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "23.11.2025 19:48"
+  "added_by": "cgnikolay"
 }

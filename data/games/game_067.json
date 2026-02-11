@@ -3,22 +3,10 @@
     "team_a": "УИГА-Дельта",
     "team_b": "Цементник-Марбакс",
     "score": "76:82",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-12-14",
     "venue": "Зал УлГУ",
-    "time": "17:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "УИГА-Дельта",
-    "teamAway": "Цементник-Марбакс",
-    "date": "2025-12-14",
     "time": "17:30",
-    "location": "Зал УлГУ",
-    "datetime": "2025-12-14 17:30",
-    "timestamp": 1765722600.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "14.12.2025 18:32"
+  "added_by": "cgnikolay"
 }

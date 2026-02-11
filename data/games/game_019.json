@@ -3,22 +3,10 @@
     "team_a": "УлГУ",
     "team_b": "АВВА-МЧС",
     "score": "89:52",
-    "competition": "Муж. Чемп. Ульян. области A",
     "date": "2025-10-12",
     "venue": "Зал УлГУ",
-    "time": "14:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "A",
-    "teamHome": "УлГУ",
-    "teamAway": "АВВА-МЧС",
-    "date": "2025-10-12",
     "time": "14:30",
-    "location": "Зал УлГУ",
-    "datetime": "2025-10-12 14:30",
-    "timestamp": 1760265000.0
+    "league": "A"
   },
-  "added_by": "cgnikolay",
-  "added_at": "12.10.2025 16:09"
+  "added_by": "cgnikolay"
 }

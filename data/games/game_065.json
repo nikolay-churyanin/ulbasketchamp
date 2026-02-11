@@ -3,22 +3,10 @@
     "team_a": "УУОР-2",
     "team_b": "ЦЕМРОС",
     "score": "47:57",
-    "competition": "Муж. Чемп. Ульян. области B",
     "date": "2025-12-14",
     "venue": "Зал УлГУ",
-    "time": "14:30"
-  },
-  "original_match": {
-    "stage": "Регулярный сезон",
-    "league": "B",
-    "teamHome": "УУОР-2",
-    "teamAway": "ЦЕМРОС",
-    "date": "2025-12-14",
     "time": "14:30",
-    "location": "Зал УлГУ",
-    "datetime": "2025-12-14 14:30",
-    "timestamp": 1765711800.0
+    "league": "B"
   },
-  "added_by": "cgnikolay",
-  "added_at": "14.12.2025 15:43"
+  "added_by": "cgnikolay"
 }
