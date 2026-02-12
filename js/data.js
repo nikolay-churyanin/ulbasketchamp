@@ -53,40 +53,6 @@ class BasketballData {
         return this.leagueConfigs[league];
     }
 
-    async loadPlayoffPreview(league) {
-        try {
-            const previewPath = `data/league-${league.toLowerCase()}-preview.md?${Date.now()}`;
-            const response = await fetch(previewPath, {
-                cache: 'no-cache',
-                headers: {
-                    'Accept': 'text/markdown, text/plain'
-                }
-            });
-            
-            if (response.ok) {
-                return await response.text();
-            } else {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-        } catch (error) {
-            console.error(`Error loading playoff preview for league ${league}:`, error);
-            throw error;
-        }
-    }
-
-    async hasPreviewFile(league) {
-        try {
-            const previewPath = `data/league-${league.toLowerCase()}-preview.md`;
-            const response = await fetch(previewPath, {
-                method: 'HEAD',
-                cache: 'no-cache'
-            });
-            return response.ok;
-        } catch (error) {
-            return false;
-        }
-    }
-
     getLeagueName(league) {
         const config = this.getLeagueConfig(league);
         return config.name;
@@ -308,6 +274,148 @@ class BasketballData {
             console.error('Ошибка в loadDataWithProgress:', error);
             throw error;
         }
+    }
+
+    async loadAllNews() {
+        try {
+            // Список всех .md файлов в папке news
+            const newsFiles = [
+                'league-b-playoff-preview.md',
+                'league-b-last-tour.md',
+                'league-a-tour.md'
+            ];
+            
+            let allNews = [];
+            
+            for (const file of newsFiles) {
+                const news = await this.loadNewsFile(file);
+                if (news) {
+                    allNews.push(news);
+                }
+            }
+            
+            // Сортируем по дате (новые сверху)
+            allNews.sort((a, b) => {
+                const dateA = this.parseDate(a.date);
+                const dateB = this.parseDate(b.date);
+                return dateB - dateA;
+            });
+            
+            return allNews;
+            
+        } catch (error) {
+            console.error('Error loading all news:', error);
+            return [];
+        }
+    }
+
+    // Загрузка одного файла новости
+    async loadNewsFile(filename) {
+        try {
+            const response = await fetch(`data/news/${filename}?t=${Date.now()}`);
+            if (!response.ok) return null;
+            
+            const content = await response.text();
+            return this.parseNewsFile(content, filename);
+            
+        } catch (error) {
+            console.log(`News file ${filename} not found`);
+            return null;
+        }
+    }
+
+    // Парсинг одного файла новости
+    parseNewsFile(content, filename) {
+        const lines = content.split('\n');
+        
+        let title = '';
+        let date = '';
+        let image = null;
+        let content_start = 0;
+        
+        // Ищем заголовок (первая строка с #)
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith('# ')) {
+                title = lines[i].substring(2).trim();
+                content_start = i + 1;
+                break;
+            }
+        }
+        
+        // Ищем дату (строка с "Дата:")
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith('Дата:')) {
+                date = lines[i].substring(5).trim();
+                break;
+            }
+        }
+        
+        // Ищем изображение (строка с "Изображение:")
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith('Изображение:')) {
+                image = lines[i].substring(11).trim();
+                break;
+            }
+        }
+        
+        // Если не нашли дату или заголовок, пропускаем
+        if (!title || !date) {
+            console.warn(`Invalid news file: ${filename}`, { title, date });
+            return null;
+        }
+        
+        // Весь остальной контент - тело новости
+        let body = '';
+        for (let i = content_start; i < lines.length; i++) {
+            // Пропускаем строки с мета-данными
+            if (lines[i].startsWith('Дата:') || lines[i].startsWith('Изображение:')) {
+                continue;
+            }
+            body += lines[i] + '\n';
+        }
+        
+        return {
+            id: filename.replace('.md', ''),
+            title: title,
+            date: date,
+            image: image,
+            league: this.extractLeagueFromNews(filename),
+            content: body.trim(),
+            filename: filename,
+            timestamp: this.parseDate(date)
+        };
+    }
+
+    // Парсинг даты из формата ДД.ММ.ГГГГ
+    parseDate(dateString) {
+        const [day, month, year] = dateString.split('.');
+        return new Date(`${year}-${month}-${day}`).getTime();
+    }
+
+    // Загрузка новостей по фильтру
+    async loadNewsByFilter(filter = 'all') {
+        const allNews = await this.loadAllNews();
+        
+        if (filter === 'all') {
+            return allNews;
+        }
+        
+        return allNews.filter(news => {
+            return news.league === filter;
+        });
+    }
+
+    // Определяем лигу новости по имени файла или контенту
+    extractLeagueFromNews(newsFileName) {
+        const filename = newsFileName.toLowerCase();
+        
+        if (filename.includes('league-a') || filename.includes('лига-а')) return 'A';
+        if (filename.includes('league-b') || filename.includes('лига-б')) return 'B';
+        if (filename.includes('league-f') || filename.includes('женская')) return 'F';
+        if (filename.includes('general') || filename.includes('общее')) return 'general';
+        
+        // По умолчанию - общая новость
+        return 'general';
     }
 
     normalizeGameData(game, gameId) {

@@ -1130,38 +1130,6 @@
     }
 }
 
-/* Улучшаем навигацию на мобильных */
-@media (max-width: 768px) {
-    .main-nav {
-        gap: 10px;
-        margin: 15px 0;
-        padding: 10px;
-        border-radius: 12px;
-        overflow-x: auto;
-        justify-content: flex-start;
-    }
-    
-    .nav-link {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        white-space: nowrap;
-        border-radius: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-nav {
-        gap: 8px;
-        padding: 8px;
-        margin: 12px 0;
-    }
-    
-    .nav-link {
-        padding: 6px 10px;
-        font-size: 0.85rem;
-    }
-}
-
 /* Улучшаем секции лиг на мобильных */
 @media (max-width: 768px) {
     .league-section {

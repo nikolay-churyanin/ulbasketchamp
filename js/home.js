@@ -5,6 +5,10 @@ class HomePage {
         this.ui = ui;
         this.matchesRenderer = new MatchesRenderer(dataManager);
         this.currentLeague = null;
+        this.newsManager = new NewsManager(dataManager);
+        
+        // Сохраняем в глобальную область
+        window.newsManager = this.newsManager;
         this.init();
     }
 
@@ -17,29 +21,27 @@ class HomePage {
         if (this.dataManager.ready) {
             this.dataManager.ready.then(() => {
                 this.renderHomePage();
+                this.setupNewsFilter();
             });
         }
     }
 
     setupNavigation() {
-        // Обработка кликов по навигации по лигам
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const sectionId = link.dataset.section;
                 
-                // Обновляем активную ссылку
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
                 
-                // Обновляем индикатор лиги
                 this.updateLeagueIndicator(sectionId);
-                
-                // Показываем нужную секцию
                 this.showSection(sectionId);
                 
-                // Если это не главная, загружаем данные лиги
-                if (sectionId !== 'home') {
+                if (sectionId === 'news') {
+                    // Загружаем новости при переходе на вкладку
+                    this.newsManager.loadAndDisplayNews('news-container', 'all');
+                } else if (sectionId !== 'home') {
                     const league = sectionId.split('-')[1].toUpperCase();
                     this.currentLeague = league;
                     this.renderLeaguePage(league);
@@ -47,13 +49,33 @@ class HomePage {
                     this.renderHomePage();
                 }
                 
-                // Прокручиваем к верху страницы
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
-        // Показываем главную страницу по умолчанию
         this.showSection('home');
+    }
+
+    // Настройка фильтра новостей
+    setupNewsFilter() {
+        document.querySelectorAll('.news-filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                const filter = e.currentTarget.dataset.filter;
+                
+                // Обновляем активную кнопку
+                document.querySelectorAll('.news-filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                e.currentTarget.classList.add('active');
+                
+                // Загружаем новости с фильтром
+                if (this.newsManager) {
+                    this.newsManager.loadAndDisplayNews('news-container', filter);
+                }
+            });
+        });
     }
 
     updateLeagueIndicator(sectionId) {
@@ -153,9 +175,6 @@ class HomePage {
             
             const topTeams = standings.slice(0, 3);
             
-            // Проверяем наличие превью
-            const hasPreview = await this.dataManager.hasPreviewFile(league.id);
-            
             html += `
                 <div class="league-card">
                     <div class="league-card-header ${league.color}">
@@ -174,13 +193,6 @@ class HomePage {
                                 </div>
                             `).join('')}
                         </div>
-                        
-                        ${hasPreview ? `
-                            <button class="playoff-preview-btn" onclick="window.homePage.showPlayoffPreview('${league.id}')">
-                                <span class="preview-icon">🔮</span>
-                                Превью плей-офф
-                            </button>
-                        ` : ''}
                     </div>
                     <div class="league-card-footer">
                         <a href="#league-${league.id.toLowerCase()}" class="league-link" data-league="${league.id}">Смотреть лигу</a>
@@ -210,361 +222,6 @@ class HomePage {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
-    }
-
-    async showPlayoffPreview(league) {
-        try {
-            // Показываем загрузку
-            const modal = new SimpleModal();
-            modal.show('Загрузка...', '<div style="padding: 40px; text-align: center;">Загружаем превью...</div>');
-            
-            // Загружаем превью
-            const previewText = await this.dataManager.loadPlayoffPreview(league);
-            const leagueName = this.dataManager.getLeagueName(league);
-            
-            // Конвертируем Markdown в HTML с сохранением форматирования
-            const htmlContent = this.convertMarkdownToHTML(previewText);
-            
-            // Обновляем модальное окно
-            const fullContent = `
-                <div style="padding: 30px;">
-                    <div style="text-align: center; margin-bottom: 25px;">
-                        <div style="font-size: 3rem; margin-bottom: 10px;">🔮</div>
-                        <h2 style="margin: 0 0 5px 0; color: #2c3e50;">${leagueName}</h2>
-                        <div style="color: #7f8c8d; font-size: 0.9rem;">Прогноз и анализ плей-офф</div>
-                    </div>
-                    <div style="line-height: 1.7; color: #333; font-size: 1rem;">
-                        ${htmlContent}
-                    </div>
-                </div>
-            `;
-            
-            modal.show('Превью плей-офф', fullContent);
-            
-        } catch (error) {
-            console.error('Error loading playoff preview:', error);
-            
-            // Показываем ошибку
-            const modal = new SimpleModal();
-            const errorContent = `
-                <div style="padding: 40px; text-align: center;">
-                    <div style="font-size: 3rem; color: #e74c3c; margin-bottom: 20px;">⚠️</div>
-                    <h3 style="color: #2c3e50; margin-bottom: 10px;">Не удалось загрузить превью</h3>
-                    <p style="color: #6c757d;">Попробуйте обновить страницу позже</p>
-                    <button onclick="window.location.reload()" style="
-                        background: #3498db;
-                        color: white;
-                        border: none;
-                        padding: 10px 20px;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        margin-top: 20px;
-                        font-size: 1rem;
-                    ">Обновить страницу</button>
-                </div>
-            `;
-            
-            modal.show('Ошибка', errorContent);
-        }
-    }
-    
-    convertMarkdownToHTML(markdown) {
-        if (!markdown) return '<p>Нет данных</p>';
-        
-        // 1. Сначала обрабатываем таблицы
-        let html = this.convertSimpleMarkdownTables(markdown);
-        
-        // 2. Разделяем на строки для обработки
-        const lines = html.split('\n');
-        let result = [];
-        let inParagraph = false;
-        let currentParagraph = [];
-        
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i].trim();
-            
-            // Пропускаем пустые строки
-            if (!line) {
-                if (inParagraph && currentParagraph.length > 0) {
-                    // Завершаем текущий параграф
-                    const paragraphText = currentParagraph.join(' ');
-                    result.push(`<p style="margin-bottom: 1em; line-height: 1.6;">${paragraphText}</p>`);
-                    inParagraph = false;
-                    currentParagraph = [];
-                }
-                continue;
-            }
-            
-            // Проверяем, является ли строка HTML-тегом (таблица, заголовок, список и т.д.)
-            const isHtmlTag = line.startsWith('<');
-            const isHeading = line.startsWith('<h');
-            const isList = line.startsWith('<ul') || line.startsWith('<li') || line.includes('</ul>');
-            const isTable = line.includes('<table') || line.includes('</table>') || 
-                           line.includes('<tr') || line.includes('<td') || line.includes('<th');
-            
-            if (isHtmlTag || isHeading || isList || isTable) {
-                // Если у нас был незакрытый параграф, закрываем его
-                if (inParagraph && currentParagraph.length > 0) {
-                    const paragraphText = currentParagraph.join(' ');
-                    result.push(`<p style="margin-bottom: 1em; line-height: 1.6;">${paragraphText}</p>`);
-                    inParagraph = false;
-                    currentParagraph = [];
-                }
-                // Добавляем HTML-тег как есть
-                result.push(line);
-            } 
-            // Проверяем, начинается ли список
-            else if (line.startsWith('- ') || line.match(/^\d+\./)) {
-                // Завершаем текущий параграф если есть
-                if (inParagraph && currentParagraph.length > 0) {
-                    const paragraphText = currentParagraph.join(' ');
-                    result.push(`<p style="margin-bottom: 1em; line-height: 1.6;">${paragraphText}</p>`);
-                    inParagraph = false;
-                    currentParagraph = [];
-                }
-                
-                // Собираем все элементы списка
-                let listItems = [];
-                while (i < lines.length && (lines[i].startsWith('- ') || lines[i].match(/^\d+\./))) {
-                    let itemText = lines[i].trim();
-                    // Убираем маркер списка
-                    if (itemText.startsWith('- ')) {
-                        itemText = itemText.substring(2);
-                    } else if (itemText.match(/^\d+\./)) {
-                        itemText = itemText.replace(/^\d+\.\s*/, '');
-                    }
-                    
-                    // Применяем inline-форматирование к элементу списка
-                    itemText = this.applyInlineFormatting(itemText);
-                    listItems.push(`<li style="margin-bottom: 0.3em;">${itemText}</li>`);
-                    i++;
-                }
-                i--; // Возвращаемся на одну строку назад
-                
-                if (listItems.length > 0) {
-                    result.push(`<ul style="margin: 1em 0 1em 1.5em; padding: 0; list-style-type: disc;">${listItems.join('')}</ul>`);
-                }
-            }
-            // Проверяем заголовки
-            else if (line.startsWith('### ')) {
-                if (inParagraph && currentParagraph.length > 0) {
-                    const paragraphText = currentParagraph.join(' ');
-                    result.push(`<p style="margin-bottom: 1em; line-height: 1.6;">${paragraphText}</p>`);
-                    inParagraph = false;
-                    currentParagraph = [];
-                }
-                const headingText = line.substring(4);
-                const formattedHeading = this.applyInlineFormatting(headingText);
-                result.push(`<h3 style="color: #16a085; margin: 1.5em 0 0.8em 0; font-size: 1.2rem;">${formattedHeading}</h3>`);
-            }
-            else if (line.startsWith('## ')) {
-                if (inParagraph && currentParagraph.length > 0) {
-                    const paragraphText = currentParagraph.join(' ');
-                    result.push(`<p style="margin-bottom: 1em; line-height: 1.6;">${paragraphText}</p>`);
-                    inParagraph = false;
-                    currentParagraph = [];
-                }
-                const headingText = line.substring(3);
-                const formattedHeading = this.applyInlineFormatting(headingText);
-                result.push(`<h2 style="color: #2980b9; margin: 1.8em 0 1em 0; font-size: 1.4rem;">${formattedHeading}</h2>`);
-            }
-            else if (line.startsWith('# ')) {
-                if (inParagraph && currentParagraph.length > 0) {
-                    const paragraphText = currentParagraph.join(' ');
-                    result.push(`<p style="margin-bottom: 1em; line-height: 1.6;">${paragraphText}</p>`);
-                    inParagraph = false;
-                    currentParagraph = [];
-                }
-                const headingText = line.substring(2);
-                const formattedHeading = this.applyInlineFormatting(headingText);
-                result.push(`<h1 style="color: #2c3e50; margin: 2em 0 1.2em 0; padding-bottom: 10px; border-bottom: 2px solid #3498db; font-size: 1.6rem;">${formattedHeading}</h1>`);
-            }
-            // Обычный текст
-            else {
-                if (!inParagraph) {
-                    inParagraph = true;
-                }
-                currentParagraph.push(line);
-            }
-        }
-        
-        // Обрабатываем последний параграф если есть
-        if (inParagraph && currentParagraph.length > 0) {
-            const paragraphText = currentParagraph.join(' ');
-            result.push(`<p style="margin-bottom: 1em; line-height: 1.6;">${paragraphText}</p>`);
-        }
-        
-        // Применяем inline-форматирование ко всему результату (кроме уже отформатированных частей)
-        return this.applyInlineFormattingToResult(result.join('\n'));
-    }
-
-    // Применяем форматирование к уже готовому HTML
-    applyInlineFormattingToResult(html) {
-        // Находим все текстовые блоки, которые не содержат HTML тегов
-        // Ищем позиции между тегами
-        let result = '';
-        let lastIndex = 0;
-        const tagRegex = /<[^>]+>/g;
-        let match;
-        
-        while ((match = tagRegex.exec(html)) !== null) {
-            // Текст перед тегом
-            const textBefore = html.substring(lastIndex, match.index);
-            if (textBefore) {
-                result += this.applyInlineFormatting(textBefore);
-            }
-            
-            // Сам тег
-            result += match[0];
-            
-            lastIndex = match.index + match[0].length;
-        }
-        
-        // Оставшийся текст
-        const remainingText = html.substring(lastIndex);
-        if (remainingText) {
-            result += this.applyInlineFormatting(remainingText);
-        }
-        
-        return result || this.applyInlineFormatting(html);
-    }
-
-    // Метод для применения inline-форматирования (жирный, курсив)
-    applyInlineFormatting(text) {
-        if (!text) return text;
-        
-        // Заменяем **жирный** на <strong>
-        let result = text.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #e74c3c; font-weight: 600;">$1</strong>');
-        
-        // Заменяем *курсив* на <em>
-        result = result.replace(/\*(.*?)\*/g, '<em style="color: #9b59b6; font-style: italic;">$1</em>');
-        
-        return result;
-    }
-
-    // Остальные методы оставляем как есть
-    convertSimpleMarkdownTables(markdown) {
-        const lines = markdown.split('\n');
-        let result = [];
-        let inTable = false;
-        let tableLines = [];
-        let currentLineIndex = 0;
-        
-        while (currentLineIndex < lines.length) {
-            let line = lines[currentLineIndex].trim();
-            
-            // Ищем начало таблицы: строка с | и следующая строка с разделителем
-            if (!inTable && line.includes('|') && 
-                currentLineIndex + 1 < lines.length && 
-                lines[currentLineIndex + 1].trim().includes('|')) {
-                
-                const nextLine = lines[currentLineIndex + 1].trim();
-                // Проверяем, является ли следующая строка разделителем таблицы
-                if (nextLine.includes('---') || nextLine.includes(':|') || nextLine.includes('|:')) {
-                    inTable = true;
-                    tableLines = [line];
-                    currentLineIndex++;
-                    continue;
-                }
-            }
-            
-            if (inTable) {
-                tableLines.push(line);
-                
-                // Проверяем, закончилась ли таблица
-                const nextLineIndex = currentLineIndex + 1;
-                if (nextLineIndex >= lines.length || 
-                    !lines[nextLineIndex].trim() || 
-                    (!lines[nextLineIndex].trim().includes('|') && 
-                     !lines[nextLineIndex].trim().startsWith('|'))) {
-                    
-                    // Конвертируем таблицу
-                    result.push(this.buildHTMLTable(tableLines));
-                    inTable = false;
-                    tableLines = [];
-                }
-            } else {
-                // Не таблица, добавляем как есть
-                result.push(line);
-            }
-            
-            currentLineIndex++;
-        }
-        
-        // Обрабатываем последнюю таблицу если осталась
-        if (inTable && tableLines.length > 0) {
-            result.push(this.buildHTMLTable(tableLines));
-        }
-        
-        return result.join('\n');
-    }
-
-    buildHTMLTable(tableLines) {
-        if (tableLines.length < 2) return tableLines.join('\n');
-        
-        // Убираем пустые строки
-        tableLines = tableLines.filter(line => line.trim());
-        
-        let html = '<div style="margin: 1em 0; overflow-x: auto;">';
-        html += '<table style="width: 100%; border-collapse: collapse; font-size: 0.95rem; border: 1px solid #dee2e6;">';
-        
-        // Определяем выравнивание
-        const alignments = [];
-        if (tableLines.length > 1) {
-            const separatorLine = tableLines[1];
-            const separatorCells = separatorLine.split('|').filter(cell => cell.trim() !== '');
-            
-            separatorCells.forEach(cell => {
-                const trimmed = cell.trim();
-                if (trimmed.startsWith(':') && trimmed.endsWith(':')) {
-                    alignments.push('center');
-                } else if (trimmed.endsWith(':')) {
-                    alignments.push('right');
-                } else if (trimmed.startsWith(':')) {
-                    alignments.push('left');
-                } else {
-                    alignments.push('left');
-                }
-            });
-        }
-        
-        // Заголовок таблицы
-        const headerLine = tableLines[0];
-        const headerCells = headerLine.split('|').filter(cell => cell.trim() !== '');
-        
-        html += '<thead><tr style="background-color: #f8f9fa;">';
-        headerCells.forEach((cell, index) => {
-            const align = alignments[index] || 'left';
-            const formattedCell = this.applyInlineFormatting(cell.trim());
-            html += `<th style="padding: 10px 12px; border: 1px solid #dee2e6; text-align: ${align}; font-weight: 600; border-bottom: 2px solid #3498db;">${formattedCell}</th>`;
-        });
-        html += '</tr></thead>';
-        
-        // Тело таблицы
-        html += '<tbody>';
-        
-        for (let i = 2; i < tableLines.length; i++) {
-            const line = tableLines[i].trim();
-            if (!line || !line.includes('|')) continue;
-            
-            const cells = line.split('|').filter(cell => cell.trim() !== '');
-            html += '<tr>';
-            
-            cells.forEach((cell, index) => {
-                const align = alignments[index] || 'left';
-                const isEvenRow = (i - 2) % 2 === 0;
-                const bgColor = isEvenRow ? '#ffffff' : '#f9f9f9';
-                const formattedCell = this.applyInlineFormatting(cell.trim());
-                
-                html += `<td style="padding: 8px 12px; border: 1px solid #dee2e6; text-align: ${align}; background-color: ${bgColor};">${formattedCell}</td>`;
-            });
-            
-            html += '</tr>';
-        }
-        
-        html += '</tbody></table></div>';
-        
-        return html;
     }
 
     onImageError(img) {
@@ -1143,8 +800,8 @@ class HomePage {
         if (thirdPlace.length > 0) {
             const tp = thirdPlace[0];
             const game = tp.games && tp.games.length > 0 ? tp.games[0] : null;
-            const team1Display = tp.team1 || 'Loss 1/2 1';
-            const team2Display = tp.team2 || 'Loss 1/2 2';
+            const team1Display = tp.team1 || 'Lose 1/2 1';
+            const team2Display = tp.team2 || 'Lose 1/2 2';
             
             html += `
                 <div class="playoff-third-place-container">
@@ -1358,120 +1015,3 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('fullscreen-loading').style.display = 'none';
     });
 });
-
-// Простой класс для модального окна - добавляем в конец home.js перед инициализацией
-class SimpleModal {
-    constructor() {
-        this.modal = null;
-        this.overlay = null;
-        this.initModal();
-    }
-
-    initModal() {
-        // Создаем overlay
-        this.overlay = document.createElement('div');
-        this.overlay.className = 'modal-overlay';
-        this.overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            padding: 20px;
-        `;
-
-        // Создаем модальное окно
-        this.modal = document.createElement('div');
-        this.modal.className = 'modal-window';
-        this.modal.style.cssText = `
-            background: white;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        `;
-
-        this.overlay.appendChild(this.modal);
-        document.body.appendChild(this.overlay);
-
-        // Закрытие по клику на overlay
-        this.overlay.addEventListener('click', (e) => {
-            if (e.target === this.overlay) {
-                this.close();
-            }
-        });
-    }
-
-    show(title, content) {
-        // Создаем заголовок
-        const header = document.createElement('div');
-        header.className = 'modal-header';
-        header.style.cssText = `
-            background: linear-gradient(135deg, #2c3e50, #4a6572);
-            color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        `;
-        
-        const titleElement = document.createElement('h3');
-        titleElement.textContent = title;
-        titleElement.style.cssText = `
-            margin: 0;
-            font-size: 1.4rem;
-        `;
-        
-        const closeBtn = document.createElement('button');
-        closeBtn.innerHTML = '&times;';
-        closeBtn.style.cssText = `
-            background: none;
-            border: none;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            line-height: 1;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        `;
-        closeBtn.onclick = () => this.close();
-        
-        header.appendChild(titleElement);
-        header.appendChild(closeBtn);
-
-        // Создаем тело
-        const body = document.createElement('div');
-        body.className = 'modal-body';
-        body.style.cssText = `
-            padding: 0;
-            max-height: 70vh;
-            overflow-y: auto;
-        `;
-        body.innerHTML = content;
-
-        // Очищаем и добавляем содержимое
-        this.modal.innerHTML = '';
-        this.modal.appendChild(header);
-        this.modal.appendChild(body);
-
-        // Показываем
-        this.overlay.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Блокируем прокрутку страницы
-    }
-
-    close() {
-        this.overlay.style.display = 'none';
-        document.body.style.overflow = ''; // Возвращаем прокрутку
-    }
-}

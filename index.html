@@ -20,12 +20,13 @@
         <h1>Чемпионат Ульяновской области по баскетболу<br/>Сезон 2025-2026</h1>
         <div class="header-hero"></div>
         
-        <!-- Навигация по лигам -->
+        <!-- Навигация -->
         <nav class="main-nav">
             <a href="#home" class="nav-link active" data-section="home">🏠 Все лиги</a>
             <a href="#league-a" class="nav-link" data-section="league-a">⭐ Лига А</a>
             <a href="#league-b" class="nav-link" data-section="league-b">🔥 Лига Б</a>
             <a href="#league-f" class="nav-link" data-section="league-f">💥 Женская лига</a>
+            <a href="#news" class="nav-link" data-section="news">📰 Новости</a>
         </nav>
 
         <div class="loading-indicator" id="loading-indicator">
@@ -71,6 +72,31 @@
                 <h2>Ближайшие матчи</h2>
                 <div class="upcoming-games-grid" id="upcoming-games">
                     <!-- Матчи будут загружены через JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция новостей -->
+        <section id="news" class="news-section hidden-section">
+            <div class="news-header">
+                <h2>📰 Новости чемпионата</h2>
+                <p>Последние события и объявления</p>
+            </div>
+            
+            <!-- Фильтр новостей по лигам -->
+            <div class="news-filter">
+                <button class="news-filter-btn active" data-filter="all">Все новости</button>
+                <button class="news-filter-btn" data-filter="A">⭐ Лига А</button>
+                <button class="news-filter-btn" data-filter="B">🔥 Лига Б</button>
+                <button class="news-filter-btn" data-filter="F">💥 Женская лига</button>
+                <button class="news-filter-btn" data-filter="general">📋 Общие</button>
+            </div>
+            
+            <!-- Контейнер для новостей -->
+            <div class="news-container" id="news-container">
+                <div class="news-loading">
+                    <div class="spinner"></div>
+                    <p>Загрузка новостей...</p>
                 </div>
             </div>
         </section>
@@ -173,5 +199,6 @@
     <script src="js/ui.js"></script>
     <script src="js/matches.js"></script>
     <script src="js/home.js"></script>
+    <script src="js/news-manager.js"></script>
 </body>
 </html>

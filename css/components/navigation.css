@@ -41,3 +41,62 @@
 .nav-link:hover::after {
     width: 80%;
 }
+
+/* Мобильная навигация */
+@media (max-width: 768px) {
+    .main-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        padding: 12px 10px;
+    }
+    
+    .nav-link {
+        flex: 0 1 auto;
+        padding: 6px 14px;
+        font-size: 14px;
+        margin: 2px;
+    }
+    
+    /* Уменьшаем размеры эмодзи/иконок */
+    .nav-link::before {
+        font-size: 16px;
+        margin-right: 4px;
+    }
+    
+    /* Выравнивание для всех строк - по центру */
+    .nav-link {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 480px) {
+    .main-nav {
+        gap: 8px;
+        padding: 10px 8px;
+    }
+    
+    .nav-link {
+        padding: 5px 12px;
+        font-size: 13px;
+        margin: 2px;
+    }
+    
+    .nav-link::before {
+        font-size: 15px;
+        margin-right: 3px;
+    }
+}
+
+/* Для экранов, где не влазят 5 кнопок */
+@media (max-width: 600px) {
+    .main-nav {
+        gap: 8px;
+    }
+    
+    .nav-link {
+        padding: 6px 12px;
+    }
+}
