@@ -282,7 +282,8 @@ class BasketballData {
             const newsFiles = [
                 'league-b-playoff-preview.md',
                 'league-b-last-tour.md',
-                'league-a-tour.md'
+                'league-a-tour.md',
+                'league-b-quaterfinal.md'
             ];
             
             let allNews = [];
