@@ -6,24 +6,6 @@
       "games": [
         {
           "date": "2026-02-15",
-          "time": "09:00",
-          "teamHome": "ЦЕМРОС",
-          "teamAway": "УлГТУ",
-          "location": "ФОК Фаворит",
-          "league": "B",
-          "gameType": "playoff"
-        },
-        {
-          "date": "2026-02-15",
-          "time": "10:30",
-          "teamHome": "Триумф-2",
-          "teamAway": "7 Ветров",
-          "location": "ФОК Фаворит",
-          "league": "B",
-          "gameType": "playoff"
-        },
-        {
-          "date": "2026-02-15",
           "time": "12:00",
           "teamHome": "УУОР",
           "teamAway": "АВВА-МЧС",
