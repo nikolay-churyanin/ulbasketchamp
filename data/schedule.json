@@ -3,7 +3,62 @@
   "stages": [
     {
       "name": "Регулярный сезон",
-      "games": []
+      "games": [
+        {
+          "date": "2026-02-21",
+          "time": "13:40",
+          "teamHome": "АВВА-МЧС",
+          "teamAway": "УИГА-Дельта",
+          "location": "Манеж УлГПУ",
+          "league": "A",
+          "gameType": "regular"
+        },
+        {
+          "date": "2026-02-21",
+          "time": "15:20",
+          "teamHome": "Спарта-УлГПУ",
+          "teamAway": "БК Петровск",
+          "location": "Манеж УлГПУ",
+          "league": "A",
+          "gameType": "regular"
+        },
+        {
+          "date": "2026-02-22",
+          "time": "09:00",
+          "teamHome": "Ветераны",
+          "teamAway": "ЦЕМРОС",
+          "location": "ФОК Фаворит",
+          "league": "B",
+          "gameType": "playoff"
+        },
+        {
+          "date": "2026-02-22",
+          "time": "10:30",
+          "teamHome": "Дельта-2",
+          "teamAway": "Триумф-2",
+          "location": "ФОК Фаворит",
+          "league": "B",
+          "gameType": "playoff"
+        },
+        {
+          "date": "2026-02-22",
+          "time": "12:00",
+          "teamHome": "УУОР",
+          "teamAway": "Триумф",
+          "location": "ФОК Фаворит",
+          "league": "A",
+          "gameType": "regular"
+        },
+        {
+          "date": "2026-02-22",
+          "time": "13:30",
+          "teamHome": "Перевалбаскет",
+          "teamAway": "Цементник-Марбакс",
+          "location": "ФОК Фаворит",
+          "league": "A",
+          "gameType": "regular"
+        }
+      ]
     }
   ]
 }
