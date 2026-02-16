@@ -283,7 +283,10 @@ class BasketballData {
                 'league-b-playoff-preview.md',
                 'league-b-last-tour.md',
                 'league-a-tour.md',
-                'league-b-quaterfinal.md'
+                'league-b-quaterfinal.md',
+                'league-f-last-tour.md',
+                'league-a-tour-15.02.md',
+                'league-f-preview-playoff.md'
             ];
             
             let allNews = [];
