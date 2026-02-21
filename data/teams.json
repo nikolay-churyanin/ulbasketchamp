@@ -42,7 +42,7 @@
     "league": "A"
   },
   {
-    "name": "УИГА-Дельта", 
+    "name": "УИГА", 
     "logo": "data/images/uiga_delta.jpg",
     "city": "Ульяновск",
     "league": "A"
@@ -60,7 +60,7 @@
     "league": "B"
   },
   {
-    "name": "Дельта-2",
+    "name": "Дельта",
     "logo": "data/images/uiga_delta.jpg",
     "city": "Ульяновск",
     "league": "B"
