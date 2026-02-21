@@ -5,24 +5,6 @@
       "name": "Регулярный сезон",
       "games": [
         {
-          "date": "2026-02-21",
-          "time": "13:40",
-          "teamHome": "АВВА-МЧС",
-          "teamAway": "УИГА",
-          "location": "Манеж УлГПУ",
-          "league": "A",
-          "gameType": "regular"
-        },
-        {
-          "date": "2026-02-21",
-          "time": "15:20",
-          "teamHome": "Спарта-УлГПУ",
-          "teamAway": "БК Петровск",
-          "location": "Манеж УлГПУ",
-          "league": "A",
-          "gameType": "regular"
-        },
-        {
           "date": "2026-02-22",
           "time": "09:00",
           "teamHome": "Ветераны",
