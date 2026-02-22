@@ -6,15 +6,6 @@
       "games": [
         {
           "date": "2026-02-22",
-          "time": "12:00",
-          "teamHome": "УУОР",
-          "teamAway": "Триумф",
-          "location": "ФОК Фаворит",
-          "league": "A",
-          "gameType": "regular"
-        },
-        {
-          "date": "2026-02-22",
           "time": "13:30",
           "teamHome": "Перевалбаскет",
           "teamAway": "Цементник-Марбакс",
