@@ -12,15 +12,6 @@
           "location": "ДС Дельфин",
           "league": "A",
           "gameType": "regular"
-        },
-        {
-          "date": "2026-03-01",
-          "time": "17:30",
-          "teamHome": "Дельта",
-          "teamAway": "Ветераны",
-          "location": "Зал УлГУ",
-          "league": "B",
-          "gameType": "playoff"
         }
       ]
     }
