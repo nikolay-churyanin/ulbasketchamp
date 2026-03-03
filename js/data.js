@@ -645,20 +645,26 @@ class BasketballData {
                 away.pointsAgainst += game.scoreHome;
                 
                 if (game.scoreHome > game.scoreAway) {
-                    home.wins++; 
+                    // Обработка технического поражения.
+                    if (game.scoreHome != 20 && game.scoreAway != 0) {
+                        away.points += 1;
+                    }
+                    home.wins++;
                     home.points += 2;
                     home.trand += "1"; 
                     
                     away.losses++; 
-                    away.points += 1;
                     away.trand += "0";
                 } else if (game.scoreHome < game.scoreAway) {
+                    // Обработка технического поражения.
+                    if (game.scoreAway != 20 && game.scoreHome != 0) {
+                        home.points += 1;
+                    }
                     away.wins++; 
                     away.points += 2;
                     away.trand += "1";
                     
-                    home.losses++; 
-                    home.points += 1;
+                    home.losses++;
                     home.trand += "0";
                 }
             }
