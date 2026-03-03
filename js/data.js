@@ -625,7 +625,7 @@ class BasketballData {
         const leagueGames = this.games
             .filter(game => game.scoreHome !== null && game.scoreAway !== null && game.league === league && game.gameType != 'playoff');
         
-        leagueGames.forEach(game => {
+        leagueGames.sort((a, b) => a._fullDate - b._fullDate).forEach(game => {
             const homeTeamName = game.teamHome;
             const awayTeamName = game.teamAway;
             
