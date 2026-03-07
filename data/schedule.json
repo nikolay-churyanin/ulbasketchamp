@@ -6,15 +6,6 @@
       "games": [
         {
           "date": "2026-03-07",
-          "time": "12:00",
-          "teamHome": "Old School",
-          "teamAway": "УСУТ",
-          "location": "Манеж УлГПУ",
-          "league": "F",
-          "gameType": "playoff"
-        },
-        {
-          "date": "2026-03-07",
           "time": "13:40",
           "teamHome": "УИГА",
           "teamAway": "Цементник-Марбакс",
