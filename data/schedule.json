@@ -6,15 +6,6 @@
       "games": [
         {
           "date": "2026-03-07",
-          "time": "15:20",
-          "teamHome": "УУОР",
-          "teamAway": "Спарта-УлГПУ",
-          "location": "Манеж УлГПУ",
-          "league": "A",
-          "gameType": "regular"
-        },
-        {
-          "date": "2026-03-07",
           "time": "17:00",
           "teamHome": "УлГУ",
           "teamAway": "Перевалбаскет",
