@@ -1320,3 +1320,249 @@
         font-size: 0.75rem;
     }
 }
+
+/* Стили для пьедестала призеров */
+.podium-container {
+    padding: 15px 10px;
+    background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+    border-radius: 12px;
+    margin-bottom: 5px;
+}
+
+.podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    min-height: 180px;
+}
+
+.podium-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 12px 12px 0 0;
+    padding: 15px 8px 10px;
+    transition: transform 0.2s ease;
+    max-width: 120px;
+}
+
+.podium-item:hover {
+    transform: translateY(-5px);
+}
+
+.podium-item.gold {
+    background: linear-gradient(135deg, #ffd700 0%, #fdb931 100%);
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+    padding-top: 25px;
+    order: 2;
+    min-height: 160px;
+}
+
+.podium-item.silver {
+    background: linear-gradient(135deg, #c0c0c0 0%, #a0a0a0 100%);
+    box-shadow: 0 8px 15px rgba(192, 192, 192, 0.3);
+    order: 1;
+    min-height: 140px;
+}
+
+.podium-item.bronze {
+    background: linear-gradient(135deg, #cd7f32 0%, #b06d2a 100%);
+    box-shadow: 0 8px 15px rgba(205, 127, 50, 0.3);
+    order: 3;
+    min-height: 120px;
+}
+
+.podium-medal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.medal-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.medal-place {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+.podium-team {
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.podium-team:hover {
+    filter: brightness(1.1);
+}
+
+.podium-team img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: white;
+    padding: 5px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 8px;
+}
+
+.podium-team-name {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1.3;
+    display: block;
+    color: #333;
+    margin-bottom: 3px;
+    word-break: break-word;
+}
+
+.podium-team-record {
+    font-size: 10px;
+    color: #666;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 20px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.podium-third-place-info {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #ccc;
+}
+
+.third-place-contenders {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.contender {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #f0f0f0;
+    padding: 5px 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 13px;
+}
+
+.contender:hover {
+    background: #e0e0e0;
+}
+
+.contender img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: white;
+    padding: 2px;
+}
+
+.vs-small {
+    font-weight: bold;
+    color: #666;
+    font-size: 14px;
+}
+
+.third-place-note {
+    text-align: center;
+    font-size: 11px;
+    color: #888;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 768px) {
+    .podium {
+        gap: 5px;
+        min-height: 150px;
+    }
+    
+    .podium-item {
+        padding: 10px 5px 8px;
+        max-width: 100px;
+    }
+    
+    .podium-item.gold {
+        padding-top: 20px;
+        min-height: 140px;
+    }
+    
+    .podium-item.silver {
+        min-height: 120px;
+    }
+    
+    .podium-item.bronze {
+        min-height: 100px;
+    }
+    
+    .podium-team img {
+        width: 40px;
+        height: 40px;
+        padding: 3px;
+    }
+    
+    .podium-team-name {
+        font-size: 11px;
+    }
+    
+    .medal-icon {
+        font-size: 20px;
+    }
+    
+    .medal-place {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .podium {
+        flex-wrap: wrap;
+    }
+    
+    .podium-item {
+        flex: 0 0 calc(33.33% - 10px);
+        max-width: none;
+    }
+    
+    .podium-item.gold {
+        order: 2;
+    }
+    
+    .podium-item.silver {
+        order: 1;
+    }
+    
+    .podium-item.bronze {
+        order: 3;
+    }
+    
+    .third-place-contenders {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .vs-small {
+        display: none;
+    }
+}

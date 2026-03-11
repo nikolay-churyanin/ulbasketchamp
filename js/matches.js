@@ -24,54 +24,80 @@ class MatchesRenderer {
         const scheduleGames = games.filter(game => !game._hasResult && !game._isFromResults)
             .sort((a, b) => a._fullDate - b._fullDate); // Ближайшие сверху
 
-        // Создаем HTML с вкладками (по умолчанию активна вкладка Расписание)
-        let html = `
-            <div class="matches-section-container">
-                <div class="matches-tabs">
-                    <button class="matches-tab" data-tab="schedule">
-                        📅 Расписание
-                        ${scheduleGames.length > 0 ? `<span class="tab-badge">${scheduleGames.length}</span>` : ''}
-                    </button>
-                    <button class="matches-tab" data-tab="results">
-                        📊 Результаты
-                        ${resultsGames.length > 0 ? `<span class="tab-badge">${resultsGames.length}</span>` : ''}
-                    </button>
-                </div>
-                
-                <div class="matches-tab-content" id="results-tab">
-        `;
+        // Проверяем, завершен ли чемпионат (есть ли чемпион в плей-офф)
+        const playoffBracket = this.dataManager.getPlayoffBracket(league);
+        const champion = playoffBracket?.champion;
+        const isChampionshipCompleted = champion !== null && champion !== undefined;
 
-        // Вкладка "Результаты"
-        if (resultsGames.length === 0) {
-            html += this.renderNoMatches('Нет завершенных матчей', '🏀');
+        // Создаем HTML с вкладками
+        let html = '';
+        
+        if (isChampionshipCompleted && scheduleGames.length === 0) {
+            // Если чемпионат завершен и нет предстоящих матчей - показываем только результаты
+            html = `
+                <div class="matches-section-container">
+                    <div class="matches-tabs">
+                        <button class="matches-tab active" data-tab="results">
+                            📊 Результаты
+                            ${resultsGames.length > 0 ? `<span class="tab-badge">${resultsGames.length}</span>` : ''}
+                        </button>
+                    </div>
+                    
+                    <div class="matches-tab-content active" id="results-tab">
+                        ${this.renderResultsTab(resultsGames, league)}
+                    </div>
+                </div>
+            `;
         } else {
-            html += this.renderMatchesGrid(resultsGames, league, 'results');
-        }
-
-        html += `
+            // Иначе показываем обе вкладки (по умолчанию активна вкладка Расписание)
+            html = `
+                <div class="matches-section-container">
+                    <div class="matches-tabs">
+                        <button class="matches-tab active" data-tab="schedule">
+                            📅 Расписание
+                            ${scheduleGames.length > 0 ? `<span class="tab-badge">${scheduleGames.length}</span>` : ''}
+                        </button>
+                        <button class="matches-tab" data-tab="results">
+                            📊 Результаты
+                            ${resultsGames.length > 0 ? `<span class="tab-badge">${resultsGames.length}</span>` : ''}
+                        </button>
+                    </div>
+                    
+                    <div class="matches-tab-content" id="results-tab">
+                        ${this.renderResultsTab(resultsGames, league)}
+                    </div>
+                    <div class="matches-tab-content active" id="schedule-tab">
+                        ${this.renderScheduleTab(scheduleGames, league)}
+                    </div>
                 </div>
-                <div class="matches-tab-content active" id="schedule-tab">
-        `;
-
-        // Вкладка "Расписание"
-        if (scheduleGames.length === 0) {
-            html += this.renderNoMatches('Нет предстоящих матчей', '📅');
-        } else {
-            html += this.renderMatchesGrid(scheduleGames, league, 'schedule');
+            `;
         }
-
-        html += `
-                </div>
-            </div>
-        `;
         
         container.innerHTML = html;
 
-        // Настраиваем вкладки
-        this.setupMatchesTabs(container);
+        // Настраиваем вкладки (если они есть)
+        if (!isChampionshipCompleted || scheduleGames.length > 0) {
+            this.setupMatchesTabs(container);
+        }
         
         // Добавляем обработчики для кликов по карточкам
         this.setupMatchCardClickHandlers(container, league);
+    }
+
+    // Новый метод для рендера вкладки результатов
+    renderResultsTab(resultsGames, league) {
+        if (resultsGames.length === 0) {
+            return this.renderNoMatches('Нет завершенных матчей', '🏀');
+        }
+        return this.renderMatchesGrid(resultsGames, league, 'results');
+    }
+
+    // Новый метод для рендера вкладки расписания
+    renderScheduleTab(scheduleGames, league) {
+        if (scheduleGames.length === 0) {
+            return this.renderNoMatches('Нет предстоящих матчей', '📅');
+        }
+        return this.renderMatchesGrid(scheduleGames, league, 'schedule');
     }
 
     // Рендер сетки карточек матчей

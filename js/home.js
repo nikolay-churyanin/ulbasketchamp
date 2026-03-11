@@ -1,4 +1,4 @@
-// home.js - обновленная версия с группировкой матчей на главной
+// home.js - обновленная версия с пьедесталом призеров
 class HomePage {
     constructor(dataManager, ui) {
         this.dataManager = dataManager;
@@ -173,26 +173,29 @@ class HomePage {
             const standings = this.dataManager.getLeagueStandings(league.id);
             const totalGames = this.dataManager.getTotalGamesPlayedByLeague(league.id);
             
-            const topTeams = standings.slice(0, 3);
+            // Проверяем, завершен ли чемпионат (есть ли чемпион в плей-офф)
+            const playoffBracket = this.dataManager.getPlayoffBracket(league.id);
+            const champion = playoffBracket?.champion;
+            const regularSeasonCompleted = this.dataManager.calculateRegularSeasonCompleted(league.id);
             
             html += `
                 <div class="league-card">
                     <div class="league-card-header ${league.color}">
                         <h3>${league.icon} ${league.name}</h3>
-                        <p>${teams.length} команд • ${totalGames} ${this.getPluralFormMatch(totalGames)} ${this.getPluralFormPlayed(totalGames)}</p>
+                        <p>${teams.length} команд • ${totalGames} ${this.getPluralFormMatch(totalGames)}</p>
                     </div>
                     <div class="league-card-body">
-                        <div class="league-teams-preview">
-                            ${topTeams.map((team, index) => `
-                                <div class="league-team-preview" data-team-name="${team.teamName}" data-league="${league.id}">
-                                    <span style="font-weight: bold; color: #0055a5;">${index + 1}</span>
-                                    <img src="${team.team.logo}" alt="${team.teamName}" 
-                                         onerror="this.onImageError(this)">
-                                    <span>${team.teamName}</span>
-                                    <span class="team-record">${team.wins}-${team.losses}</span>
-                                </div>
-                            `).join('')}
-                        </div>
+            `;
+
+            // Если есть чемпион - показываем пьедестал
+            if (champion) {
+                html += this.renderPodium(playoffBracket, standings, league.id);
+            } else {
+                // Иначе показываем топ-3 команды регулярки
+                html += this.renderTopTeamsPreview(standings.slice(0, 3), league.id);
+            }
+
+            html += `
                     </div>
                     <div class="league-card-footer">
                         <a href="#league-${league.id.toLowerCase()}" class="league-link" data-league="${league.id}">Смотреть лигу</a>
@@ -224,19 +227,138 @@ class HomePage {
         });
     }
 
+    // Новый метод для рендера топ-3 команд регулярки
+    renderTopTeamsPreview(topTeams, league) {
+        return `
+            <div class="league-teams-preview">
+                ${topTeams.map((team, index) => `
+                    <div class="league-team-preview" data-team-name="${team.teamName}" data-league="${league}">
+                        <span class="team-position position-${index + 1}">${index + 1}</span>
+                        <img src="${team.team.logo}" alt="${team.teamName}" 
+                             onerror="this.onImageError(this)">
+                        <span class="team-name">${team.teamName}</span>
+                        <span class="team-record">${team.wins}-${team.losses}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Новый метод для рендера пьедестала призеров
+    renderPodium(playoffBracket, standings, league) {
+        const champion = playoffBracket.champion;
+        
+        // Находим серебряного и бронзового призера
+        const finalMatch = playoffBracket.final?.[0];
+        const thirdPlaceMatch = playoffBracket.thirdPlace?.[0];
+        
+        // Серебряный призер - проигравший в финале
+        let silverMedalist = null;
+        if (finalMatch && finalMatch.winner) {
+            silverMedalist = finalMatch.winner === finalMatch.team1 ? finalMatch.team2 : finalMatch.team1;
+        }
+        
+        // Бронзовый призер - победитель матча за 3-е место
+        let bronzeMedalist = null;
+        if (thirdPlaceMatch && thirdPlaceMatch.winner) {
+            bronzeMedalist = thirdPlaceMatch.winner;
+        } else if (thirdPlaceMatch && thirdPlaceMatch.team1 && thirdPlaceMatch.team2 && !thirdPlaceMatch.winner) {
+            // Если матч за 3-е место не сыгран, показываем участников
+            bronzeMedalist = 'Матч за 3-е место';
+        }
+
+        // Получаем полные данные команд
+        const championData = standings.find(t => t.teamName === champion);
+        const silverData = standings.find(t => t.teamName === silverMedalist);
+        const bronzeData = bronzeMedalist && !bronzeMedalist.includes('Матч') 
+            ? standings.find(t => t.teamName === bronzeMedalist) 
+            : null;
+
+        return `
+            <div class="podium-container">
+                <div class="podium">
+                    <!-- 2-е место (серебро) -->
+                    <div class="podium-item silver">
+                        <div class="podium-medal">
+                            <span class="medal-icon">🥈</span>
+                            <span class="medal-place">2-е место</span>
+                        </div>
+                        <div class="podium-team" data-team-name="${silverMedalist || ''}" data-league="${league}">
+                            <img src="${silverData ? silverData.team.logo : ''}" 
+                                 alt="${silverMedalist || 'Второе место'}" 
+                                 onerror="this.onImageError(this)">
+                            <span class="podium-team-name">${silverMedalist || 'Второе место'}</span>
+                            ${silverData ? `<span class="podium-team-record">${silverData.wins}-${silverData.losses}</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <!-- 1-е место (золото) - центральное и самое высокое -->
+                    <div class="podium-item gold">
+                        <div class="podium-medal">
+                            <span class="medal-icon">🥇</span>
+                            <span class="medal-place">Чемпион</span>
+                        </div>
+                        <div class="podium-team" data-team-name="${champion || ''}" data-league="${league}">
+                            <img src="${championData ? championData.team.logo : ''}" 
+                                 alt="${champion || 'Чемпион'}" 
+                                 onerror="this.onImageError(this)">
+                            <span class="podium-team-name">${champion || 'Чемпион'}</span>
+                            ${championData ? `<span class="podium-team-record">${championData.wins}-${championData.losses}</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <!-- 3-е место (бронза) -->
+                    <div class="podium-item bronze">
+                        <div class="podium-medal">
+                            <span class="medal-icon">🥉</span>
+                            <span class="medal-place">3-е место</span>
+                        </div>
+                        <div class="podium-team" data-team-name="${bronzeMedalist || ''}" data-league="${league}">
+                            <img src="${bronzeData ? bronzeData.team.logo : ''}" 
+                                 alt="${bronzeMedalist || 'Третье место'}" 
+                                 onerror="this.onImageError(this)">
+                            <span class="podium-team-name">${bronzeMedalist || 'Третье место'}</span>
+                            ${bronzeData ? `<span class="podium-team-record">${bronzeData.wins}-${bronzeData.losses}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Если матч за 3-е место не сыгран, показываем дополнительную информацию -->
+                ${bronzeMedalist === 'Матч за 3-е место' ? `
+                    <div class="podium-third-place-info">
+                        <div class="third-place-contenders">
+                            <div class="contender" data-team-name="${thirdPlaceMatch.team1}" data-league="${league}">
+                                <img src="${this.getTeamLogo(thirdPlaceMatch.team1, league)}" alt="${thirdPlaceMatch.team1}">
+                                <span>${thirdPlaceMatch.team1}</span>
+                            </div>
+                            <span class="vs-small">VS</span>
+                            <div class="contender" data-team-name="${thirdPlaceMatch.team2}" data-league="${league}">
+                                <img src="${this.getTeamLogo(thirdPlaceMatch.team2, league)}" alt="${thirdPlaceMatch.team2}">
+                                <span>${thirdPlaceMatch.team2}</span>
+                            </div>
+                        </div>
+                        <p class="third-place-note">Матч за 3-е место ожидается</p>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
     onImageError(img) {
         img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
         img.onerror = null;
     }
 
     setupTeamPreviewClickHandlers() {
-        document.querySelectorAll('.league-team-preview').forEach(preview => {
+        document.querySelectorAll('.league-team-preview, .podium-team, .contender').forEach(preview => {
             preview.addEventListener('click', () => {
                 const teamName = preview.dataset.teamName;
                 const league = preview.dataset.league;
                 
-                // Показываем модальное окно команды
-                this.ui.showTeamModal(teamName, league);
+                if (teamName && !teamName.includes('Матч') && !teamName.includes('место')) {
+                    // Показываем модальное окно команды
+                    this.ui.showTeamModal(teamName, league);
+                }
             });
         });
     }
