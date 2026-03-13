@@ -286,7 +286,10 @@ class BasketballData {
                 'league-b-quaterfinal.md',
                 'league-a-tour-15.02.md',
                 'league-b-halffinals.md',
-                'league-a-tour-21-22.02.md'
+                'league-a-tour-21-22.02.md',
+                'league-a-tour-28-01.03.md',
+                'league-a-tour-07.03.md',
+                'league-b-final.md'
             ];
             
             let allNews = [];
