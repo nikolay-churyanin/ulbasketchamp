@@ -6,15 +6,6 @@
       "games": [
         {
           "date": "2026-03-14",
-          "time": "13:40",
-          "teamHome": "Old School",
-          "teamAway": "Феникс",
-          "location": "Манеж УлГПУ",
-          "league": "F",
-          "gameType": "playoff"
-        },
-        {
-          "date": "2026-03-14",
           "time": "15:20",
           "teamHome": "УлГУ",
           "teamAway": "УСУТ",
