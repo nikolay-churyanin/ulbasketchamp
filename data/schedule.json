@@ -6,15 +6,6 @@
       "games": [
         {
           "date": "2026-03-15",
-          "time": "12:00",
-          "teamHome": "УИГА",
-          "teamAway": "УлГУ",
-          "location": "ФОК Фаворит",
-          "league": "A",
-          "gameType": "regular"
-        },
-        {
-          "date": "2026-03-15",
           "time": "15:00",
           "teamHome": "УУОР",
           "teamAway": "Перевалбаскет",
