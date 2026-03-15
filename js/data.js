@@ -1330,14 +1330,19 @@ class BasketballData {
         const thirdPlace = bracket.thirdPlace[0];
         if (!thirdPlace) return;
         
-        if (semifinalIndex === 0) {
-            // Проигравший первого полуфинала идет в первую позицию матча за 3-е место
+        if (thirdPlace.team1) {
+            if (thirdPlace.team1Seed > loserSeed) {
+                thirdPlace.team2 = thirdPlace.team1;
+                thirdPlace.team2Seed = thirdPlace.team1Seed;
+                thirdPlace.team1 = loser;
+                thirdPlace.team1Seed = loserSeed;    
+            } else {
+                thirdPlace.team2 = loser;
+                thirdPlace.team2Seed = loserSeed;
+            }
+        } else {
             thirdPlace.team1 = loser;
             thirdPlace.team1Seed = loserSeed;
-        } else if (semifinalIndex === 1) {
-            // Проигравший второго полуфинала идет во вторую позицию матча за 3-е место
-            thirdPlace.team2 = loser;
-            thirdPlace.team2Seed = loserSeed;
         }
     }
 
