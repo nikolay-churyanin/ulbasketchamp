@@ -40,6 +40,7 @@
             <a href="#league-b" class="nav-link" data-section="league-b">🔥 Лига Б</a>
             <a href="#league-f" class="nav-link" data-section="league-f">💥 Женская лига</a>
             <a href="#news" class="nav-link" data-section="news">📰 Новости</a>
+            <a href="#top-stats" class="nav-link" data-section="top-stats">🏆 ТОПы</a>
         </nav>
 
         <div class="loading-indicator" id="loading-indicator">
@@ -87,6 +88,38 @@
                     <!-- Матчи будут загружены через JavaScript -->
                 </div>
             </div>
+        </section>
+
+        <!-- Секция ТОПов -->
+        <section id="top-stats" class="top-stats-section hidden-section">
+            <div class="top-stats-header">
+                <h2>🏆 Лучшие команды</h2>
+                <p>Статистика и рекорды чемпионата</p>
+            </div>
+            
+            <!-- Дисклеймер о технических победах -->
+            <div class="stats-disclaimer">
+                <div class="disclaimer-icon">⚖️</div>
+                <div class="disclaimer-text">
+                    <strong>Технические победы (20:0)</strong> учитываются только в общем количестве побед, 
+                    но <strong>не влияют</strong> на средние показатели результативности, защиты и рекордные матчи
+                </div>
+            </div>
+
+            <!-- Фильтр по лигам -->
+            <div class="top-stats-filter">
+                <button class="top-filter-btn league-a" data-filter="A">⭐ Лига А</button>
+                <button class="top-filter-btn league-b" data-filter="B">🔥 Лига Б</button>
+                <button class="top-filter-btn league-f" data-filter="F">💥 Женская лига</button>
+            </div>
+            
+            <!-- Сетка топ статистики -->
+            <div class="top-stats-grid" id="top-stats-grid">
+                <!-- Здесь будут карточки -->
+            </div>
+            
+            <!-- Секция "В зоне огня" (текущие победные серии) -->
+            <div id="hot-streaks-container"></div>
         </section>
 
         <!-- Секция новостей -->
@@ -213,5 +246,6 @@
     <script src="js/matches.js"></script>
     <script src="js/home.js"></script>
     <script src="js/news-manager.js"></script>
+    <script src="js/top-stats.js"></script>
 </body>
 </html>

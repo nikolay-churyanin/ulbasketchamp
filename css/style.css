@@ -14,6 +14,7 @@
 @import url('playoff.css');
 @import url('components/preview.css');
 @import url('utilities.css');
+@import url('top-stats.css');
 
 /* Скрытые секции (будут показываться через JavaScript) */
 .hidden-section {

@@ -1,0 +1,1104 @@
+/* css/top-stats.css */
+.top-stats-section {
+    padding: 20px 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Заголовок секции */
+.top-stats-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.top-stats-header h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: var(--text-primary, #333);
+}
+
+.top-stats-header p {
+    color: var(--text-secondary, #666);
+    font-size: 16px;
+}
+
+/* Дисклеймер о технических победах */
+.stats-disclaimer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-left: 4px solid #6c757d;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 0 0 20px 0;
+    font-size: 14px;
+    color: #495057;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.disclaimer-icon {
+    font-size: 24px;
+    min-width: 32px;
+    text-align: center;
+}
+
+.disclaimer-text {
+    line-height: 1.5;
+}
+
+.disclaimer-text strong {
+    color: #212529;
+    font-weight: 600;
+}
+
+.disclaimer-hint {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 12px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Фильтр по лигам */
+.top-stats-filter {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.top-filter-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    background: var(--bg-secondary, #f5f5f5);
+    color: var(--text-secondary, #666);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid transparent;
+}
+
+.top-filter-btn:hover {
+    background: var(--bg-hover, #e8e8e8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.top-filter-btn.active {
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.top-filter-btn.league-a.active {
+    background: linear-gradient(135deg, #0055a5, #0077be);
+}
+
+.top-filter-btn.league-b.active {
+    background: linear-gradient(135deg, #dc3545, #ff4757);
+}
+
+.top-filter-btn.league-f.active {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+}
+
+/* Сетка карточек */
+.top-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Карточка статистики */
+.top-stat-card {
+    background: var(--card-bg, white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color, #eee);
+}
+
+.top-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Заголовок карточки */
+.stat-card-header {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--header-color, #0055a5), var(--header-color-light, #0077be));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stat-card-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-card-header .stat-emoji {
+    font-size: 24px;
+}
+
+/* Индикатор технических побед */
+.tech-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 14px;
+    margin-left: 8px;
+    cursor: help;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+}
+
+.tech-indicator.no-tech {
+    color: #ff6b6b;
+}
+
+.tech-indicator.with-tech {
+    color: #51cf66;
+}
+
+.tech-indicator:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Тело карточки */
+.stat-card-body {
+    padding: 20px;
+    flex: 1;
+    background: var(--card-bg, white);
+}
+
+/* Команда-лидер */
+.top-team {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--bg-highlight, #f8f9fa);
+    border: 1px solid var(--border-color, #e9ecef);
+}
+
+.top-team:hover {
+    background: var(--bg-hover, #e9ecef);
+    transform: translateX(4px);
+}
+
+.top-team-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg-secondary, #f5f5f5);
+    border: 2px solid var(--border-color, #ddd);
+}
+
+.top-team-info {
+    flex: 1;
+}
+
+.top-team-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary, #333);
+    margin-bottom: 4px;
+}
+
+.top-team-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-color, #0055a5);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.value-unit {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary, #666);
+}
+
+/* Топ игра */
+.top-game {
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--bg-highlight, #f8f9fa);
+    border: 1px solid var(--border-color, #e9ecef);
+}
+
+.top-game:hover {
+    background: var(--bg-hover, #e9ecef);
+    transform: translateX(4px);
+}
+
+/* Отображение матча в карточке */
+.match-teams-display {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.match-teams-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(0,0,0,0.1);
+}
+
+.match-teams-row:last-child {
+    border-bottom: none;
+}
+
+.match-teams-row.winner {
+    background: rgba(40, 167, 69, 0.05);
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin: 0 -4px;
+}
+
+.match-teams-row.defender {
+    background: rgba(23, 162, 184, 0.05);
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin: 0 -4px;
+}
+
+.match-team {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary, #333);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.match-team:before {
+    content: "•";
+    color: var(--accent-color, #0055a5);
+    font-size: 18px;
+}
+
+.match-teams-row.winner .match-team:before {
+    content: "🏆";
+    font-size: 14px;
+}
+
+.match-teams-row.defender .match-team:before {
+    content: "🛡️";
+    font-size: 14px;
+}
+
+.match-score {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent-color, #0055a5);
+    background: rgba(0, 85, 165, 0.1);
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.match-total {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-color, #eee);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary, #666);
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.match-total:before {
+    content: "📊";
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* Список остальных команд/игр */
+.top-teams-list {
+    border-top: 1px solid var(--border-color, #eee);
+    padding-top: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color, #0055a5) var(--bg-secondary, #f5f5f5);
+}
+
+.top-teams-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.top-teams-list::-webkit-scrollbar-track {
+    background: var(--bg-secondary, #f5f5f5);
+    border-radius: 10px;
+}
+
+.top-teams-list::-webkit-scrollbar-thumb {
+    background: var(--accent-color, #0055a5);
+    border-radius: 10px;
+}
+
+.top-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    margin-bottom: 2px;
+}
+
+.top-list-item:hover {
+    background: var(--bg-hover, #f5f5f5);
+    transform: translateX(4px);
+}
+
+.top-list-item.game-list-item {
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--border-color, #f0f0f0);
+}
+
+.top-list-item.game-list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item-logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg-secondary, #f5f5f5);
+    border: 1px solid var(--border-color, #ddd);
+}
+
+.list-item-name {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-primary, #333);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-item-name.game-name {
+    font-size: 13px;
+    white-space: normal;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.list-item-value {
+    font-weight: 600;
+    color: var(--accent-color, #0055a5);
+    font-size: 14px;
+    white-space: nowrap;
+    background: rgba(0, 85, 165, 0.1);
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+/* Победные серии */
+.streak-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.streak-badge.active {
+    background: #28a745;
+    color: white;
+}
+
+/* Секция "В зоне огня" */
+.hot-streaks-section {
+    margin-top: 40px;
+}
+
+.hot-streaks-section h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary, #333);
+}
+
+.hot-streaks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.hot-streak-card {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    border-radius: 12px;
+    padding: 16px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.hot-streak-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+}
+
+.hot-streak-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    padding: 3px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.hot-streak-info {
+    flex: 1;
+}
+
+.hot-streak-team {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.hot-streak-value {
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hot-streak-icon {
+    font-size: 20px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Подвал с пояснениями */
+.stats-footer {
+    margin-top: 40px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.stats-footer h4 {
+    margin: 0 0 15px 0;
+    color: #212529;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stats-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.legend-marker {
+    font-size: 18px;
+    min-width: 28px;
+    text-align: center;
+}
+
+.legend-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #495057;
+}
+
+.legend-text strong {
+    color: #212529;
+}
+
+.stats-note {
+    margin: 15px 0 0 0;
+    padding: 15px 0 0 0;
+    border-top: 1px dashed #dee2e6;
+    font-size: 13px;
+    color: #6c757d;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Пустое состояние */
+.no-data {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-secondary, #999);
+    font-size: 14px;
+    background: var(--bg-secondary, #f9f9f9);
+    border-radius: 8px;
+    border: 2px dashed var(--border-color, #ddd);
+}
+
+/* Модальное окно для деталей */
+.top-stats-modal {
+    max-width: 500px;
+}
+
+.top-stats-modal .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.top-stats-detail {
+    padding: 0;
+}
+
+.top-stats-detail h4 {
+    margin: 0 0 15px 0;
+    color: var(--text-primary, #333);
+    font-size: 16px;
+}
+
+.top-stats-detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.top-stats-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--bg-secondary, #f8f9fa);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color, #e9ecef);
+}
+
+.top-stats-detail-item:hover {
+    background: var(--bg-hover, #e9ecef);
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.top-stats-detail-item.game-detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.detail-rank {
+    font-size: 18px;
+    min-width: 32px;
+    text-align: center;
+}
+
+.detail-item-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color, #ddd);
+}
+
+.detail-item-info {
+    flex: 1;
+}
+
+.detail-item-info.game-info {
+    width: 100%;
+}
+
+.detail-item-name {
+    font-weight: 600;
+    color: var(--text-primary, #333);
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+.detail-item-meta {
+    font-size: 12px;
+    color: var(--text-secondary, #666);
+}
+
+.detail-item-value {
+    font-weight: 700;
+    color: var(--accent-color, #0055a5);
+    font-size: 16px;
+    background: rgba(0, 85, 165, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .top-stats-section {
+        padding: 15px 12px;
+    }
+    
+    .top-stats-header h2 {
+        font-size: 24px;
+    }
+    
+    .top-filter-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    .top-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .stat-card-header h3 {
+        font-size: 16px;
+    }
+    
+    .stat-card-header .stat-emoji {
+        font-size: 20px;
+    }
+    
+    .tech-indicator {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+    }
+    
+    .top-team-logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .top-team-name {
+        font-size: 15px;
+    }
+    
+    .top-team-value {
+        font-size: 18px;
+    }
+    
+    .match-team {
+        font-size: 13px;
+    }
+    
+    .match-score {
+        font-size: 14px;
+        padding: 2px 6px;
+    }
+    
+    .match-total {
+        font-size: 12px;
+    }
+    
+    .hot-streaks-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hot-streak-card {
+        padding: 12px;
+    }
+    
+    .hot-streak-logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .hot-streak-team {
+        font-size: 15px;
+    }
+    
+    .hot-streak-value {
+        font-size: 16px;
+    }
+    
+    .stats-footer {
+        margin-top: 30px;
+        padding: 15px;
+    }
+    
+    .stats-footer h4 {
+        font-size: 16px;
+    }
+    
+    .legend-item {
+        gap: 8px;
+    }
+    
+    .legend-text {
+        font-size: 13px;
+    }
+    
+    .stats-disclaimer {
+        padding: 10px 12px;
+        font-size: 13px;
+        margin: 0 0 15px 0;
+    }
+    
+    .disclaimer-icon {
+        font-size: 20px;
+        min-width: 28px;
+    }
+    
+    .disclaimer-hint {
+        display: none; /* Скрываем подсказку на мобильных */
+    }
+}
+
+@media (max-width: 480px) {
+    .top-stats-section {
+        padding: 10px 8px;
+    }
+    
+    .top-filter-btn {
+        width: calc(50% - 5px);
+        justify-content: center;
+        padding: 10px 8px;
+    }
+    
+    .stat-card-header {
+        padding: 14px 16px;
+    }
+    
+    .stat-card-body {
+        padding: 16px;
+    }
+    
+    .top-team {
+        padding: 10px;
+        gap: 12px;
+    }
+    
+    .top-team-logo {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .top-team-name {
+        font-size: 14px;
+    }
+    
+    .top-team-value {
+        font-size: 16px;
+    }
+    
+    .match-teams-row {
+        padding: 4px 0;
+    }
+    
+    .match-team {
+        font-size: 12px;
+    }
+    
+    .match-team:before {
+        font-size: 14px;
+    }
+    
+    .match-score {
+        font-size: 13px;
+        padding: 2px 4px;
+    }
+    
+    .match-total {
+        font-size: 11px;
+        margin-top: 6px;
+        padding-top: 6px;
+    }
+    
+    .top-list-item {
+        padding: 8px 6px;
+    }
+    
+    .list-item-logo {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .list-item-name {
+        font-size: 12px;
+    }
+    
+    .list-item-name.game-name {
+        font-size: 12px;
+    }
+    
+    .list-item-value {
+        font-size: 12px;
+        padding: 2px 6px;
+    }
+    
+    .stats-footer {
+        padding: 12px;
+    }
+    
+    .stats-disclaimer {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+        padding: 10px;
+    }
+    
+    .hot-streak-card {
+        padding: 10px;
+    }
+    
+    .hot-streak-logo {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .hot-streak-team {
+        font-size: 14px;
+    }
+    
+    .hot-streak-value {
+        font-size: 14px;
+    }
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    .top-stats-section {
+        background: #1a1a1a;
+    }
+    
+    .top-stats-header h2 {
+        color: #f8f9fa;
+    }
+    
+    .top-stats-header p {
+        color: #adb5bd;
+    }
+    
+    .stats-disclaimer {
+        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        border-left-color: #868e96;
+        color: #e9ecef;
+    }
+    
+    .disclaimer-text strong {
+        color: #f8f9fa;
+    }
+    
+    .disclaimer-hint {
+        color: #adb5bd;
+    }
+    
+    .top-filter-btn {
+        background: #2d2d2d;
+        color: #adb5bd;
+        border-color: #404040;
+    }
+    
+    .top-filter-btn:hover {
+        background: #404040;
+    }
+    
+    .top-stat-card {
+        background: #2d2d2d;
+        border-color: #404040;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    .stat-card-body {
+        background: #2d2d2d;
+    }
+    
+    .top-team {
+        background: #1a1a1a;
+        border-color: #404040;
+    }
+    
+    .top-team:hover {
+        background: #333;
+    }
+    
+    .top-team-name {
+        color: #f8f9fa;
+    }
+    
+    .top-team-value {
+        color: #66b0ff;
+    }
+    
+    .value-unit {
+        color: #adb5bd;
+    }
+    
+    .top-game {
+        background: #1a1a1a;
+        border-color: #404040;
+    }
+    
+    .top-game:hover {
+        background: #333;
+    }
+    
+    .match-teams-row {
+        border-bottom-color: rgba(255,255,255,0.1);
+    }
+    
+    .match-teams-row.winner {
+        background: rgba(40, 167, 69, 0.15);
+    }
+    
+    .match-teams-row.defender {
+        background: rgba(23, 162, 184, 0.15);
+    }
+    
+    .match-team {
+        color: #e9ecef;
+    }
+    
+    .match-team:before {
+        color: #66b0ff;
+    }
+    
+    .match-score {
+        background: rgba(102, 176, 255, 0.15);
+        color: #66b0ff;
+    }
+    
+    .match-total {
+        border-top-color: #404040;
+        color: #adb5bd;
+    }
+    
+    .top-teams-list {
+        border-top-color: #404040;
+    }
+    
+    .top-teams-list::-webkit-scrollbar-track {
+        background: #1a1a1a;
+    }
+    
+    .top-list-item:hover {
+        background: #333;
+    }
+    
+    .top-list-item.game-list-item {
+        border-bottom-color: #404040;
+    }
+    
+    .list-item-logo {
+        border-color: #404040;
+    }
+    
+    .list-item-name {
+        color: #e9ecef;
+    }
+    
+    .list-item-value {
+        background: rgba(102, 176, 255, 0.15);
+        color: #66b0ff;
+    }
+    
+    .hot-streaks-section h3 {
+        color: #f8f9fa;
+    }
+    
+    .stats-footer {
+        background: #1a1a1a;
+        border-color: #404040;
+    }
+    
+    .stats-footer h4 {
+        color: #f8f9fa;
+    }
+    
+    .legend-text {
+        color: #adb5bd;
+    }
+    
+    .legend-text strong {
+        color: #f8f9fa;
+    }
+    
+    .stats-note {
+        border-top-color: #404040;
+        color: #868e96;
+    }
+    
+    .no-data {
+        background: #1a1a1a;
+        border-color: #404040;
+        color: #868e96;
+    }
+    
+    .top-stats-detail-item {
+        background: #1a1a1a;
+        border-color: #404040;
+    }
+    
+    .top-stats-detail-item:hover {
+        background: #333;
+    }
+    
+    .detail-item-name {
+        color: #f8f9fa;
+    }
+    
+    .detail-item-meta {
+        color: #adb5bd;
+    }
+    
+    .detail-item-value {
+        background: rgba(102, 176, 255, 0.15);
+        color: #66b0ff;
+    }
+}

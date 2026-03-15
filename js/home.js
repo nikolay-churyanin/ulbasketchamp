@@ -41,6 +41,11 @@ class HomePage {
                 if (sectionId === 'news') {
                     // Загружаем новости при переходе на вкладку
                     this.newsManager.loadAndDisplayNews('news-container', 'all');
+                } else if (sectionId === 'top-stats') {
+                    // Загружаем топ статистику
+                    if (window.topStatsManager) {
+                        window.topStatsManager.loadAndDisplayStats('A');
+                    }
                 } else if (sectionId !== 'home') {
                     const league = sectionId.split('-')[1].toUpperCase();
                     this.currentLeague = league;
@@ -1114,6 +1119,7 @@ class HomePage {
 }
 
 // Инициализация при загрузке страницы
+// Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     
     const dataManager = new BasketballData();
@@ -1125,10 +1131,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Создаем главную страницу
         const homePage = new HomePage(dataManager, ui);
         
+        // Создаем менеджер топ статистики
+        const topStatsManager = new TopStatsManager(dataManager);
+        
         // Сохраняем в глобальной области
         window.basketballUI = ui;
         window.basketballData = dataManager;
         window.homePage = homePage;
+        window.topStatsManager = topStatsManager;
         
         console.log('Приложение инициализировано');
     }).catch(error => {

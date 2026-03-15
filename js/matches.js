@@ -705,18 +705,24 @@ class MatchesRenderer {
         
         let totalPointsFor = 0;
         let totalPointsAgainst = 0;
+        let totalGames = 0
         
         teamGames.forEach(game => {
+            if ((game.scoreHome === 20 && game.scoreAway === 0) || 
+                (game.scoreHome === 0 && game.scoreAway === 20)) {
+                return; // Игнорируем технические победы
+            }
             const isHome = this.dataManager.normalizeTeamName(game.teamHome) === this.dataManager.normalizeTeamName(teamName);
             totalPointsFor += isHome ? game.scoreHome : game.scoreAway;
             totalPointsAgainst += isHome ? game.scoreAway : game.scoreHome;
+            totalGames += 1;
         });
         
         return {
             wins: wins,
             losses: losses,
-            avgPointsFor: teamGames.length > 0 ? totalPointsFor / teamGames.length : 0,
-            avgPointsAgainst: teamGames.length > 0 ? totalPointsAgainst / teamGames.length : 0
+            avgPointsFor: totalGames > 0 ? totalPointsFor / totalGames : 0,
+            avgPointsAgainst: totalGames > 0 ? totalPointsAgainst / totalGames : 0
         };
     }
 
