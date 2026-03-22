@@ -3,17 +3,7 @@
   "stages": [
     {
       "name": "Регулярный сезон",
-      "games": [
-        {
-          "date": "2026-03-22",
-          "time": "16:00",
-          "teamHome": "БК Петровск",
-          "teamAway": "УлГУ",
-          "location": "Зал УлГУ",
-          "league": "A",
-          "gameType": "regular"
-        }
-      ]
+      "games": []
     }
   ]
 }
