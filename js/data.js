@@ -290,7 +290,8 @@ class BasketballData {
                 'league-a-tour-28-01.03.md',
                 'league-a-tour-07.03.md',
                 'league-b-final.md',
-                'league-a-tour-14-15.03.md'
+                'league-a-tour-14-15.03.md',
+                'league-a-tour-22.03.md'
             ];
             
             let allNews = [];
