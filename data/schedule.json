@@ -21,6 +21,15 @@
           "location": "Зал УлГУ",
           "league": "A",
           "gameType": "regular"
+        },
+        {
+          "date": "2026-04-05",
+          "time": "14:30",
+          "teamHome": "УУОР",
+          "teamAway": "УлГУ",
+          "location": "Зал УлГУ",
+          "league": "A",
+          "gameType": "regular"
         }
       ]
     }
