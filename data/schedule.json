@@ -3,7 +3,26 @@
   "stages": [
     {
       "name": "Регулярный сезон",
-      "games": []
+      "games": [
+        {
+          "date": "2026-05-17",
+          "time": "17:00",
+          "teamHome": "Триумф",
+          "teamAway": "УУОР",
+          "location": "ФОК Фаворит",
+          "league": "A",
+          "gameType": "playoff"
+        },
+        {
+          "date": "2026-05-17",
+          "time": "18:30",
+          "teamHome": "УлГУ",
+          "teamAway": "Цементник-Марбакс",
+          "location": "ФОК Фаворит",
+          "league": "A",
+          "gameType": "playoff"
+        }
+      ]
     }
   ]
 }
