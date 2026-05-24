@@ -3,17 +3,7 @@
   "stages": [
     {
       "name": "Регулярный сезон",
-      "games": [
-        {
-          "date": "2026-05-24",
-          "time": "11:50",
-          "teamHome": "УлГУ",
-          "teamAway": "Триумф",
-          "location": "ФОК Фаворит",
-          "league": "A",
-          "gameType": "playoff"
-        }
-      ]
+      "games": []
     }
   ]
 }
