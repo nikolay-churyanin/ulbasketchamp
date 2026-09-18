@@ -2,7 +2,6 @@ class BasketballData {
     constructor() {
         this.teams = [];
         this.games = [];
-        this.schedule = { stages: [{ name: 'Регулярный сезон', games: [] }] };
         this.leagueConfigs = {};
         this.newsIndex = [];
         this.seasonsCatalog = { current: '2025-26', seasons: [] };
@@ -36,12 +35,71 @@ class BasketballData {
         return this.leagueConfigs[league];
     }
 
+    getLeagues() {
+        return Object.entries(this.leagueConfigs || {}).map(([id, config]) => {
+            const slug = String(id).toLowerCase();
+            return {
+                id,
+                name: config?.name || id,
+                slug,
+                sectionId: `league-${slug}`,
+                cssClass: `league-${slug}`,
+                playoffTeams: config?.playoffTeams,
+                regularSeasonRounds: config?.regularSeasonRounds
+            };
+        });
+    }
+
+    getLeagueIds() {
+        return this.getLeagues().map(league => league.id);
+    }
+
+    getLeagueById(id) {
+        return this.getLeagues().find(league => league.id === id) || null;
+    }
+
+    getLeagueBySectionId(sectionId) {
+        return this.getLeagues().find(league => league.sectionId === sectionId) || null;
+    }
+
     getSeasonList() {
         return this.seasonsCatalog.seasons || [];
     }
 
     getSeasonLabel() {
         return this.seasonMeta?.label || this.seasonId || '';
+    }
+
+    hasNews() {
+        return Array.isArray(this.newsIndex) && this.newsIndex.length > 0;
+    }
+
+    getRegularSeasonTotals(league) {
+        const config = this.getLeagueConfig(league);
+        const teams = this.getTeamsByLeague(league);
+        const totalTeams = teams.length;
+        if (!config?.regularSeasonRounds || totalTeams < 2) {
+            return { played: 0, total: 0 };
+        }
+
+        const total = (totalTeams * (totalTeams - 1) * config.regularSeasonRounds) / 2;
+        const played = this.games.filter(game =>
+            game.league === league &&
+            game.scoreHome !== null &&
+            game.scoreAway !== null &&
+            game.gameType !== 'playoff'
+        ).length;
+
+        return { played, total };
+    }
+
+    isLeagueReadyForTopStats(league) {
+        const { played, total } = this.getRegularSeasonTotals(league);
+        return total > 0 && played >= total / 2;
+    }
+
+    getLeaguesReadyForTopStats() {
+        return this.getLeagueIds().filter(league => this.isLeagueReadyForTopStats(league));
     }
 
     seasonFile(filename) {
@@ -56,13 +114,17 @@ class BasketballData {
 
     readRequestedSeasonId() {
         const params = new URLSearchParams(window.location.search);
-        return params.get('season') || window.localStorage.getItem('ulbasket-season');
+        return params.get('season');
     }
 
     resolveSeasonId(requested) {
         const seasons = this.getSeasonList();
         if (requested && seasons.some(season => season.id === requested)) {
             return requested;
+        }
+        const unfinished = seasons.find(season => !season.archived);
+        if (unfinished) {
+            return unfinished.id;
         }
         if (this.seasonsCatalog.current && seasons.some(season => season.id === this.seasonsCatalog.current)) {
             return this.seasonsCatalog.current;
@@ -96,7 +158,6 @@ class BasketballData {
         this.games = [];
         this.leagueConfigs = {};
         this.newsIndex = [];
-        this.schedule = { stages: [{ name: 'Регулярный сезон', games: [] }] };
 
         this.updateProgress(15, 'Загрузка конфигурации лиг...');
         this.leagueConfigs = await this.loadJSON(this.seasonFile('leagues-config.json'));
@@ -107,12 +168,6 @@ class BasketballData {
         this.updateProgress(55, 'Загрузка матчей...');
         const packedGames = await this.loadJSON(this.seasonFile('games.json'));
         this.ingestPackedGames(packedGames);
-
-        try {
-            this.schedule = await this.loadJSON(this.seasonFile('schedule.json'));
-        } catch (error) {
-            this.schedule = { stages: [{ name: 'Регулярный сезон', games: [] }] };
-        }
 
         try {
             this.newsIndex = await this.loadJSON(this.seasonFile('news-index.json'));
@@ -367,14 +422,7 @@ class BasketballData {
     }
 
     getLeagueName(league) {
-        const config = this.getLeagueConfig(league);
-        if (config?.name) {
-            return config.name;
-        }
-        if (league === 'A') return 'Лига А';
-        if (league === 'B') return 'Лига Б';
-        if (league === 'F') return 'Женская лига';
-        return league;
+        return this.getLeagueConfig(league)?.name || league;
     }
 
     getTeamByName(teamName, league) {
@@ -391,52 +439,7 @@ class BasketballData {
         return this.teams.filter(team => team.league === league);
     }
 
-    getAllScheduledGames() {
-        if (!this.schedule || !Array.isArray(this.schedule.stages)) {
-            console.log('No schedule data found');
-            return [];
-        }
-        
-        const list = [];
-        let gameCounter = 1;
-        
-        this.schedule.stages.forEach(stage => {
-            (stage.games || []).forEach(game => {
-                if (!game) return;
-                
-                // Исправляем создание даты
-                const gameDateTime = this.createValidDate(game.date, game.time);
-                if (!gameDateTime) {
-                    console.warn(`Invalid date for game: ${game.teamHome} vs ${game.teamAway}`);
-                    return;
-                }
-                
-                list.push({ 
-                    date: game.date,
-                    time: game.time,
-                    location: game.location,
-                    teamHome: game.teamHome,
-                    teamAway: game.teamAway,
-                    league: game.league,
-                    gameType: game.gameType || 'regular',
-                    scoreHome: null,
-                    scoreAway: null,
-                    id: `scheduled_${gameDateTime}`,
-                    _fullDate: gameDateTime,
-                    _hasResult: false
-                });
-            });
-        });
-        
-        return list;
-    }
-
     getAllGamesForDisplay() {
-        
-        // 1. Получаем игры из расписания
-        const scheduledGames = this.getAllScheduledGames();
-        
-        // 2. Получаем игры из файлов (уже загружены в this.games)
         const resultGames = this.games.map(game => {
             const gameDate = this.createValidDate(game.date, game.time);
             const hasResult = this.hasGameScore(game);
@@ -458,16 +461,9 @@ class BasketballData {
                 _gameData: game
             };
         });
-        
-        // 3. Объединяем и сортируем
-        const allGames = [...scheduledGames, ...resultGames];
-        
-        // Убираем дубликаты
-        const uniqueGames = this.removeDuplicateGames(allGames);
-        
-        // Сортируем по дате (новые сверху)
+
+        const uniqueGames = this.removeDuplicateGames(resultGames);
         uniqueGames.sort((a, b) => b._fullDate - a._fullDate);
-        
         return uniqueGames;
     }
 
@@ -801,22 +797,11 @@ class BasketballData {
     }
 
     getGameById(gameId) {
-        console.log(`Looking for game with ID: ${gameId}`);
-        
-        // Для scheduled игр
-        if (gameId.startsWith('scheduled_')) {
-            const allGames = this.getAllGamesForDisplay();
-            const foundGame = allGames.find(game => game.id === gameId);
-            return foundGame || null;
-        }
-        
-        // Для result игр
         if (gameId.startsWith('game_')) {
             const allGames = this.getAllGamesForDisplay();
             const foundGame = allGames.find(game => game.id === gameId);
             
             if (foundGame && foundGame._gameData) {
-                console.log('Found result game with full data');
                 return {
                     ...foundGame,
                     ...foundGame._gameData,
@@ -826,11 +811,8 @@ class BasketballData {
             return foundGame;
         }
         
-        // Для обычных игр
         const id = this.normalizeGameId(gameId);
-        const actual = this.games.find(g => this.normalizeGameId(g.id) === id) || null;
-        
-        return actual;
+        return this.games.find(g => this.normalizeGameId(g.id) === id) || null;
     }
 
     createValidDate(dateString, timeString = '12:00') {
@@ -868,36 +850,16 @@ class BasketballData {
     }
 
     getPlayoffBracket(league) {
-        // 1. Получаем все игры плей-офф для лиги
-        const playoffGames = this.games.filter(game => 
-            game.gameType === 'playoff' && 
-            game.league === league
-        )
-        const scheduledGames = this.getAllScheduledGames();
-        
-        // Фильтруем игры плей-офф из расписания
-        const scheduledPlayoffGames = scheduledGames.filter(game => 
-            game.gameType === 'playoff' && 
+        const playoffGames = this.games.filter(game =>
+            game.gameType === 'playoff' &&
             game.league === league
         );
-        
-        // 2. Объединяем сыгранные игры плей-офф с запланированными
-        const allPlayoffGames = [...playoffGames, ...scheduledPlayoffGames.map(game => ({
-            ...game,
-            gameType: 'playoff',
-            league: league,
-            // Преобразуем scheduled объект в формат игры
-            id: game.id,
-            _fullDate: game._fullDate,
-            _hasResult: false,
-        }))];
 
-        if (allPlayoffGames.length === 0) {
+        if (playoffGames.length === 0) {
             return this.generateEmptyBracket(league);
         }
-        
-        // 2. Анализируем игры и строим сетку
-        return this.buildBracketFromGames(allPlayoffGames, league);
+
+        return this.buildBracketFromGames(playoffGames, league);
     }
 
     generateEmptyBracket(league) {

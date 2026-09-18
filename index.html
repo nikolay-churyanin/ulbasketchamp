@@ -16,50 +16,49 @@
     <!-- /Yandex.Metrika counter -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="theme-color" content="#0055a5">
+    <meta name="theme-color" content="#0f2236">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Чемпионат по баскетболу - Главная</title>
-    <link rel="stylesheet" href="css/style.css?v=2.0">
-    <link rel="stylesheet" href="css/home.css?v=2.0">
+    <link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
     <header>
         <div class="current-league-indicator" id="league-indicator"></div>
-        
-        <h1 id="site-title">Чемпионат Ульяновской области по баскетболу<br/><br/><span id="season-title">Сезон</span></h1>
-        <label class="season-switcher">
-            <span class="season-switcher-label">Сезон</span>
-            <select id="season-select" aria-label="Выбор сезона"></select>
-        </label>
-        <div class="header-hero"></div>
-        
-        <!-- Навигация -->
-        <nav class="main-nav">
-            <a href="#home" class="nav-link active" data-section="home">🏠 Все лиги</a>
-            <a href="#league-a" class="nav-link" data-section="league-a">⭐ Лига А</a>
-            <a href="#league-b" class="nav-link" data-section="league-b">🔥 Лига Б</a>
-            <a href="#league-f" class="nav-link" data-section="league-f">💥 Женская лига</a>
-            <a href="#news" class="nav-link" data-section="news">📰 Новости</a>
-            <a href="#top-stats" class="nav-link" data-section="top-stats">🏆 ТОПы</a>
-        </nav>
-
-        <div class="loading-indicator" id="loading-indicator">
-            <div class="spinner"></div>
-            <span>Загрузка данных...</span>
+        <div class="header-inner">
+            <div class="header-top">
+                <div class="header-brand">
+                    <img class="header-logo" src="data/images/ul-logo.jpeg" alt="">
+                    <div class="header-titles">
+                        <p class="header-kicker">Ульяновская область</p>
+                        <h1 id="site-title">Чемпионат по баскетболу</h1>
+                        <label class="season-switcher">
+                            <span class="season-switcher-label">Сезон</span>
+                            <select id="season-select" aria-label="Выбор сезона"></select>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <nav class="main-nav">
+                <a href="#home" class="nav-link active" data-section="home">Главная</a>
+                <a href="#news" class="nav-link" data-section="news">Новости</a>
+                <a href="#top-stats" class="nav-link" data-section="top-stats">ТОПы</a>
+            </nav>
+            <div class="loading-indicator" id="loading-indicator">
+                <div class="spinner"></div>
+                <span>Загрузка данных...</span>
+            </div>
         </div>
     </header>
 
     <main>
-        <!-- Главная страница (Все лиги) -->
+        <!-- Главная страница -->
         <section id="home" class="home-section">
             <div class="home-hero">
-                <h1>Добро пожаловать на чемпионат!</h1>
-                <p>Следите за лучшими баскетбольными командами Ульяновской области. Три лиги, десятки команд и сотни захватывающих матчей!</p>
-                
+                <div class="home-intro" id="home-intro"></div>
                 <div class="hero-stats">
                     <div class="stat-item">
                         <span class="stat-number" id="active-leagues">3</span>
@@ -97,7 +96,7 @@
         <!-- Секция ТОПов -->
         <section id="top-stats" class="top-stats-section hidden-section">
             <div class="top-stats-header">
-                <h2>🏆 Лучшие команды</h2>
+                <h2>Лучшие команды</h2>
                 <p>Статистика и рекорды чемпионата</p>
             </div>
             
@@ -111,11 +110,7 @@
             </div>
 
             <!-- Фильтр по лигам -->
-            <div class="top-stats-filter">
-                <button class="top-filter-btn league-a" data-filter="A">⭐ Лига А</button>
-                <button class="top-filter-btn league-b" data-filter="B">🔥 Лига Б</button>
-                <button class="top-filter-btn league-f" data-filter="F">💥 Женская лига</button>
-            </div>
+            <div class="top-stats-filter" id="top-stats-filter"></div>
             
             <!-- Сетка топ статистики -->
             <div class="top-stats-grid" id="top-stats-grid">
@@ -129,17 +124,14 @@
         <!-- Секция новостей -->
         <section id="news" class="news-section hidden-section">
             <div class="news-header">
-                <h2>📰 Новости чемпионата</h2>
+                <h2>Новости чемпионата</h2>
                 <p>Последние события и объявления</p>
             </div>
             
             <!-- Фильтр новостей по лигам -->
-            <div class="news-filter">
+            <div class="news-filter" id="news-filter">
                 <button class="news-filter-btn active" data-filter="all">Все новости</button>
-                <button class="news-filter-btn" data-filter="A">⭐ Лига А</button>
-                <button class="news-filter-btn" data-filter="B">🔥 Лига Б</button>
-                <button class="news-filter-btn" data-filter="F">💥 Женская лига</button>
-                <button class="news-filter-btn" data-filter="general">📋 Общие</button>
+                <button class="news-filter-btn" data-filter="general">Общие</button>
             </div>
             
             <!-- Контейнер для новостей -->
@@ -151,66 +143,7 @@
             </div>
         </section>
 
-        <!-- В секциях лиг заменяем старый контент на новый -->
-        <!-- Лига А -->
-        <section id="league-a" class="league-section hidden-section">
-            <div class="league-header league-a">
-                <h2>Лига А</h2>
-            </div>
-            
-            <!-- Положение команд -->
-            <h3 class="league-section-title">🏆 Положение команд</h3>
-            <div class="teams-container" id="league-a-teams">
-                <!-- Таблица положения будет загружена через JavaScript -->
-            </div>
-            
-            <!-- Разделитель -->
-            <div class="league-content-divider"></div>
-            
-            <!-- Расписание и результаты -->
-            <h3 class="league-section-title">📅 Матчи</h3>
-            <div class="matches-container" id="league-a-matches">
-                <!-- Карточки матчей будут загружены через JavaScript -->
-            </div>
-        </section>
-
-        <!-- Лига Б -->
-        <section id="league-b" class="league-section hidden-section">
-            <div class="league-header league-b">
-                <h2>Лига Б</h2>
-            </div>
-            
-            <h3 class="league-section-title">🏆 Положение команд</h3>
-            <div class="teams-container" id="league-b-teams">
-                <!-- Таблица положения будет загружена через JavaScript -->
-            </div>
-            
-            <div class="league-content-divider"></div>
-            
-            <h3 class="league-section-title">📅 Матчи</h3>
-            <div class="matches-container" id="league-b-matches">
-                <!-- Карточки матчей будут загружены через JavaScript -->
-            </div>
-        </section>
-
-        <!-- Женская лига -->
-        <section id="league-f" class="league-section hidden-section">
-            <div class="league-header league-f">
-                <h2>Женская лига</h2>
-            </div>
-            
-            <h3 class="league-section-title">🏆 Положение команд</h3>
-            <div class="teams-container" id="league-f-teams">
-                <!-- Таблица положения будет загружена через JavaScript -->
-            </div>
-            
-            <div class="league-content-divider"></div>
-            
-            <h3 class="league-section-title">📅 Матчи</h3>
-            <div class="matches-container" id="league-f-matches">
-                <!-- Карточки матчей будут загружены через JavaScript -->
-            </div>
-        </section>
+        <div id="league-pages"></div>
     </main>
 
     <!-- Модальное окно информации о команде -->
@@ -244,12 +177,12 @@
         </div>
     </div>
 
-    <script src="js/utils.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/matches.js"></script>
-    <script src="js/home.js"></script>
-    <script src="js/news-manager.js"></script>
-    <script src="js/top-stats.js"></script>
+    <script src="js/utils.js?v=15"></script>
+    <script src="js/data.js?v=15"></script>
+    <script src="js/ui.js?v=15"></script>
+    <script src="js/matches.js?v=15"></script>
+    <script src="js/home.js?v=15"></script>
+    <script src="js/news-manager.js?v=15"></script>
+    <script src="js/top-stats.js?v=15"></script>
 </body>
 </html>

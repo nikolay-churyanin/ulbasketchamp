@@ -14,14 +14,14 @@ class HomePage {
 
     init() {
         this.setupNavigation();
-        this.setupScrollSpy();
+        this.setupNewsFilter();
         this.updateLeagueIndicator('home');
         
         if (this.dataManager.ready) {
             this.dataManager.ready.then(() => {
                 this.setupSeasonSwitcher();
+                this.renderLeagueShell();
                 this.renderHomePage();
-                this.setupNewsFilter();
             });
         }
     }
@@ -49,16 +49,13 @@ class HomePage {
     }
 
     updateSeasonChrome() {
-        const title = document.getElementById('season-title');
         const label = this.dataManager.getSeasonLabel();
-        if (title) {
-            title.textContent = `Сезон ${label}`;
-        }
         document.title = `Чемпионат по баскетболу — ${label}`;
     }
 
     async refreshAfterSeasonChange() {
         this.updateSeasonChrome();
+        this.renderLeagueShell();
         await this.renderHomePage();
 
         const active = document.querySelector('.nav-link.active');
@@ -69,138 +66,163 @@ class HomePage {
             return;
         }
         if (sectionId === 'top-stats' && window.topStatsManager) {
-            window.topStatsManager.loadAndDisplayStats(window.topStatsManager.currentFilter || 'A');
+            const leagues = this.dataManager.getLeaguesReadyForTopStats();
+            window.topStatsManager.syncLeagueFilters(leagues);
+            window.topStatsManager.loadAndDisplayStats(window.topStatsManager.currentFilter);
             return;
         }
         if (sectionId.startsWith('league-')) {
-            const league = sectionId.split('-')[1].toUpperCase();
-            this.currentLeague = league;
-            this.renderLeaguePage(league);
+            const league = this.dataManager.getLeagueBySectionId(sectionId);
+            if (league) {
+                this.currentLeague = league.id;
+                this.renderLeaguePage(league.id);
+            } else {
+                this.openSection('home');
+            }
         }
     }
 
     setupNavigation() {
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sectionId = link.dataset.section;
-                
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                
-                this.updateLeagueIndicator(sectionId);
-                this.showSection(sectionId);
-                
-                if (sectionId === 'news') {
-                    // Загружаем новости при переходе на вкладку
-                    this.newsManager.loadAndDisplayNews('news-container', 'all');
-                } else if (sectionId === 'top-stats') {
-                    // Загружаем топ статистику
-                    if (window.topStatsManager) {
-                        window.topStatsManager.loadAndDisplayStats('A');
-                    }
-                } else if (sectionId !== 'home') {
-                    const league = sectionId.split('-')[1].toUpperCase();
-                    this.currentLeague = league;
-                    this.renderLeaguePage(league);
-                } else {
-                    this.renderHomePage();
-                }
-                
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+        const nav = document.querySelector('.main-nav');
+        nav?.addEventListener('click', (e) => {
+            const link = e.target.closest('.nav-link');
+            if (!link) return;
+            e.preventDefault();
+            this.openSection(link.dataset.section);
         });
 
         this.showSection('home');
     }
 
+    openSection(sectionId) {
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.toggle('active', link.dataset.section === sectionId);
+        });
+
+        this.updateLeagueIndicator(sectionId);
+        this.showSection(sectionId);
+
+        if (sectionId === 'news') {
+            this.newsManager.loadAndDisplayNews('news-container', 'all');
+        } else if (sectionId === 'top-stats') {
+            if (window.topStatsManager) {
+                const leagues = this.dataManager.getLeaguesReadyForTopStats();
+                window.topStatsManager.syncLeagueFilters(leagues);
+                window.topStatsManager.loadAndDisplayStats(window.topStatsManager.currentFilter);
+            }
+        } else if (sectionId === 'home') {
+            this.renderHomePage();
+        } else {
+            const league = this.dataManager.getLeagueBySectionId(sectionId);
+            if (league) {
+                this.currentLeague = league.id;
+                this.renderLeaguePage(league.id);
+            }
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     // Настройка фильтра новостей
     setupNewsFilter() {
-        document.querySelectorAll('.news-filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                const filter = e.currentTarget.dataset.filter;
-                
-                // Обновляем активную кнопку
-                document.querySelectorAll('.news-filter-btn').forEach(b => {
-                    b.classList.remove('active');
-                });
-                e.currentTarget.classList.add('active');
-                
-                // Загружаем новости с фильтром
-                if (this.newsManager) {
-                    this.newsManager.loadAndDisplayNews('news-container', filter);
-                }
+        document.querySelector('.news-filter')?.addEventListener('click', (e) => {
+            const btn = e.target.closest('.news-filter-btn');
+            if (!btn) return;
+            e.preventDefault();
+
+            const filter = btn.dataset.filter;
+            document.querySelectorAll('.news-filter-btn').forEach(item => {
+                item.classList.toggle('active', item === btn);
             });
+
+            if (this.newsManager) {
+                this.newsManager.loadAndDisplayNews('news-container', filter);
+            }
         });
+    }
+
+    renderLeagueShell() {
+        this.renderLeagueNav();
+        this.renderLeaguePages();
+        this.renderNewsFilters();
+    }
+
+    renderLeagueNav() {
+        const nav = document.querySelector('.main-nav');
+        const newsLink = nav?.querySelector('[data-section="news"]');
+        if (!nav || !newsLink) return;
+
+        nav.querySelectorAll('.nav-link[data-section^="league-"]').forEach(link => link.remove());
+
+        this.dataManager.getLeagues().forEach(league => {
+            const link = document.createElement('a');
+            link.href = `#${league.sectionId}`;
+            link.className = 'nav-link';
+            link.dataset.section = league.sectionId;
+            link.textContent = league.name;
+            nav.insertBefore(link, newsLink);
+        });
+    }
+
+    renderLeaguePages() {
+        const host = document.getElementById('league-pages');
+        if (!host) return;
+
+        host.innerHTML = this.dataManager.getLeagues().map(league => `
+            <section id="${league.sectionId}" class="league-section hidden-section">
+                <div class="league-header ${league.cssClass}">
+                    <h2>${league.name}</h2>
+                </div>
+                <h3 class="league-section-title">Положение команд</h3>
+                <div class="teams-container" id="${league.sectionId}-teams"></div>
+                <div class="league-content-divider"></div>
+                <h3 class="league-section-title">Матчи</h3>
+                <div class="matches-container" id="${league.sectionId}-matches"></div>
+            </section>
+        `).join('');
+    }
+
+    renderNewsFilters() {
+        const el = document.querySelector('.news-filter');
+        if (!el) return;
+
+        const leagueButtons = this.dataManager.getLeagues().map(league =>
+            `<button class="news-filter-btn" data-filter="${league.id}">${league.name}</button>`
+        ).join('');
+
+        el.innerHTML = `
+            <button class="news-filter-btn active" data-filter="all">Все новости</button>
+            ${leagueButtons}
+            <button class="news-filter-btn" data-filter="general">Общие</button>
+        `;
     }
 
     updateLeagueIndicator(sectionId) {
         const indicator = document.getElementById('league-indicator');
+        if (!indicator) return;
+
         indicator.className = 'current-league-indicator';
-        
+
         if (sectionId === 'home') {
             indicator.classList.add('home');
-        } else if (sectionId === 'league-a') {
-            indicator.classList.add('league-a');
-        } else if (sectionId === 'league-b') {
-            indicator.classList.add('league-b');
-        } else if (sectionId === 'league-f') {
-            indicator.classList.add('league-f');
+            return;
+        }
+
+        const league = this.dataManager.getLeagueBySectionId(sectionId);
+        if (league) {
+            indicator.classList.add(league.cssClass);
         }
     }
 
     showSection(sectionId) {
-        // Скрываем все секции
         document.querySelectorAll('section').forEach(section => {
             section.style.display = 'none';
         });
-        
-        // Показываем нужную секцию
+
         const targetSection = document.getElementById(sectionId);
         if (targetSection) {
             targetSection.style.display = 'block';
         }
-    }
-
-    setupScrollSpy() {
-        // Отслеживаем прокрутку для обновления активной ссылки
-        let isScrolling = false;
-        
-        window.addEventListener('scroll', () => {
-            if (isScrolling) return;
-            
-            isScrolling = true;
-            
-            setTimeout(() => {
-                const sections = document.querySelectorAll('section');
-                let currentSection = 'home';
-                
-                sections.forEach(section => {
-                    if (section.style.display !== 'none' && section.offsetParent !== null) {
-                        const sectionTop = section.offsetTop - 100;
-                        const sectionHeight = section.clientHeight;
-                        
-                        if (window.pageYOffset >= sectionTop && 
-                            window.pageYOffset < sectionTop + sectionHeight) {
-                            currentSection = section.id;
-                        }
-                    }
-                });
-                
-                // Обновляем активную ссылку
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                    if (link.dataset.section === currentSection) {
-                        link.classList.add('active');
-                        this.updateLeagueIndicator(currentSection);
-                    }
-                });
-                
-                isScrolling = false;
-            }, 100);
-        });
     }
 
     async renderHomePage() {
@@ -209,20 +231,82 @@ class HomePage {
         }
 
         this.updateSeasonChrome();
+        this.updateHomeIntro();
         await this.renderLeagueOverview();
         await this.renderUpcomingGames();
         this.updateStats();
+        this.updateSeasonNav();
+    }
+
+    updateHomeIntro() {
+        const el = document.getElementById('home-intro');
+        if (!el) return;
+
+        const archived = Boolean(this.dataManager.seasonMeta?.archived);
+        const hasGames = this.dataManager.getAllGamesForDisplay().length > 0;
+
+        if (archived) {
+            el.dataset.state = 'archived';
+            el.innerHTML = `
+                <div class="home-intro-row">
+                    <h2>Сезон завершён</h2>
+                    <span class="home-intro-badge">Архив</span>
+                </div>
+                <p>Спасибо командам, судьям и болельщикам. Чемпионы определены — таблицы, плей-офф и новости остаются здесь.</p>
+            `;
+            return;
+        }
+
+        if (hasGames) {
+            el.dataset.state = 'live';
+            el.innerHTML = `
+                <div class="home-intro-row">
+                    <h2>Сезон в разгаре</h2>
+                    <span class="home-intro-badge">Идёт</span>
+                </div>
+                <p>Следите за таблицей, ближайшими матчами и новостями. Результаты появляются по ходу туров.</p>
+            `;
+            return;
+        }
+
+        el.dataset.state = 'upcoming';
+        el.innerHTML = `
+            <div class="home-intro-row">
+                <h2>Сезон начинается</h2>
+                <span class="home-intro-badge">Скоро</span>
+            </div>
+            <p>Добро пожаловать на чемпионат Ульяновской области. Следите за ходом сезона — расписание и результаты появятся здесь.</p>
+        `;
+    }
+
+    updateSeasonNav() {
+        const newsLink = document.querySelector('.nav-link[data-section="news"]');
+        const topsLink = document.querySelector('.nav-link[data-section="top-stats"]');
+        const hasNews = this.dataManager.hasNews();
+        const topLeagues = this.dataManager.getLeaguesReadyForTopStats();
+
+        if (newsLink) newsLink.hidden = !hasNews;
+        if (topsLink) topsLink.hidden = topLeagues.length === 0;
+
+        if (window.topStatsManager) {
+            window.topStatsManager.syncLeagueFilters(topLeagues);
+        }
+
+        const active = document.querySelector('.nav-link.active');
+        if (active?.hidden) {
+            active.classList.remove('active');
+            const homeLink = document.querySelector('.nav-link[data-section="home"]');
+            homeLink?.classList.add('active');
+            this.updateLeagueIndicator('home');
+            this.showSection('home');
+        }
     }
 
     async renderLeagueOverview() {
         const container = document.getElementById('league-overview');
         if (!container) return;
 
-        const leagues = [
-            { id: 'A', name: 'Лига А', color: 'league-a', icon: '⭐' },
-            { id: 'B', name: 'Лига Б', color: 'league-b', icon: '🔥' },
-            { id: 'F', name: 'Женская лига', color: 'league-f', icon: '💥' }
-        ];
+        const leagues = this.dataManager.getLeagues();
 
         let html = '';
 
@@ -238,8 +322,8 @@ class HomePage {
             
             html += `
                 <div class="league-card">
-                    <div class="league-card-header ${league.color}">
-                        <h3>${league.icon} ${league.name}</h3>
+                    <div class="league-card-header ${league.cssClass}">
+                        <h3>${league.name}</h3>
                         <p>${teams.length} команд • ${totalGames} ${this.getPluralFormMatch(totalGames)}</p>
                     </div>
                     <div class="league-card-body">
@@ -269,18 +353,9 @@ class HomePage {
         document.querySelectorAll('.league-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const league = link.dataset.league;
-                const leagueId = `league-${league.toLowerCase()}`;
-                
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                document.querySelector(`.nav-link[data-section="${leagueId}"]`).classList.add('active');
-                this.updateLeagueIndicator(leagueId);
-                this.showSection(leagueId);
-                
-                this.currentLeague = league;
-                this.renderLeaguePage(league);
-                
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                const league = this.dataManager.getLeagueById(link.dataset.league);
+                if (!league) return;
+                this.openSection(league.sectionId);
             });
         });
     }
@@ -432,18 +507,17 @@ class HomePage {
         const now = new Date();
         const upcomingGames = allGames
             .filter(game => !game._hasResult && game._fullDate > now)
-            .sort((a, b) => a._fullDate - b._fullDate); // Сортировка по времени
+            .sort((a, b) => a._fullDate - b._fullDate);
+        const section = container.closest('.upcoming-games-section');
 
-        if (upcomingGames.length === 0) {
-            container.innerHTML = `
-                <div class="no-upcoming-games">
-                    <div class="no-upcoming-games-icon">📅</div>
-                    <h3>Нет предстоящих матчей</h3>
-                    <p>Следите за обновлениями расписания</p>
-                </div>
-            `;
+        const seasonArchived = Boolean(this.dataManager.seasonMeta?.archived);
+        if (upcomingGames.length === 0 || seasonArchived) {
+            if (section) section.hidden = true;
+            container.innerHTML = '';
             return;
         }
+
+        if (section) section.hidden = false;
 
         // Группируем игры по датам для заголовков
         const gamesByDate = this.groupGamesByDate(upcomingGames);
@@ -664,21 +738,10 @@ class HomePage {
     setupGamePreviewClickHandlers() {
         document.querySelectorAll('.game-preview-card').forEach(card => {
             card.addEventListener('click', () => {
-                const league = card.dataset.league;
-                const leagueId = `league-${league.toLowerCase()}`;
-                
-                // Показываем страницу лиги
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                document.querySelector(`.nav-link[data-section="${leagueId}"]`).classList.add('active');
-                this.updateLeagueIndicator(leagueId);
-                this.showSection(leagueId);
-                
-                // Устанавливаем текущую лигу
-                this.currentLeague = league;
-                this.renderLeaguePage(league);
-                
-                // Прокручиваем к матчам
-                const matchesSection = document.getElementById(`${leagueId}-matches`);
+                const league = this.dataManager.getLeagueById(card.dataset.league);
+                if (!league) return;
+                this.openSection(league.sectionId);
+                const matchesSection = document.getElementById(`${league.sectionId}-matches`);
                 if (matchesSection) {
                     matchesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
@@ -844,205 +907,142 @@ class HomePage {
         const thirdPlace = bracket.thirdPlace || [];
         const final = bracket.final || [];
         const champion = bracket.champion;
+        const format = quarterfinals.length > 0 ? '6' : '4';
 
-        // Функция для получения seed команды
         const getTeamSeed = (teamName) => {
             if (!teamName) return null;
-            const teamIndex = standings.findIndex(t => 
+            const teamIndex = standings.findIndex(t =>
                 this.dataManager.normalizeTeamName(t.teamName) === this.dataManager.normalizeTeamName(teamName)
             );
             return teamIndex >= 0 ? teamIndex + 1 : null;
         };
-        
-        const renderTeamForPlace = (title, place, game, team1Display, team2Display) => {
-            const isCompleted = place.winner !== null;
+
+        const isPlaceholder = (name) => {
+            if (!name) return true;
+            return /^(TBD|Win |Lose |Победитель|Проигравший)/i.test(name);
+        };
+
+        const scoresForPlace = (place, game) => {
+            if (!game || game.scoreHome == null || game.scoreAway == null) {
+                return [null, null];
+            }
+            const home = this.dataManager.normalizeTeamName(game.teamHome);
+            const team1 = this.dataManager.normalizeTeamName(place.team1);
+            if (home === team1) {
+                return [game.scoreHome, game.scoreAway];
+            }
+            return [game.scoreAway, game.scoreHome];
+        };
+
+        const renderLine = (teamName, seed, score, isWinner, isLoser) => {
+            const waiting = isPlaceholder(teamName);
+            const display = teamName || 'Ожидается';
+            const logo = waiting ? '' : this.getTeamLogo(teamName, league);
             return `
-                <div class="playoff-match" data-game-id="${game ? game.id : -1}" data-league="${league}">
-                    <div class="playoff-match-header">
-                        <div class="playoff-match-title">${title}</div>
-                    </div>
-                    <!-- Команда 1 -->
-                    <div class="playoff-team ${place.team1 && place.winner === place.team1 ? 'winner' : ''}">
-                        <div class="playoff-team-with-seed">
-                            ${place.team1Seed ? `
-                                <div class="playoff-team-seed-info">
-                                    <div class="playoff-seed-badge ${this.getSeedBadgeClass(place.team1Seed)}" 
-                                         title="Место в регулярке: ${place.team1Seed}">
-                                        ${place.team1Seed}
-                                    </div>
-                                </div>
-                            ` : ''}
-                                        
-                            <div class="playoff-team-info">
-                                <img src="${place.team1 ? this.getTeamLogo(place.team1, league) : 
-                                        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEJEPC90ZXh0Pgo8L3N2Zz4='}" 
-                                     alt="${team1Display}" class="playoff-team-logo" onerror="this.onImageError(this)">
-                                <div class="playoff-team-details">
-                                    <span class="playoff-team-name">${team1Display}</span>
-                                </div>
-                            </div>
-                            
-                            ${game && game.scoreHome ? `
-                                <div class="playoff-team-score">
-                                    ${game.scoreHome}
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                    
-                    <!-- Команда 2 -->
-                    <div class="playoff-team ${place.team2 && place.winner === place.team2 ? 'winner' : ''}">
-                        <div class="playoff-team-with-seed">
-                            ${place.team2Seed ? `
-                                <div class="playoff-team-seed-info">
-                                    <div class="playoff-seed-badge ${this.getSeedBadgeClass(place.team2Seed)}" 
-                                         title="Место в регулярке: ${place.team2Seed}">
-                                        ${place.team2Seed}
-                                    </div>
-                                </div>
-                            ` : ''}
-                            
-                             <div class="playoff-team-info">
-                                <img src="${place.team2 ? this.getTeamLogo(place.team2, league) : 
-                                        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEJEPC90ZXh0Pgo8L3N2Zz4='}" 
-                                     alt="${team2Display}" class="playoff-team-logo" onerror="this.onImageError(this)">
-                                <div class="playoff-team-details">
-                                    <span class="playoff-team-name">${team2Display}</span>
-                                </div>
-                            </div>
-                            
-                            ${game && game.scoreAway ? `
-                                <div class="playoff-team-score">
-                                    ${game.scoreAway}
-                                </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                    
-                    <div class="playoff-match-footer">
-                        <div class="playoff-match-status ${isCompleted ? 'completed' : 'scheduled'}">
-                            ${isCompleted ? 'Завершено' : 'Запланировано'}
-                        </div>
-                    </div>
+                <div class="bracket-line ${isWinner ? 'is-winner' : ''} ${isLoser ? 'is-loser' : ''} ${waiting ? 'is-wait' : ''}">
+                    ${seed ? `<span class="bracket-seed ${this.getSeedBadgeClass(seed)}" title="Место в регулярке: ${seed}">${seed}</span>` : '<span class="bracket-seed bracket-seed--empty"></span>'}
+                    ${logo
+                        ? `<img src="${logo}" alt="" class="bracket-logo" onerror="this.onImageError(this)">`
+                        : '<span class="bracket-logo bracket-logo--empty"></span>'}
+                    <span class="bracket-name">${display}</span>
+                    <span class="bracket-score">${score == null ? '' : score}</span>
                 </div>
             `;
         };
 
-        let html = `
-            <div class="playoff-bracket-container">
-                <div class="playoff-bracket">
-        `;
-        
-        // Четвертьфиналы (только для 6 команд)
-        if (quarterfinals.length > 0) {
-            html += `
-                <div class="playoff-round playoff-round-quartefinals">
-                    <div class="playoff-round-title">1/4 финала</div>
-                    <div class="playoff-round-matches">
+        const renderGame = (place, game, label) => {
+            const done = place.winner != null;
+            const [score1, score2] = scoresForPlace(place, game);
+            const gameId = game?.id || '';
+            return `
+                <div class="bracket-game playoff-match ${done ? 'is-done' : 'is-pending'}"
+                     data-game-id="${gameId}"
+                     data-league="${league}">
+                    <div class="bracket-game-label">${label}</div>
+                    ${renderLine(place.team1, place.team1Seed, score1, done && place.winner === place.team1, done && place.winner && place.winner !== place.team1)}
+                    ${renderLine(place.team2, place.team2Seed, score2, done && place.winner === place.team2, done && place.winner && place.winner !== place.team2)}
+                </div>
             `;
-            
-            quarterfinals.forEach((qf, index) => {
-                const game = qf.games && qf.games.length > 0 ? qf.games[0] : null;
-                
-                html += renderTeamForPlace(`1/4 финала ${index + 1}`, qf, game, qf.team1, qf.team2);
-            });
-            
-            html += `
-                    </div>
+        };
+
+        const qfHtml = quarterfinals.map((qf, index) => {
+            const game = qf.games?.[0] || null;
+            return renderGame(qf, game, `1/4 · ${index + 1}`);
+        }).join('');
+
+        const sfHtml = semifinals.map((sf, index) => {
+            const game = sf.games?.[0] || null;
+            const place = {
+                ...sf,
+                team2: sf.team2 || (quarterfinals.length ? `Победитель 1/4 ${index + 1}` : 'TBD')
+            };
+            return renderGame(place, game, `1/2 · ${index + 1}`);
+        }).join('');
+
+        let finalHtml = '';
+        if (final[0]) {
+            const match = final[0];
+            const game = match.games?.[0] || null;
+            const place = {
+                ...match,
+                team1: match.team1 || 'Победитель 1/2 1',
+                team2: match.team2 || 'Победитель 1/2 2'
+            };
+            finalHtml = renderGame(place, game, 'Финал');
+        }
+
+        let thirdHtml = '';
+        if (thirdPlace[0]) {
+            const match = thirdPlace[0];
+            const game = match.games?.[0] || null;
+            const place = {
+                ...match,
+                team1: match.team1 || 'Проигравший 1/2 1',
+                team2: match.team2 || 'Проигравший 1/2 2'
+            };
+            thirdHtml = renderGame(place, game, 'За 3-е место');
+        }
+
+        let championHtml = '';
+        if (champion) {
+            const championSeed = getTeamSeed(champion);
+            championHtml = `
+                <div class="champion-team">
+                    <span class="trophy">Чемпион</span>
+                    <strong class="champion-name">${champion}</strong>
+                    ${championSeed ? `<span class="champion-seed-info">${championSeed} место в регулярке</span>` : ''}
                 </div>
             `;
         }
-        
-        // Полуфиналы
-        if (semifinals.length > 0) {
-            html += `
-                <div class="playoff-round playoff-round-semifinals">
-                    <div class="playoff-round-title">1/2 финала</div>
-                    <div class="playoff-round-matches">
-            `;
-            
-            semifinals.forEach((sf, index) => {
-                const game = sf.games && sf.games.length > 0 ? sf.games[0] : null;
-                const team2Display = sf.team2 || (quarterfinals.length > 0 ? 
-                    (index === 0 ? 'Win 1/4 2' : 'Win 1/4 1') : 
-                    'TBD');
-                
-                html += renderTeamForPlace(`1/2 финала ${index + 1}`, sf, game, sf.team1, team2Display);
-            });
-            
-            html += `
+
+        const qfColumn = quarterfinals.length ? `
+            <div class="bracket-round" data-round="qf">
+                <div class="bracket-round-label">1/4 финала</div>
+                <div class="bracket-round-games">${qfHtml}</div>
+            </div>
+            <div class="bracket-join" aria-hidden="true"></div>
+        ` : '';
+
+        return `
+            <div class="bracket-wrap">
+                <div class="bracket bracket--${format}">
+                    ${qfColumn}
+                    <div class="bracket-round" data-round="sf">
+                        <div class="bracket-round-label">1/2 финала</div>
+                        <div class="bracket-round-games">${sfHtml}</div>
                     </div>
-                </div>
-            `;
-        }
-        
-        // Матч за 3-е место
-        if (thirdPlace.length > 0) {
-            const tp = thirdPlace[0];
-            const game = tp.games && tp.games.length > 0 ? tp.games[0] : null;
-            const team1Display = tp.team1 || 'Lose 1/2 1';
-            const team2Display = tp.team2 || 'Lose 1/2 2';
-            
-            html += `
-                <div class="playoff-third-place-container">
-                    <div class="playoff-third-place-match-wrapper">
-                        <div class="playoff-round playoff-round-third-place">
-                            <div class="playoff-round-title">
-                                <span class="bronze-icon">🥉</span> Матч за 3-е место
-                            </div>
-                            <div class="playoff-round-matches">
-                                ${renderTeamForPlace('Матч за 3-е место', tp, game, team1Display, team2Display)}
-                            </div>
+                    <div class="bracket-join" aria-hidden="true"></div>
+                    <div class="bracket-round" data-round="final">
+                        <div class="bracket-round-label">Финал</div>
+                        <div class="bracket-round-games">
+                            ${finalHtml}
+                            ${championHtml}
+                            ${thirdHtml}
                         </div>
                     </div>
-                </div>
-            `;
-        }
-        
-        // Финал
-        if (final.length > 0) {
-            const finalMatch = final[0];
-            const game = finalMatch.games && finalMatch.games.length > 0 ? finalMatch.games[0] : null;
-            const team1Display = finalMatch.team1 || 'Win 1/2 1';
-            const team2Display = finalMatch.team2 || 'Win 1/2 2';
-            
-            html += `
-                <div class="playoff-round playoff-round-finals">
-                    <div class="playoff-round-title">Финал</div>
-                    <div class="playoff-round-matches">
-                        ${renderTeamForPlace('Финал', finalMatch, game, team1Display, team2Display)}
-                    </div>
-                </div>
-            `;
-        }
-        
-        html += `
                 </div>
             </div>
         `;
-        
-        // Чемпион
-        if (champion) {
-            const championSeed = getTeamSeed(champion);
-            
-            html += `
-                <div class="champion-team">
-                    <div class="trophy">🏆</div>
-                    <h3>Чемпион ${this.dataManager.getLeagueName(league)}</h3>
-                    <div class="champion-name">${champion}</div>
-                    ${championSeed ? `
-                        <div class="champion-seed-info">
-                            <span class="playoff-seed-badge ${this.getSeedBadgeClass(championSeed)}">
-                                ${championSeed}
-                            </span>
-                            <span>Место в регулярке</span>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-        
-        return html;
     }
 
     // Новый метод для настройки вкладок плей-офф
@@ -1101,12 +1101,7 @@ class HomePage {
     }
 
     getLeagueName(leagueCode) {
-        const leagues = {
-            'A': 'Лига А',
-            'B': 'Лига Б',
-            'F': 'Женская лига'
-        };
-        return leagues[leagueCode] || leagueCode;
+        return this.dataManager.getLeagueName(leagueCode);
     }
 
     updateStats() {
@@ -1118,6 +1113,8 @@ class HomePage {
         // Подсчет игроков: 12 игроков * количество команд
         const estimatedPlayers = totalTeams * 12;
         
+        const leaguesCount = this.dataManager.getLeagues().length;
+        document.getElementById('active-leagues').textContent = leaguesCount;
         document.getElementById('total-teams').textContent = totalTeams;
         document.getElementById('total-teams-label').textContent = this.getPluralFormTeam(totalTeams);;
         document.getElementById('total-games').textContent = totalGames;
@@ -1153,6 +1150,7 @@ class HomePage {
             card.addEventListener('click', async (e) => {
                              
                 const gameId = card.dataset.gameId;
+                if (!gameId) return;
                 const game = this.dataManager.getGameById(gameId);
 
                 if (game) {

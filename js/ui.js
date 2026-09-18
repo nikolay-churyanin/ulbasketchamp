@@ -42,7 +42,7 @@ class BasketballUI {
         // Если лига не указана, ищем команду во всех лигах
         if (!league) {
             // Проверяем все лиги
-            const leagues = ['A', 'B', 'F'];
+            const leagues = this.dataManager.getLeagueIds();
             for (const l of leagues) {
                 const team = this.dataManager.getTeamByName(teamName, l);
                 if (team) {

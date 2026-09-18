@@ -105,13 +105,16 @@ class NewsManager {
 
     // Получить бейдж лиги
     getLeagueBadge(league) {
-        const badges = {
-            'A': '<span class="news-badge league-a">⭐ Лига А</span>',
-            'B': '<span class="news-badge league-b">🔥 Лига Б</span>',
-            'F': '<span class="news-badge league-f">💥 Женская лига</span>',
-            'general': '<span class="news-badge general">📋 Общее</span>'
-        };
-        return badges[league] || badges['general'];
+        if (!league || league === 'general') {
+            return '<span class="news-badge general">Общее</span>';
+        }
+
+        const item = this.dataManager.getLeagueById(league);
+        if (!item) {
+            return '<span class="news-badge general">Общее</span>';
+        }
+
+        return `<span class="news-badge ${item.cssClass}">${item.name}</span>`;
     }
 
     // Форматирование даты

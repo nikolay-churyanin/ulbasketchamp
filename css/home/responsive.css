@@ -1,81 +1,8 @@
-/* home/responsive.css - Дополнительные адаптивные стили */
-
-/* Большие десктопы */
-@media (min-width: 1400px) {
-    .home-hero {
-        padding: 50px 30px;
-    }
-    
-    .league-overview {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Планшеты в ландшафтной ориентации */
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-    .hero-stats {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    
-    .upcoming-matches-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Очень маленькие экраны */
-@media (max-width: 320px) {
-    .home-hero {
-        padding: 12px 6px;
-    }
-    
-    .home-hero h1 {
-        font-size: 1.2rem;
-    }
-    
-    .home-hero p {
-        font-size: 0.8rem;
-    }
-    
-    .stat-number {
-        font-size: 1.3rem;
-    }
-    
-    .stat-label {
-        font-size: 0.6rem;
-    }
-    
-    .league-team-preview span {
-        font-size: 0.75rem;
-    }
-    
-    .match-exact-time {
-        font-size: 0.75rem;
-    }
-}
-
-/* Высокие экраны */
-@media (min-height: 1000px) {
-    .home-hero {
-        padding: 60px 30px;
-    }
-    
-    .hero-stats {
-        margin-top: 40px;
-    }
-}
-
-/* Печать */
 @media print {
-    .home-hero {
+    header,
+    .season-switcher,
+    .main-nav {
         background: none;
         color: black;
-        box-shadow: none;
-    }
-    
-    .stat-number,
-    .stat-label {
-        color: black;
-        text-shadow: none;
     }
 }

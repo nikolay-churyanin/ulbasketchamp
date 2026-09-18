@@ -1,27 +1,28 @@
-/* Таблицы */
 table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 20px;
-    background: white;
-    border-radius: 15px;
+    border-collapse: collapse;
+    margin-top: var(--space-2);
+    background: var(--surface);
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+    border: 1px solid var(--line);
 }
 
 th, td {
-    padding: 15px 20px;
+    padding: 10px 12px;
     text-align: left;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--line);
 }
 
 th {
-    background: linear-gradient(135deg, #0055a5, #0077cc);
+    background: var(--navy);
     color: white;
     font-weight: 600;
     position: sticky;
     top: 0;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
 }
 
 tr:last-child td {
@@ -29,52 +30,53 @@ tr:last-child td {
 }
 
 tr:hover {
-    background: #f8f9fa;
+    background: var(--paper);
 }
 
-/* Кликабельные строки */
 .clickable-row {
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
 .clickable-row:hover {
-    background: #e3f2fd !important;
+    background: #ebe7df !important;
 }
 
-/* Обертка для горизонтальной прокрутки на мобильных */
 .table-container {
     width: 100%;
-    max-height:700px; /* ваше максимальное значение */
+    max-height: 700px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-/* Адаптивность таблиц */
 @media (max-width: 768px) {
     table {
-        font-size: 14px;
+        font-size: 13px;
     }
     th, td {
-        padding: 10px 12px;
+        padding: 8px;
     }
 }
 
-/* Сокрытие второстепенных колонок на очень узких экранах */
-@media (max-width: 600px) {
-    /* Статистика игроков: скрываем "Игры" и "Всего <метрика>" */
-    #stats .table-container table th:nth-child(4),
-    #stats .table-container table td:nth-child(4),
-    #stats .table-container table th:nth-child(6),
-    #stats .table-container table td:nth-child(6)
-    { display: none; }
+@media (max-width: 640px) {
+    .standings-table th:nth-child(5),
+    .standings-table td:nth-child(5),
+    .standings-table th:nth-child(6),
+    .standings-table td:nth-child(6),
+    .standings-table th:nth-child(7),
+    .standings-table td:nth-child(7),
+    .standings-table th:nth-child(8),
+    .standings-table td:nth-child(8),
+    .standings-table th:nth-child(9),
+    .standings-table td:nth-child(9) {
+        display: none;
+    }
 }
 
 @media (max-width: 468px) {
     table {
-        font-size: 10px;
+        font-size: 11px;
     }
     th, td {
-        padding: 4px 6px;
+        padding: 6px;
     }
 }

@@ -18,8 +18,8 @@
     display: inline-block;
     margin: 0.5px;
 }
-.green { background-color: #4CAF50; }
-.red { background-color: #f44336; }
+.green { background-color: var(--win); }
+.red { background-color: var(--loss); }
 
 /* Стили для секции команд - УЛУЧШЕННАЯ ВЕРСИЯ */
 .teams-container {
@@ -45,37 +45,18 @@
 
 /* Заголовок лиги */
 .league-header {
-    padding: 12px 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
+    padding: 12px 16px;
+    border-radius: 0;
+    margin-bottom: 0;
     font-weight: 700;
-    font-size: 1.3rem;
-    text-align: center;
+    font-size: 1.15rem;
+    text-align: left;
     color: white;
-    position: relative;
-    overflow: hidden;
 }
 
-.league-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, var(--league-color), var(--league-color-dark));
-    z-index: -1;
-}
-
-.league-header.league-a {
-    --league-color: #0055a5;
-    --league-color-dark: #003d7a;
-}
-
-.league-header.league-b {
-    --league-color: #28a745;
-    --league-color-dark: #1e7e34;
-}
+.league-header.league-a { background: var(--league-a); }
+.league-header.league-b { background: var(--league-b); }
+.league-header.league-f { background: var(--league-f); }
 
 /* Сетка чипов команд */
 .teams-chips {
@@ -190,7 +171,7 @@
     display: inline-block;
     margin-top: 10px;
     padding: 4px 12px;
-    background: linear-gradient(135deg, #0055a5, #0077cc);
+    background: var(--navy);
     color: white;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -210,7 +191,7 @@
 }
 
 .standings-table th {
-    background: linear-gradient(135deg, #0055a5, #0077cc);
+    background: var(--navy);
     color: white;
     font-weight: 600;
     text-align: left;
@@ -259,7 +240,7 @@
     display: block;
     margin: 25px auto 0;
     padding: 12px 24px;
-    background: linear-gradient(135deg, #0055a5, #0077cc);
+    background: var(--navy);
     color: white;
     border: none;
     border-radius: 25px;

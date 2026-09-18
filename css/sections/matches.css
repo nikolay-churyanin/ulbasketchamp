@@ -1,91 +1,67 @@
 /* matches.css - Обновленные стили для карточек матчей */
 /* Контейнер для вкладок и контента */
 .matches-section-container {
-    margin-top: 20px;
+    margin-top: 0;
     width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
 }
 
-/* Горизонтальные вкладки */
 .matches-tabs {
     display: flex;
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 4px;
-    margin-bottom: 25px;
-    border: 1px solid #e9ecef;
+    gap: 6px;
+    margin: 0 0 16px;
+    padding: 0 0 8px;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line, #ddd6cc);
     overflow-x: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #adb5bd #f8f9fa;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-    max-width: 100%;
-}
-
-.matches-tabs::-webkit-scrollbar {
-    height: 6px;
-}
-
-.matches-tabs::-webkit-scrollbar-track {
-    background: #f8f9fa;
-    border-radius: 3px;
-}
-
-.matches-tabs::-webkit-scrollbar-thumb {
-    background: #adb5bd;
-    border-radius: 3px;
+    flex-wrap: wrap;
 }
 
 .matches-tab {
-    flex: 1;
-    min-width: 140px;
-    max-width: 200px;
-    padding: 12px 16px;
-    background: transparent;
-    border: none;
+    flex: 0 0 auto;
+    min-width: 0;
+    max-width: none;
+    padding: 8px 12px;
+    background: var(--paper);
+    border: 1px solid var(--line);
     border-radius: 8px;
-    color: #495057;
+    color: var(--muted);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 14px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     white-space: nowrap;
-    flex-shrink: 0;
-    box-sizing: border-box;
 }
 
 .matches-tab:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: #ebe7df;
 }
 
 .matches-tab.active {
-    background: white;
-    color: #0055a5;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e9ecef;
+    background: var(--navy);
+    color: white;
+    box-shadow: none;
+    border-color: var(--navy);
 }
 
 .tab-badge {
-    background: linear-gradient(135deg, #0055a5, #0077cc);
+    background: var(--accent);
     color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
+    padding: 1px 7px;
+    border-radius: 8px;
+    font-size: 0.75rem;
     font-weight: 700;
-    min-width: 24px;
+    min-width: 20px;
     text-align: center;
-    flex-shrink: 0;
 }
 
 .matches-tab.active .tab-badge {
-    background: white;
-    color: #0055a5;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: none;
 }
 
 /* Контейнер для контента вкладок */
@@ -104,34 +80,31 @@
 /* Компактные карточки матчей */
 .matches-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 12px;
+    margin-top: 12px;
     width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
 }
 
 .match-card {
-    background: white;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
-    border: 1px solid #e9ecef;
+    background: var(--surface, #fff);
+    border-radius: var(--radius, 10px);
+    padding: 14px;
+    box-shadow: none;
+    border: 1px solid var(--line, #ddd6cc);
     height: 100%;
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 100%;
+    max-width: none;
     box-sizing: border-box;
     overflow: hidden;
 }
 
 .match-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-color: #dee2e6;
+    transform: none;
+    box-shadow: none;
+    border-color: var(--navy, #16324f);
 }
 
 /* Заголовок карточки с датой */
@@ -139,11 +112,11 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #f1f3f5;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line, #ddd6cc);
     width: 100%;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
@@ -181,13 +154,13 @@
 }
 
 .status-upcoming {
-    background: rgba(0, 123, 255, 0.1);
-    color: #007bff;
+    background: var(--paper, #f3f1ec);
+    color: var(--navy, #16324f);
 }
 
 .status-finished {
-    background: rgba(40, 167, 69, 0.1);
-    color: #28a745;
+    background: rgba(45, 106, 87, 0.12);
+    color: var(--league-b, #2d6a57);
 }
 
 .status-live {
@@ -208,30 +181,30 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 12px;
+    margin: 0 0 8px;
     width: 100%;
-    max-width: 100%;
+    max-width: none;
 }
 
 .team-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 1;
+    flex: 1 1 0;
     min-width: 0;
-    max-width: calc(50% - 40px);
+    max-width: none;
     box-sizing: border-box;
 }
 
 .team-logo-wrapper {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 8px;
-    padding: 6px;
-    background: #f8f9fa;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 6px;
+    padding: 4px;
+    background: var(--paper, #f3f1ec);
     border-radius: 10px;
-    border: 1px solid #e9ecef;
+    border: 1px solid var(--line, #ddd6cc);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -363,23 +336,22 @@
 }
 
 .matches-group-title {
-    font-size: 1.1rem;
-    color: #2c3e50;
-    margin: 0 0 12px 0;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #e9ecef;
+    font-size: 1rem;
+    color: var(--navy, #16324f);
+    margin: 0 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--line, #ddd6cc);
     display: flex;
     align-items: center;
     gap: 8px;
     width: 100%;
-    max-width: 100%;
     flex-wrap: wrap;
 }
 
 .matches-group-subtitle {
     font-size: 0.85rem;
-    color: #6c757d;
-    font-weight: normal;
+    color: var(--muted, #5c6570);
+    font-weight: 600;
     margin-left: auto;
     white-space: nowrap;
     flex-shrink: 0;
@@ -432,12 +404,12 @@
 /* Адаптивность */
 @media (max-width: 992px) {
     .matches-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+        gap: 12px;
     }
     
     .team-container {
-        max-width: calc(50% - 35px);
+        max-width: none;
     }
     
     .match-center {
@@ -458,21 +430,21 @@
 
 @media (max-width: 768px) {
     .matches-section-container {
-        margin-top: 15px;
+        margin-top: 0;
     }
     
     .matches-tabs {
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         overflow-x: auto;
-        padding: 3px;
-        margin-bottom: 20px;
+        padding: 0;
+        margin-bottom: 12px;
     }
     
     .matches-tab {
-        min-width: 120px;
-        max-width: 150px;
-        padding: 10px 12px;
-        font-size: 0.9rem;
+        min-width: 0;
+        max-width: none;
+        padding: 8px 12px;
+        font-size: 0.85rem;
     }
     
     .tab-badge {
@@ -483,23 +455,34 @@
     
     .matches-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 10px;
+        justify-items: stretch;
     }
     
     .match-card {
-        padding: 14px;
+        padding: 12px;
         border-radius: 10px;
         min-width: 0;
+        width: 100%;
+        max-width: none;
     }
-    
+
+    .match-teams {
+        max-width: none;
+    }
+
     .match-header {
-        margin-bottom: 14px;
-        padding-bottom: 10px;
-        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 8px;
+        flex-wrap: wrap;
     }
-    
+
     .match-date-time {
-        min-width: 120px;
+        min-width: 0;
+        flex: 0 1 auto;
+        flex-direction: row;
+        gap: 8px;
+        align-items: baseline;
     }
     
     .match-status {
@@ -557,13 +540,13 @@
 
 @media (max-width: 480px) {
     .matches-tabs {
-        margin-bottom: 15px;
-        padding: 2px;
+        margin-bottom: 12px;
+        padding: 0 0 8px;
     }
     
     .matches-tab {
-        min-width: 110px;
-        max-width: 130px;
+        min-width: 0;
+        max-width: none;
         padding: 8px 10px;
         font-size: 0.85rem;
     }
@@ -582,23 +565,27 @@
         padding: 12px;
         border-radius: 9px;
         min-width: 0;
-        max-width: 100vw;
+        width: 100%;
+        max-width: none;
         box-sizing: border-box;
     }
-    
+
     .match-header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
         gap: 6px;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
         padding-bottom: 8px;
     }
     
     .match-date-time {
-        width: 100%;
+        width: auto;
         flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
+        justify-content: flex-start;
+        align-items: baseline;
+        gap: 8px;
     }
     
     .match-status {
@@ -614,7 +601,7 @@
     
     .team-container {
         flex-direction: column;
-        max-width: calc(50% - 30px);
+        max-width: none;
     }
     
     .team-logo-wrapper {
@@ -717,8 +704,8 @@
 
 @media (max-width: 375px) {
     .matches-tab {
-        min-width: 100px;
-        max-width: 115px;
+        min-width: 0;
+        max-width: none;
         padding: 7px 8px;
         font-size: 0.8rem;
     }
@@ -777,8 +764,8 @@
 
 @media (max-width: 320px) {
     .matches-tab {
-        min-width: 90px;
-        max-width: 100px;
+        min-width: 0;
+        max-width: none;
         padding: 6px 8px;
         font-size: 0.75rem;
     }
@@ -910,11 +897,6 @@
     .matches-tab:active {
         transform: scale(0.95);
     }
-}
-
-/* Гарантируем что ничего не выходит за пределы экрана */
-* {
-    max-width: 100%;
 }
 
 .matches-section-container,

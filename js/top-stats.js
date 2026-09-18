@@ -10,24 +10,29 @@ class TopStatsManager {
         this.setupFilterListeners();
     }
 
-    // Настройка фильтров
     setupFilterListeners() {
-        document.querySelectorAll('.top-filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                const filter = e.currentTarget.dataset.filter;
-                
-                // Обновляем активную кнопку
-                document.querySelectorAll('.top-filter-btn').forEach(b => {
-                    b.classList.remove('active');
-                });
-                e.currentTarget.classList.add('active');
-                
-                // Загружаем статистику с фильтром
-                this.loadAndDisplayStats(filter);
-            });
+        document.querySelector('.top-stats-filter')?.addEventListener('click', (e) => {
+            const btn = e.target.closest('.top-filter-btn');
+            if (!btn || btn.hidden) return;
+            e.preventDefault();
+            this.loadAndDisplayStats(btn.dataset.filter);
         });
+    }
+
+    syncLeagueFilters(leagues) {
+        const wrap = document.querySelector('.top-stats-filter');
+        if (!wrap) return;
+
+        const items = this.dataManager.getLeagues().filter(league => leagues.includes(league.id));
+        if (!items.some(league => league.id === this.currentFilter)) {
+            this.currentFilter = items[0]?.id || this.currentFilter;
+        }
+
+        wrap.innerHTML = items.map(league => `
+            <button class="top-filter-btn ${league.cssClass}${league.id === this.currentFilter ? ' active' : ''}" data-filter="${league.id}">
+                ${league.name}
+            </button>
+        `).join('');
     }
 
     // Основной метод загрузки и отображения статистики

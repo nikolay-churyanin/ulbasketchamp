@@ -1,8 +1,6 @@
-/* home.css - основной файл, импортирующий все компоненты */
-
-@import url('home/base.css');
-@import url('home/hero-stats.css');
-@import url('home/league-cards.css');
-@import url('home/upcoming-matches.css');
-@import url('home/podium.css');
-@import url('home/responsive.css');
+@import url('home/base.css?v=10');
+@import url('home/hero-stats.css?v=10');
+@import url('home/league-cards.css?v=10');
+@import url('home/upcoming-matches.css?v=10');
+@import url('home/podium.css?v=10');
+@import url('home/responsive.css?v=10');

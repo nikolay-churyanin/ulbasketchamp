@@ -5,9 +5,9 @@
 }
 
 .upcoming-games-section h2 {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
-    margin-bottom: 25px;
-    color: #2c3e50;
+    font-size: 1.35rem;
+    margin-bottom: var(--space-2);
+    color: var(--navy);
 }
 
 .upcoming-day-header {
@@ -47,14 +47,14 @@
 
 .upcoming-matches-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+    gap: 12px;
 }
 
 .upcoming-match-card {
     background: white;
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 10px;
+    padding: 12px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
     border: 1px solid #e9ecef;
@@ -80,21 +80,21 @@
 }
 
 .league-badge-a {
-    background: rgba(0, 85, 165, 0.1);
-    color: #0055a5;
-    border: 1px solid rgba(0, 85, 165, 0.2);
+    background: rgba(30, 77, 140, 0.1);
+    color: var(--league-a);
+    border: 1px solid rgba(30, 77, 140, 0.2);
 }
 
 .league-badge-b {
-    background: rgba(40, 167, 69, 0.1);
-    color: #28a745;
-    border: 1px solid rgba(40, 167, 69, 0.2);
+    background: rgba(45, 106, 87, 0.1);
+    color: var(--league-b);
+    border: 1px solid rgba(45, 106, 87, 0.2);
 }
 
 .league-badge-f {
-    background: rgba(233, 30, 99, 0.1);
-    color: #e91e63;
-    border: 1px solid rgba(233, 30, 99, 0.2);
+    background: rgba(122, 57, 72, 0.1);
+    color: var(--league-f);
+    border: 1px solid rgba(122, 57, 72, 0.2);
 }
 
 .upcoming-match-time-header {
@@ -131,9 +131,10 @@
 .upcoming-match-teams {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 10px;
+    max-width: 280px;
 }
 
 .upcoming-match-team {
@@ -210,19 +211,19 @@
 
 /* Специальные стили для дней */
 .today-matches .upcoming-day-title {
-    color: #0055a5;
+    color: var(--navy);
 }
 
 .today-matches .upcoming-match-card {
-    border-left: 3px solid #0055a5;
+    border-left: 3px solid var(--accent);
 }
 
 .tomorrow-matches .upcoming-day-title {
-    color: #28a745;
+    color: var(--muted);
 }
 
 .tomorrow-matches .upcoming-match-card {
-    border-left: 3px solid #28a745;
+    border-left: 3px solid var(--line);
 }
 
 .no-upcoming-games {
@@ -245,8 +246,8 @@
 /* Адаптивность */
 @media (max-width: 992px) {
     .upcoming-matches-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+        gap: 12px;
     }
 }
 

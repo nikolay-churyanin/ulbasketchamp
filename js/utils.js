@@ -46,12 +46,7 @@ class BasketballUtils {
     }
 
     static getLeagueName(leagueCode) {
-        const leagues = {
-            'A': 'Лига А',
-            'B': 'Лига Б',
-            'all': 'Все лиги'
-        };
-        return leagues[leagueCode] || leagueCode;
+        return window.basketballData?.getLeagueName(leagueCode) || leagueCode;
     }
 
     static getPositionName(positionCode) {

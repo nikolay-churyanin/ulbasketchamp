@@ -28,11 +28,13 @@ class MatchesRenderer {
         const playoffBracket = this.dataManager.getPlayoffBracket(league);
         const champion = playoffBracket?.champion;
         const isChampionshipCompleted = champion !== null && champion !== undefined;
+        const hideSchedule = Boolean(this.dataManager.seasonMeta?.archived) ||
+            (isChampionshipCompleted && scheduleGames.length === 0);
 
         // Создаем HTML с вкладками
         let html = '';
         
-        if (isChampionshipCompleted && scheduleGames.length === 0) {
+        if (hideSchedule) {
             // Если чемпионат завершен и нет предстоящих матчей - показываем только результаты
             html = `
                 <div class="matches-section-container">
@@ -76,7 +78,7 @@ class MatchesRenderer {
         container.innerHTML = html;
 
         // Настраиваем вкладки (если они есть)
-        if (!isChampionshipCompleted || scheduleGames.length > 0) {
+        if (!hideSchedule) {
             this.setupMatchesTabs(container);
         }
         
