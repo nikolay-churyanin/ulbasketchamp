@@ -1,0 +1,470 @@
+/* modals/team-games.css - Полная версия со всеми стилями */
+
+.team-section {
+    margin-top: 15px;
+}
+
+.team-section-title {
+    margin: 0 0 15px 0;
+    color: #0055a5;
+    font-size: 1.2rem;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.team-section-title::before {
+    content: '📅';
+    font-size: 1.2rem;
+}
+
+.team-games-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.team-game-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.team-game-item:hover {
+    background: #e9ecef;
+    border-color: #0055a5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.game-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.game-date-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.game-date {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.game-date::before {
+    content: '📅';
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.game-status {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.status-finished {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.status-upcoming {
+    background: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+    border: 1px solid rgba(0, 123, 255, 0.2);
+}
+
+.status-live {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.game-versus {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+}
+
+.game-home-away {
+    font-size: 0.8rem;
+    color: #6c757d;
+    background: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.game-vs {
+    color: #adb5bd;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.game-opponent {
+    font-weight: 600;
+    color: #2c3e50;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 180px;
+}
+
+.game-score {
+    flex-shrink: 0;
+}
+
+.win-game-score,
+.loss-game-score,
+.no-score {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    min-width: 85px;
+    justify-content: center;
+}
+
+.win-game-score {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.loss-game-score {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.no-score {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #e9ecef;
+}
+
+.score-team,
+.score-opponent {
+    min-width: 25px;
+    text-align: center;
+    font-weight: 800;
+}
+
+.score-separator {
+    font-weight: 600;
+    color: inherit;
+    opacity: 0.7;
+}
+
+.no-games-message {
+    text-align: center;
+    padding: 30px 20px;
+    color: #6c757d;
+    font-size: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 2px dashed #dee2e6;
+}
+
+.no-games-message::before {
+    content: '🏀';
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+/* Скроллбар */
+.team-games-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.team-games-list::-webkit-scrollbar-track {
+    background: #f1f3f5;
+    border-radius: 3px;
+}
+
+.team-games-list::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+    border-radius: 3px;
+}
+
+.team-games-list::-webkit-scrollbar-thumb:hover {
+    background: #6c757d;
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+
+/* Планшеты */
+@media (max-width: 768px) {
+    .team-section-title {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+    
+    .team-games-list {
+        max-height: 400px;
+        gap: 8px;
+    }
+    
+    .team-game-item {
+        padding: 10px;
+        gap: 12px;
+    }
+    
+    .game-opponent {
+        max-width: 150px;
+    }
+    
+    .win-game-score,
+    .loss-game-score,
+    .no-score {
+        min-width: 75px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+}
+
+/* Маленькие планшеты и большие телефоны */
+@media (max-width: 600px) {
+    .team-games-list {
+        max-height: 350px;
+    }
+    
+    .team-game-item {
+        padding: 10px;
+    }
+    
+    .game-date-status {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        margin-bottom: 6px;
+    }
+    
+    .game-status {
+        align-self: flex-start;
+    }
+    
+    .game-versus {
+        justify-content: space-between;
+        width: 100%;
+    }
+    
+    .game-opponent {
+        max-width: 130px;
+    }
+}
+
+/* Телефоны */
+@media (max-width: 480px) {
+    .team-section-title {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+    }
+    
+    .team-section-title::before {
+        font-size: 1rem;
+    }
+    
+    .team-games-list {
+        max-height: 320px;
+        gap: 6px;
+    }
+    
+    .team-game-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 10px;
+    }
+    
+    .game-info {
+        width: 100%;
+    }
+    
+    .game-date-status {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .game-versus {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 5px;
+    }
+    
+    .game-home-away {
+        font-size: 0.75rem;
+        padding: 1px 4px;
+    }
+    
+    .game-vs {
+        font-size: 0.8rem;
+    }
+    
+    .game-opponent {
+        max-width: none;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 0.9rem;
+    }
+    
+    .game-score {
+        width: 100%;
+        margin-top: 5px;
+    }
+    
+    .win-game-score,
+    .loss-game-score,
+    .no-score {
+        width: 100%;
+        min-width: auto;
+        font-size: 1rem;
+        padding: 6px 10px;
+    }
+    
+    .score-team,
+    .score-opponent {
+        min-width: 30px;
+    }
+}
+
+/* Маленькие телефоны */
+@media (max-width: 380px) {
+    .team-section-title {
+        font-size: 0.95rem;
+    }
+    
+    .team-games-list {
+        max-height: 300px;
+    }
+    
+    .team-game-item {
+        padding: 8px;
+    }
+    
+    .game-date {
+        font-size: 0.8rem;
+    }
+    
+    .game-date::before {
+        font-size: 0.8rem;
+    }
+    
+    .game-status {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+    }
+    
+    .game-versus {
+        font-size: 0.85rem;
+    }
+    
+    .game-home-away {
+        font-size: 0.7rem;
+    }
+    
+    .game-opponent {
+        font-size: 0.85rem;
+    }
+    
+    .win-game-score,
+    .loss-game-score,
+    .no-score {
+        font-size: 0.95rem;
+        padding: 5px 8px;
+    }
+}
+
+/* Очень маленькие телефоны */
+@media (max-width: 320px) {
+    .team-section-title {
+        font-size: 0.9rem;
+    }
+    
+    .team-games-list {
+        max-height: 280px;
+    }
+    
+    .game-date-status {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .game-versus {
+        flex-wrap: wrap;
+    }
+    
+    .game-home-away {
+        width: 100%;
+    }
+}
+
+/* Для планшетов в ландшафтной ориентации */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .team-games-list {
+        max-height: 350px;
+    }
+    
+    .game-opponent {
+        max-width: 160px;
+    }
+}
+
+/* Для телефонов в ландшафтной ориентации */
+@media (max-height: 500px) and (max-width: 900px) and (orientation: landscape) {
+    .team-games-list {
+        max-height: 250px;
+    }
+    
+    .team-game-item {
+        padding: 6px 8px;
+    }
+    
+    .game-date-status {
+        margin-bottom: 2px;
+    }
+    
+    .game-versus {
+        font-size: 0.85rem;
+    }
+}

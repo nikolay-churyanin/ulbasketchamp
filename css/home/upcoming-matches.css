@@ -1,0 +1,288 @@
+/* home/upcoming-matches.css - Ближайшие матчи */
+
+.upcoming-games-section {
+    margin-bottom: 40px;
+}
+
+.upcoming-games-section h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    margin-bottom: 25px;
+    color: #2c3e50;
+}
+
+.upcoming-day-header {
+    margin: 30px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.upcoming-day-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.upcoming-day-title svg {
+    color: #0055a5;
+    width: 20px;
+    height: 20px;
+}
+
+.upcoming-day-matches-count {
+    font-size: 0.9rem;
+    color: #6c757d;
+    background: #f8f9fa;
+    padding: 4px 12px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.upcoming-matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+.upcoming-match-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.upcoming-match-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-color: #dee2e6;
+}
+
+.upcoming-match-league-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.league-badge-a {
+    background: rgba(0, 85, 165, 0.1);
+    color: #0055a5;
+    border: 1px solid rgba(0, 85, 165, 0.2);
+}
+
+.league-badge-b {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.league-badge-f {
+    background: rgba(233, 30, 99, 0.1);
+    color: #e91e63;
+    border: 1px solid rgba(233, 30, 99, 0.2);
+}
+
+.upcoming-match-time-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f3f5;
+}
+
+.upcoming-match-time {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.match-exact-time {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.match-time-left {
+    font-size: 0.8rem;
+    color: #28a745;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.upcoming-match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.upcoming-match-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.upcoming-match-team img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    object-fit: contain;
+    background: #f8f9fa;
+    padding: 4px;
+    border: 1px solid #e9ecef;
+    transition: transform 0.3s ease;
+}
+
+.upcoming-match-card:hover .upcoming-match-team img {
+    transform: scale(1.05);
+}
+
+.upcoming-match-team span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.upcoming-match-vs {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #adb5bd;
+    min-width: 40px;
+    text-align: center;
+}
+
+.upcoming-match-footer {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f3f5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.upcoming-match-location {
+    font-size: 0.85rem;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.upcoming-match-league-info {
+    font-size: 0.8rem;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Специальные стили для дней */
+.today-matches .upcoming-day-title {
+    color: #0055a5;
+}
+
+.today-matches .upcoming-match-card {
+    border-left: 3px solid #0055a5;
+}
+
+.tomorrow-matches .upcoming-day-title {
+    color: #28a745;
+}
+
+.tomorrow-matches .upcoming-match-card {
+    border-left: 3px solid #28a745;
+}
+
+.no-upcoming-games {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px dashed #dee2e6;
+    margin-top: 20px;
+}
+
+.no-upcoming-games-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+    color: #adb5bd;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .upcoming-matches-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .upcoming-matches-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .upcoming-match-card {
+        padding: 14px;
+    }
+    
+    .upcoming-match-team img {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+@media (max-width: 480px) {
+    .upcoming-match-card {
+        padding: 12px;
+    }
+    
+    .upcoming-match-team img {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .upcoming-match-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .upcoming-day-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

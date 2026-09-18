@@ -1,0 +1,7 @@
+/* team-modal.css - основной файл модального окна команды */
+
+@import url('modals/base.css');
+@import url('modals/team-header.css');
+@import url('modals/team-games.css');
+@import url('modals/notifications.css');
+@import url('modals/responsive.css');

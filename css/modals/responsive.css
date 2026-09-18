@@ -1,0 +1,90 @@
+/* modals/responsive.css - Дополнительные адаптивные стили */
+
+/* Планшеты в ландшафтной ориентации */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .modal-content {
+        max-width: 800px;
+        margin: 2% auto;
+    }
+    
+    .team-info-header {
+        gap: 20px;
+    }
+    
+    .team-info-logo {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .team-games-list {
+        max-height: 400px;
+    }
+}
+
+/* Очень большие экраны */
+@media (min-width: 1400px) {
+    .modal-content {
+        max-width: 800px;
+    }
+    
+    .team-info-logo {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .team-info-details h2 {
+        font-size: 2rem;
+    }
+    
+    .team-games-list {
+        max-height: 600px;
+    }
+}
+
+/* Высокие экраны */
+@media (min-height: 1000px) {
+    .modal-content {
+        margin: 10% auto;
+    }
+    
+    .team-games-list {
+        max-height: 600px;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 320px) {
+    .modal-content {
+        padding: 12px;
+    }
+    
+    .team-info-logo {
+        width: 60px;
+        height: 60px;
+        padding: 5px;
+    }
+    
+    .team-info-details h2 {
+        font-size: 1.1rem;
+    }
+    
+    .meta-item {
+        padding: 5px 8px;
+    }
+    
+    .meta-label {
+        font-size: 0.7rem;
+    }
+    
+    .meta-value {
+        font-size: 0.9rem;
+    }
+    
+    .team-section-title {
+        font-size: 1rem;
+    }
+    
+    .game-date {
+        font-size: 0.75rem;
+    }
+}

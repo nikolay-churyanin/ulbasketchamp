@@ -1,0 +1,62 @@
+/* home/base.css - Базовые стили главной страницы */
+
+/* Герой-секция на главной */
+.home-hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(0, 85, 165, 0.9), rgba(0, 119, 204, 0.9));
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 85, 165, 0.3);
+}
+
+.home-hero h1 {
+    font-size: clamp(1.3rem, 6vw, 2.8rem);
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    color: white;
+    word-wrap: break-word;
+    hyphens: auto;
+    line-height: 1.2;
+}
+
+.home-hero p {
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    max-width: 800px;
+    margin: 0 auto 25px;
+    opacity: 0.95;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    line-height: 1.5;
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Утилиты */
+.text-center { text-align: center; }
+.mb-30 { margin-bottom: 30px; }
+.mt-30 { margin-top: 30px; }
+.mb-20 { margin-bottom: 20px; }
+.mt-20 { margin-top: 20px; }

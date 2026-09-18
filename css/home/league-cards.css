@@ -1,0 +1,197 @@
+/* home/league-cards.css - Карточки лиг на главной */
+
+.league-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.league-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.league-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.league-card-header {
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+.league-card-header.league-a {
+    background: linear-gradient(135deg, #0055a5, #0077cc);
+}
+
+.league-card-header.league-b {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.league-card-header.league-f {
+    background: linear-gradient(135deg, #e91e63, #ff4081);
+}
+
+.league-card-header h3 {
+    margin: 0 0 10px 0;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+}
+
+.league-card-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.league-card-body {
+    padding: 20px;
+}
+
+.league-teams-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.league-team-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.league-team-preview:hover {
+    background: #e9ecef;
+}
+
+.league-team-preview img {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: white;
+    padding: 3px;
+    border: 1px solid #dee2e6;
+}
+
+.league-team-preview span {
+    font-weight: 600;
+    flex: 1;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+}
+
+.league-team-preview .team-record {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.league-card-footer {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    text-align: center;
+}
+
+.league-link {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #0055a5, #0077cc);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.league-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 85, 165, 0.3);
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .league-overview {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .league-card {
+        border-radius: 15px;
+    }
+    
+    .league-card-header {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .league-overview {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .league-card {
+        border-radius: 12px;
+    }
+    
+    .league-card-header {
+        padding: 12px;
+    }
+    
+    .league-card-body {
+        padding: 12px;
+    }
+    
+    .league-team-preview {
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .league-team-preview img {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .league-card-header {
+        padding: 10px;
+    }
+    
+    .league-card-body {
+        padding: 10px;
+    }
+    
+    .league-teams-preview {
+        gap: 8px;
+    }
+    
+    .league-team-preview {
+        padding: 6px 8px;
+    }
+    
+    .league-team-preview img {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .league-card-footer {
+        padding: 10px 12px;
+    }
+    
+    .league-link {
+        padding: 5px 14px;
+        font-size: 0.85rem;
+    }
+}

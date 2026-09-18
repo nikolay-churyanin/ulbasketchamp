@@ -2,21 +2,22 @@ class BasketballData {
     constructor() {
         this.teams = [];
         this.games = [];
-        this.schedule = [];
+        this.schedule = { stages: [{ name: 'Регулярный сезон', games: [] }] };
         this.leagueConfigs = {};
-        this.dataVersion = '2.1';
+        this.newsIndex = [];
+        this.seasonsCatalog = { current: '2025-26', seasons: [] };
+        this.seasonId = null;
+        this.seasonMeta = null;
+        this.dataVersion = '3.0';
         this.ready = this.init();
     }
 
     async init() {
         try {
             this.showLoading();
-            
-            await this.loadLeagueConfigs();
-
-            // Разбиваем загрузку на этапы с прогрессом
-            await this.loadDataWithProgress();
-            
+            await this.loadSeasonsCatalog();
+            const requested = this.readRequestedSeasonId();
+            await this.loadSeason(this.resolveSeasonId(requested));
             this.hideLoading();
         } catch (error) {
             console.error('Error in init:', error);
@@ -25,37 +26,123 @@ class BasketballData {
     }
 
     showLoading() {
-        // Показываем оба индикатора
-        document.getElementById('fullscreen-loading').style.display = 'flex';
-        document.getElementById('loading-indicator').classList.add('active');
-    }
-
-    async loadLeagueConfigs() {
-        try {
-            this.updateProgress(5, 'Загрузка конфигурации лиг...');
-            
-            const response = await fetch('data/leagues-config.json?' + Date.now(), {
-                cache: 'no-cache'
-            });
-            
-            if (response.ok) {
-                this.leagueConfigs = await response.json();
-                console.log('Конфигурация лиг загружена:', this.leagueConfigs);
-            } else {
-                console.warn('Не удалось загрузить конфигурацию лиг, используем значения по умолчанию');
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки конфигурации лиг:', error)
-        }
+        const overlay = document.getElementById('fullscreen-loading');
+        if (overlay) overlay.style.display = 'flex';
+        const indicator = document.getElementById('loading-indicator');
+        if (indicator) indicator.classList.add('active');
     }
 
     getLeagueConfig(league) {
         return this.leagueConfigs[league];
     }
 
-    getLeagueName(league) {
-        const config = this.getLeagueConfig(league);
-        return config.name;
+    getSeasonList() {
+        return this.seasonsCatalog.seasons || [];
+    }
+
+    getSeasonLabel() {
+        return this.seasonMeta?.label || this.seasonId || '';
+    }
+
+    seasonFile(filename) {
+        return `data/seasons/${this.seasonId}/${filename}`;
+    }
+
+    withVersion(url) {
+        const version = this.seasonsCatalog.version || this.dataVersion;
+        const sep = url.includes('?') ? '&' : '?';
+        return `${url}${sep}v=${encodeURIComponent(version)}`;
+    }
+
+    readRequestedSeasonId() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('season') || window.localStorage.getItem('ulbasket-season');
+    }
+
+    resolveSeasonId(requested) {
+        const seasons = this.getSeasonList();
+        if (requested && seasons.some(season => season.id === requested)) {
+            return requested;
+        }
+        if (this.seasonsCatalog.current && seasons.some(season => season.id === this.seasonsCatalog.current)) {
+            return this.seasonsCatalog.current;
+        }
+        return seasons[0]?.id || '2025-26';
+    }
+
+    persistSeasonId(seasonId) {
+        try {
+            window.localStorage.setItem('ulbasket-season', seasonId);
+        } catch (error) {
+            /* ignore quota / private mode */
+        }
+        const url = new URL(window.location.href);
+        url.searchParams.set('season', seasonId);
+        window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+    }
+
+    async loadSeasonsCatalog() {
+        this.updateProgress(5, 'Загрузка списка сезонов...');
+        this.seasonsCatalog = await this.loadJSON('data/seasons.json');
+        this.dataVersion = this.seasonsCatalog.version || this.dataVersion;
+    }
+
+    async loadSeason(seasonId) {
+        this.seasonId = seasonId;
+        this.seasonMeta = this.getSeasonList().find(season => season.id === seasonId) || { id: seasonId };
+        this.persistSeasonId(seasonId);
+
+        this.teams = [];
+        this.games = [];
+        this.leagueConfigs = {};
+        this.newsIndex = [];
+        this.schedule = { stages: [{ name: 'Регулярный сезон', games: [] }] };
+
+        this.updateProgress(15, 'Загрузка конфигурации лиг...');
+        this.leagueConfigs = await this.loadJSON(this.seasonFile('leagues-config.json'));
+
+        this.updateProgress(35, 'Загрузка команд...');
+        this.teams = await this.loadJSON(this.seasonFile('teams.json'));
+
+        this.updateProgress(55, 'Загрузка матчей...');
+        const packedGames = await this.loadJSON(this.seasonFile('games.json'));
+        this.ingestPackedGames(packedGames);
+
+        try {
+            this.schedule = await this.loadJSON(this.seasonFile('schedule.json'));
+        } catch (error) {
+            this.schedule = { stages: [{ name: 'Регулярный сезон', games: [] }] };
+        }
+
+        try {
+            this.newsIndex = await this.loadJSON(this.seasonFile('news-index.json'));
+        } catch (error) {
+            this.newsIndex = [];
+        }
+
+        this.updateProgress(100, 'Готово!');
+    }
+
+    async switchSeason(seasonId) {
+        if (!seasonId || seasonId === this.seasonId) {
+            return false;
+        }
+        this.showLoading();
+        try {
+            await this.loadSeason(seasonId);
+            return true;
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    ingestPackedGames(packedGames) {
+        this.games = [];
+        (packedGames || []).forEach((game, index) => {
+            const gameId = game.id || `game_${String(index + 1).padStart(3, '0')}`;
+            this.normalizeGameData(game, gameId);
+            this.games.push(game);
+        });
     }
 
     updateProgress(percent, text) {
@@ -81,28 +168,10 @@ class BasketballData {
     }
 
     hideLoading() {
-        // Скрываем оба индикатора
-        document.getElementById('fullscreen-loading').style.display = 'none';
-        document.getElementById('loading-indicator').classList.remove('active');
-    }
-
-    async loadData() {
-        try {
-            this.updateProgress(10, 'Загрузка команд...');
-            this.teams = await this.loadJSON('data/teams.json?' + Date.now());
-            
-            this.updateProgress(30, 'Загрузка расписания...');
-            this.schedule = await this.loadJSON('data/schedule.json?' + Date.now());
-            
-            this.updateProgress(50, 'Загрузка матчей...');
-            await this.loadGameFiles();
-            
-            this.updateProgress(100, 'Готово!');
-            
-        } catch (error) {
-            console.error('Ошибка загрузки данных:', error);
-            throw error;
-        }
+        const overlay = document.getElementById('fullscreen-loading');
+        if (overlay) overlay.style.display = 'none';
+        const indicator = document.getElementById('loading-indicator');
+        if (indicator) indicator.classList.remove('active');
     }
 
     async loadJSON(url) {
@@ -110,9 +179,8 @@ class BasketballData {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // Таймаут 5 секунд
             
-            const response = await fetch(url, { 
-                signal: controller.signal,
-                cache: 'no-cache'
+            const response = await fetch(this.withVersion(url), { 
+                signal: controller.signal
             });
             
             clearTimeout(timeoutId);
@@ -130,170 +198,10 @@ class BasketballData {
         }
     }
 
-    async loadGameFiles() {
-        try {
-            this.updateProgress(50, 'Определение количества игр...');
-            const maxGameNumber = await this.findMaxGameNumber();
-            
-            if (maxGameNumber === 0) {
-                console.log('Файлы игр не найдены');
-                return;
-            }
-            
-            console.log(`Найдено ${maxGameNumber} игр для загрузки`);
-            
-            // Загружаем игры параллельными блоками
-            const batchSize = 10; // Увеличиваем размер блока
-            const totalBatches = Math.ceil(maxGameNumber / batchSize);
-            
-            for (let batch = 0; batch < totalBatches; batch++) {
-                const start = batch * batchSize + 1;
-                const end = Math.min(start + batchSize - 1, maxGameNumber);
-                
-                // Создаем промисы для текущего блока
-                const batchPromises = [];
-                for (let i = start; i <= end; i++) {
-                    batchPromises.push(this.loadGameFile(i, maxGameNumber));
-                }
-                
-                // Ждем завершения текущего блока
-                await Promise.allSettled(batchPromises);
-                
-                // Обновляем прогресс после каждого блока
-                const progress = 50 + Math.floor((end / maxGameNumber) * 40);
-                this.updateProgress(progress, `Загружено ${end}/${maxGameNumber} игр`);
-            }
-            
-            this.updateProgress(90, 'Обработка данных игр...');
-        } catch (error) {
-            console.warn('Ошибка загрузки файлов игр:', error);
-        }
-    }
-
-    // Новый метод для загрузки одного файла игры
-    async loadGameFile(gameNumber, totalGames) {
-        try {
-            const gameId = `game_${gameNumber.toString().padStart(3, '0')}`;
-            const gamePath = `data/games/${gameId}.json?${Date.now()}`;
-            
-            const game = await this.loadJSON(gamePath);
-            this.normalizeGameData(game, gameId);
-            this.games.push(game);
-        } catch (error) {
-            console.warn(`Не удалось загрузить игру ${gameNumber}:`, error);
-        }
-    }
-
-    async findMaxGameNumber() {
-        // Используем бинарный поиск для быстрого определения максимального номера
-        let low = 1;
-        let high = 200; // Максимально возможное количество игр (можно увеличить)
-        let lastFound = 0;
-        
-        // Быстрая проверка: если нет первой игры, значит игр нет
-        if (!await this.checkGameFileExists(1)) {
-            return 0;
-        }
-        
-        // Если есть последняя возможная игра, возвращаем её
-        if (await this.checkGameFileExists(high)) {
-            // Проверяем, есть ли игры выше этого номера
-            let current = high;
-            while (await this.checkGameFileExists(current + 100)) {
-                current += 100;
-            }
-            while (await this.checkGameFileExists(current + 10)) {
-                current += 10;
-            }
-            while (await this.checkGameFileExists(current + 1)) {
-                current++;
-            }
-            return current;
-        }
-        
-        // Бинарный поиск между 1 и high
-        while (low <= high) {
-            const mid = Math.floor((low + high) / 2);
-            const exists = await this.checkGameFileExists(mid);
-            
-            if (exists) {
-                lastFound = mid;
-                low = mid + 1;
-            } else {
-                high = mid - 1;
-            }
-        }
-        
-        return lastFound;
-    }
-
-    // Улучшенная проверка файла с таймаутом
-    async checkGameFileExists(gameNumber) {
-        const gameId = `game_${gameNumber.toString().padStart(3, '0')}`;
-        const gamePath = `data/games/${gameId}.json`;
-        
-        try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2000); // Таймаут 2 секунды
-            
-            const response = await fetch(gamePath, { 
-                method: 'HEAD',
-                signal: controller.signal,
-                cache: 'no-cache'
-            });
-            
-            clearTimeout(timeoutId);
-            return response.ok;
-        } catch (error) {
-            if (error.name === 'AbortError') {
-                console.log(`Таймаут проверки файла ${gameId}`);
-            }
-            return false;
-        }
-    }
-
-    async loadDataWithProgress() {
-        try {
-            this.updateProgress(10, 'Загрузка команд...');
-            this.teams = await this.loadJSON('data/teams.json?' + Date.now());
-            
-            this.updateProgress(30, 'Загрузка расписания...');
-            this.schedule = await this.loadJSON('data/schedule.json?' + Date.now());
-            
-            this.updateProgress(50, 'Загрузка игр...');
-            await this.loadGameFiles(); // Здесь уже есть свой прогресс
-            
-            this.updateProgress(95, 'Обработка данных...');
-            
-            this.updateProgress(100, 'Готово!');
-            
-            // Добавляем небольшую задержку для плавного завершения
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-        } catch (error) {
-            console.error('Ошибка в loadDataWithProgress:', error);
-            throw error;
-        }
-    }
-
     async loadAllNews() {
         try {
             // Список всех .md файлов в папке news
-            const newsFiles = [
-                'league-b-playoff-preview.md',
-                'league-b-last-tour.md',
-                'league-a-tour.md',
-                'league-b-quaterfinal.md',
-                'league-a-tour-15.02.md',
-                'league-b-halffinals.md',
-                'league-a-tour-21-22.02.md',
-                'league-a-tour-28-01.03.md',
-                'league-a-tour-07.03.md',
-                'league-b-final.md',
-                'league-a-tour-14-15.03.md',
-                'league-a-tour-22.03.md',
-                'league-a-tour-29.03.md'
-            ];
+            const newsFiles = Array.isArray(this.newsIndex) ? this.newsIndex : [];
             
             let allNews = [];
             
@@ -322,7 +230,7 @@ class BasketballData {
     // Загрузка одного файла новости
     async loadNewsFile(filename) {
         try {
-            const response = await fetch(`data/news/${filename}?t=${Date.now()}`);
+            const response = await fetch(this.withVersion(this.seasonFile(`news/${filename}`)));
             if (!response.ok) return null;
             
             const content = await response.text();
@@ -429,19 +337,29 @@ class BasketballData {
     }
 
     normalizeGameData(game, gameId) {
-        if (game.match_info) {
-            game.id = gameId
-            game.teamHome = game.match_info.team_a;
-            game.teamAway = game.match_info.team_b;
-            game.scoreHome = parseInt(game.match_info.score.split(':')[0]);
-            game.scoreAway = parseInt(game.match_info.score.split(':')[1]);
-            game.date = game.match_info.date;
-            game.time = game.match_info.time;
-            game.location = game.match_info.venue;
-            game.gameType = game.match_info.gameType || 'regular';
-            
-            game.league = game.match_info.league || 'A';
+        if (!game.match_info) {
+            return;
         }
+
+        const info = game.match_info;
+        const score = typeof info.score === 'string' ? info.score.split(':') : [];
+        const scoreHome = score.length === 2 ? parseInt(score[0], 10) : NaN;
+        const scoreAway = score.length === 2 ? parseInt(score[1], 10) : NaN;
+
+        game.id = gameId;
+        game.teamHome = info.team_a;
+        game.teamAway = info.team_b;
+        game.scoreHome = Number.isFinite(scoreHome) ? scoreHome : null;
+        game.scoreAway = Number.isFinite(scoreAway) ? scoreAway : null;
+        game.date = info.date;
+        game.time = info.time;
+        game.location = info.venue;
+        game.gameType = info.gameType || 'regular';
+        game.league = info.league || 'A';
+    }
+
+    hasGameScore(game) {
+        return Number.isFinite(game?.scoreHome) && Number.isFinite(game?.scoreAway);
     }
 
     normalizeTeamName(teamName) {
@@ -449,13 +367,14 @@ class BasketballData {
     }
 
     getLeagueName(league) {
-        if (league === 'A') {
-            return 'Лига А'
-        } else if (league === 'B') {
-            return 'Лига Б'
-        } else {
-            return 'Жен. Лига'
+        const config = this.getLeagueConfig(league);
+        if (config?.name) {
+            return config.name;
         }
+        if (league === 'A') return 'Лига А';
+        if (league === 'B') return 'Лига Б';
+        if (league === 'F') return 'Женская лига';
+        return league;
     }
 
     getTeamByName(teamName, league) {
@@ -519,14 +438,14 @@ class BasketballData {
         
         // 2. Получаем игры из файлов (уже загружены в this.games)
         const resultGames = this.games.map(game => {
-            // Создаем корректную дату для игр из результатов
             const gameDate = this.createValidDate(game.date, game.time);
-            
+            const hasResult = this.hasGameScore(game);
+
             return {
                 id: game.id,
                 _fullDate: gameDate,
-                _hasResult: true,
-                _isFromResults: true,
+                _hasResult: hasResult,
+                _isFromResults: hasResult,
                 teamHome: game.teamHome,
                 teamAway: game.teamAway,
                 scoreHome: game.scoreHome,
@@ -934,10 +853,7 @@ class BasketballData {
 
     // Новые методы для работы с изображениями результатов
     getGameResultImage(gameId) {
-        // gameId может быть в формате "game_001" или "result_2024-01-15T12:00:00.000Z"
-        
-        // Возвращаем путь к изображению
-        return `data/result/${gameId}.jpg`;
+        return this.seasonFile(`result/${gameId}.jpg`);
     }
 
     // Метод проверки существования изображения
@@ -1419,6 +1335,9 @@ class BasketballData {
         
         const teams = this.getTeamsByLeague(league);
         const totalTeams = teams.length;
+        if (totalTeams < 2) {
+            return false;
+        }
         
         // Общее количество игр в регулярке
         const totalRegularGames = (totalTeams * (totalTeams - 1) * config.regularSeasonRounds) / 2;

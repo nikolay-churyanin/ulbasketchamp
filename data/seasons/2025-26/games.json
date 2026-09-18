@@ -1,0 +1,1882 @@
+[
+  {
+    "match_info": {
+      "team_a": "УлГПУ-2",
+      "team_b": "Дельта",
+      "score": "54:69",
+      "date": "2025-09-28",
+      "venue": "ФОК \"Фаворит\"",
+      "time": "14:00",
+      "league": "B"
+    },
+    "id": "game_001"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "УУОР",
+      "score": "73:80",
+      "date": "2025-09-28",
+      "venue": "ФОК \"Фаворит\"",
+      "time": "13:00",
+      "league": "A"
+    },
+    "id": "game_002"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР-2",
+      "team_b": "7 Ветров",
+      "score": "61:94",
+      "date": "2025-09-28",
+      "venue": "ФОК \"Фаворит\"",
+      "time": "10:00",
+      "league": "B"
+    },
+    "id": "game_003"
+  },
+  {
+    "match_info": {
+      "team_a": "Перевалбаскет",
+      "team_b": "АВВА-МЧС",
+      "score": "47:65",
+      "date": "2025-10-05",
+      "venue": "ФОК Фаворит",
+      "time": "18:00",
+      "league": "A"
+    },
+    "id": "game_004"
+  },
+  {
+    "match_info": {
+      "team_a": "7 Ветров",
+      "team_b": "УлГТУ",
+      "score": "72:48",
+      "date": "2025-10-04",
+      "venue": "Манеж УлГТУ",
+      "time": "12:00",
+      "league": "B"
+    },
+    "id": "game_005"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф-2",
+      "team_b": "УлГПУ-2",
+      "score": "69:52",
+      "date": "2025-10-04",
+      "venue": "Манеж УлГПУ",
+      "time": "14:00",
+      "league": "B"
+    },
+    "id": "game_006"
+  },
+  {
+    "match_info": {
+      "team_a": "Приборка",
+      "team_b": "ЦЕМРОС",
+      "score": "30:84",
+      "date": "2025-10-04",
+      "venue": "Манеж УлГПУ",
+      "time": "15:00",
+      "league": "B"
+    },
+    "id": "game_007"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "УИГА",
+      "score": "89:57",
+      "date": "2025-10-04",
+      "venue": "Манеж УлГПУ",
+      "time": "17:00",
+      "league": "A"
+    },
+    "id": "game_008"
+  },
+  {
+    "match_info": {
+      "team_a": "Авангард",
+      "team_b": "Дельта",
+      "score": "50:88",
+      "date": "2025-10-05",
+      "venue": "ФОК Фаворит",
+      "time": "20:00",
+      "league": "B"
+    },
+    "id": "game_009"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "Триумф",
+      "score": "66:77",
+      "date": "2025-10-05",
+      "venue": "Зал УлГУ",
+      "time": "20:00",
+      "league": "A"
+    },
+    "id": "game_010"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Цементник-Марбакс",
+      "score": "65:49",
+      "date": "2025-10-05",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "A"
+    },
+    "id": "game_011"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР-2",
+      "team_b": "Ветераны",
+      "score": "54:78",
+      "date": "2025-10-05",
+      "venue": "Зал УлГУ",
+      "time": "18:00",
+      "league": "B"
+    },
+    "id": "game_012"
+  },
+  {
+    "match_info": {
+      "team_a": "7 Ветров",
+      "team_b": "УлГПУ-2",
+      "score": "63:64",
+      "date": "2025-10-11",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "B"
+    },
+    "id": "game_013"
+  },
+  {
+    "match_info": {
+      "team_a": "Авангард",
+      "team_b": "Триумф-2",
+      "score": "54:90",
+      "date": "2025-10-11",
+      "venue": "Манеж УлГПУ",
+      "time": "14:00",
+      "league": "B"
+    },
+    "id": "game_014"
+  },
+  {
+    "match_info": {
+      "team_a": "Приборка",
+      "team_b": "УлГТУ",
+      "score": "51:69",
+      "date": "2025-10-11",
+      "venue": "Манеж УлГПУ",
+      "time": "16:00",
+      "league": "B"
+    },
+    "id": "game_015"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "Перевалбаскет",
+      "score": "73:60",
+      "date": "2025-10-11",
+      "venue": "Манеж УлГПУ",
+      "time": "18:00",
+      "league": "A"
+    },
+    "id": "game_016"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "УИГА",
+      "score": "111:84",
+      "date": "2025-10-12",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_017"
+  },
+  {
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "ЦЕМРОС",
+      "score": "50:61",
+      "date": "2025-10-12",
+      "venue": "ФОК Фаворит",
+      "time": "09:00",
+      "league": "B"
+    },
+    "id": "game_018"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "АВВА-МЧС",
+      "score": "89:52",
+      "date": "2025-10-12",
+      "venue": "Зал УлГУ",
+      "time": "14:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_019"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "БК Петровск",
+      "score": "82:67",
+      "date": "2025-10-12",
+      "venue": "ФОК Фаворит",
+      "time": "13:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_020"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР-2",
+      "team_b": "Дельта",
+      "score": "63:79",
+      "date": "2025-10-12",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_021"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "Триумф",
+      "score": "57:59",
+      "date": "2025-10-19",
+      "venue": "ФОК Фаворит",
+      "time": "19:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_022"
+  },
+  {
+    "match_info": {
+      "team_a": "ЦЕМРОС",
+      "team_b": "Дельта",
+      "score": "56:70",
+      "date": "2025-10-19",
+      "venue": "Зал УлГУ",
+      "time": "19:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_023"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "БК Петровск",
+      "score": "58:46",
+      "date": "2025-10-19",
+      "venue": "ФОК Фаворит",
+      "time": "18:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_024"
+  },
+  {
+    "match_info": {
+      "team_a": "Перевалбаскет",
+      "team_b": "УлГУ",
+      "score": "52:86",
+      "date": "2025-10-19",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_025"
+  },
+  {
+    "match_info": {
+      "team_a": "Приборка",
+      "team_b": "Авангард",
+      "score": "41:59",
+      "date": "2025-10-18",
+      "venue": "Зал УлГУ",
+      "time": "19:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_026"
+  },
+  {
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "Триумф-2",
+      "score": "62:55",
+      "date": "2025-10-18",
+      "venue": "Зал УлГУ",
+      "time": "18:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_027"
+  },
+  {
+    "match_info": {
+      "team_a": "УИГА",
+      "team_b": "Перевалбаскет",
+      "score": "47:58",
+      "date": "2025-10-26",
+      "venue": "Зал УлГУ",
+      "time": "14:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_028"
+  },
+  {
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "Дельта",
+      "score": "56:83",
+      "date": "2025-10-26",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_029"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "АВВА-МЧС",
+      "score": "47:72",
+      "date": "2025-10-26",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_030"
+  },
+  {
+    "match_info": {
+      "team_a": "7 Ветров",
+      "team_b": "Авангард",
+      "score": "64:42",
+      "date": "2025-11-02",
+      "venue": "ФОК Фаворит",
+      "time": "09:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_031"
+  },
+  {
+    "match_info": {
+      "team_a": "БК Петровск",
+      "team_b": "УИГА",
+      "score": "62:94",
+      "date": "2025-11-02",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_032"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "Цементник-Марбакс",
+      "score": "86:82",
+      "date": "2025-11-02",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_033"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "Перевалбаскет",
+      "score": "75:53",
+      "date": "2025-11-02",
+      "venue": "ФОК Фаворит",
+      "time": "13:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_034"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГТУ",
+      "team_b": "УлГПУ-2",
+      "score": "56:46",
+      "date": "2025-11-08",
+      "venue": "Манеж УлГПУ",
+      "time": "15:20",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_035"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "УлГУ",
+      "score": "64:86",
+      "date": "2025-11-08",
+      "venue": "Манеж УлГПУ",
+      "time": "17:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_036"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР-2",
+      "team_b": "Триумф-2",
+      "score": "44:74",
+      "date": "2025-11-09",
+      "venue": "ФОК Фаворит",
+      "time": "09:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_037"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "БК Петровск",
+      "score": "76:49",
+      "date": "2025-11-09",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_038"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "АВВА-МЧС",
+      "score": "69:75",
+      "date": "2025-11-09",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_039"
+  },
+  {
+    "match_info": {
+      "team_a": "Перевалбаскет",
+      "team_b": "Цементник-Марбакс",
+      "score": "71:49",
+      "date": "2025-11-09",
+      "venue": "ФОК Фаворит",
+      "time": "13:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_040"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "УИГА",
+      "score": "74:50",
+      "date": "2025-11-22",
+      "venue": "Зал УлГУ",
+      "time": "18:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_041"
+  },
+  {
+    "match_info": {
+      "team_a": "Дельта",
+      "team_b": "Триумф-2",
+      "score": "82:66",
+      "date": "2025-11-22",
+      "venue": "Зал УлГУ",
+      "time": "19:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_042"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГПУ-2",
+      "team_b": "ЦЕМРОС",
+      "score": "52:57",
+      "date": "2025-11-23",
+      "venue": "Манеж УлГПУ",
+      "time": "11:40",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_043"
+  },
+  {
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "7 Ветров",
+      "score": "90:86",
+      "date": "2025-11-23",
+      "venue": "Манеж УлГПУ",
+      "time": "13:20",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_044"
+  },
+  {
+    "match_info": {
+      "team_a": "БК Петровск",
+      "team_b": "Перевалбаскет",
+      "score": "64:65",
+      "date": "2025-11-23",
+      "venue": "Зал УлГУ",
+      "time": "14:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_045"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "Спарта-УлГПУ",
+      "score": "84:81",
+      "date": "2025-11-23",
+      "venue": "Манеж УлГПУ",
+      "time": "15:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_046"
+  },
+  {
+    "match_info": {
+      "team_a": "Приборка",
+      "team_b": "УУОР-2",
+      "score": "48:67",
+      "date": "2025-11-23",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_047"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "УлГУ",
+      "score": "60:99",
+      "date": "2025-11-23",
+      "venue": "Зал УлГУ",
+      "time": "19:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_048"
+  },
+  {
+    "match_info": {
+      "team_a": "Приборка",
+      "team_b": "УлГПУ-2",
+      "score": "47:80",
+      "date": "2025-11-29",
+      "venue": "Манеж УлГПУ",
+      "time": "13:40",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_049"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГТУ",
+      "team_b": "ЦЕМРОС",
+      "score": "56:51",
+      "date": "2025-11-29",
+      "venue": "Манеж УлГПУ",
+      "time": "15:20",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_050"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "Спарта-УлГПУ",
+      "score": "72:74",
+      "date": "2025-11-29",
+      "venue": "Манеж УлГПУ",
+      "time": "17:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_051"
+  },
+  {
+    "match_info": {
+      "team_a": "БК Петровск",
+      "team_b": "УлГУ",
+      "score": "58:75",
+      "date": "2025-11-30",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_052"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "Триумф",
+      "score": "71:89",
+      "date": "2025-11-30",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_053"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГПУ-2",
+      "team_b": "Авангард",
+      "score": "64:57",
+      "date": "2025-12-06",
+      "venue": "Манеж УлГПУ",
+      "time": "14:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_054"
+  },
+  {
+    "match_info": {
+      "team_a": "ЦЕМРОС",
+      "team_b": "Триумф-2",
+      "score": "54:49",
+      "date": "2025-12-07",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_055"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГТУ",
+      "team_b": "УУОР-2",
+      "score": "67:63",
+      "date": "2025-12-07",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_056"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "БК Петровск",
+      "score": "65:68",
+      "date": "2025-12-07",
+      "venue": "ФОК Фаворит",
+      "time": "13:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_057"
+  },
+  {
+    "match_info": {
+      "team_a": "УИГА",
+      "team_b": "УлГУ",
+      "score": "43:107",
+      "date": "2025-12-07",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_058"
+  },
+  {
+    "match_info": {
+      "team_a": "Дельта",
+      "team_b": "7 Ветров",
+      "score": "72:57",
+      "date": "2025-12-07",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_059"
+  },
+  {
+    "match_info": {
+      "team_a": "Перевалбаскет",
+      "team_b": "АВВА-МЧС",
+      "score": "32:62",
+      "date": "2025-12-13",
+      "venue": "ДС Дельфин",
+      "time": "14:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_060"
+  },
+  {
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "Приборка",
+      "score": "91:26",
+      "date": "2025-12-14",
+      "venue": "ФОК Фаворит",
+      "time": "09:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_061"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГТУ",
+      "team_b": "Авангард",
+      "score": "73:57",
+      "date": "2025-12-14",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_062"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф-2",
+      "team_b": "7 Ветров",
+      "score": "68:65",
+      "date": "2025-12-14",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_063"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "БК Петровск",
+      "score": "98:48",
+      "date": "2025-12-14",
+      "venue": "ФОК Фаворит",
+      "time": "13:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_064"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР-2",
+      "team_b": "ЦЕМРОС",
+      "score": "47:57",
+      "date": "2025-12-14",
+      "venue": "Зал УлГУ",
+      "time": "14:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_065"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "УлГУ",
+      "score": "58:110",
+      "date": "2025-12-14",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_066"
+  },
+  {
+    "match_info": {
+      "team_a": "УИГА",
+      "team_b": "Цементник-Марбакс",
+      "score": "76:82",
+      "date": "2025-12-14",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_067"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "Перевалбаскет",
+      "score": "97:77",
+      "date": "2025-12-21",
+      "venue": "ДС Дельфин",
+      "time": "14:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_068"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф-2",
+      "team_b": "Приборка",
+      "score": "76:33",
+      "date": "2025-12-21",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_069"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Цементник-Марбакс",
+      "score": "107:51",
+      "date": "2025-12-21",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_070"
+  },
+  {
+    "match_info": {
+      "team_a": "БК Петровск",
+      "team_b": "УИГА",
+      "score": "70:62",
+      "date": "2025-12-21",
+      "venue": "Зал УлГУ",
+      "time": "19:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_071"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "Перевалбаскет",
+      "score": "98:82",
+      "date": "2026-01-11",
+      "venue": "Манеж УлГПУ",
+      "time": "14:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_072"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "БК Петровск",
+      "score": "84:68",
+      "date": "2026-01-11",
+      "venue": "Манеж УлГПУ",
+      "time": "16:10",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_073"
+  },
+  {
+    "match_info": {
+      "team_a": "Old School",
+      "team_b": "УлГУ",
+      "score": "37:68",
+      "date": "2025-12-01",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_074"
+  },
+  {
+    "match_info": {
+      "team_a": "Old School",
+      "team_b": "УСУТ",
+      "score": "70:56",
+      "date": "2025-12-01",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_075"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГПУ",
+      "team_b": "УСУТ",
+      "score": "59:83",
+      "date": "2025-12-01",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_076"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Феникс",
+      "score": "80:39",
+      "date": "2025-12-01",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_077"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГТУ",
+      "team_b": "Ветераны",
+      "score": "69:94",
+      "date": "2026-01-17",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_078"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "Триумф",
+      "score": "73:78",
+      "date": "2026-01-17",
+      "venue": "Манеж УлГПУ",
+      "time": "13:40",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_079"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "Цементник-Марбакс",
+      "score": "79:87",
+      "date": "2026-01-17",
+      "venue": "Манеж УлГПУ",
+      "time": "15:20",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_080"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГПУ-2",
+      "team_b": "УУОР-2",
+      "score": "67:47",
+      "date": "2026-01-17",
+      "venue": "Манеж УлГПУ",
+      "time": "17:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_081"
+  },
+  {
+    "match_info": {
+      "team_a": "Феникс",
+      "team_b": "УСУТ",
+      "score": "50:70",
+      "date": "2026-01-18",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_082"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "АВВА-МЧС",
+      "score": "71:63",
+      "date": "2026-01-18",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_083"
+  },
+  {
+    "match_info": {
+      "team_a": "Авангард",
+      "team_b": "ЦЕМРОС",
+      "score": "47:77",
+      "date": "2026-01-18",
+      "venue": "Зал УлГУ",
+      "time": "19:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_084"
+  },
+  {
+    "match_info": {
+      "team_a": "Феникс",
+      "team_b": "УлГПУ",
+      "score": "88:45",
+      "date": "2026-01-24",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_085"
+  },
+  {
+    "match_info": {
+      "team_a": "Дельта",
+      "team_b": "Приборка",
+      "score": "68:42",
+      "date": "2026-01-24",
+      "venue": "Манеж УлГПУ",
+      "time": "13:40",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_086"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГПУ-2",
+      "team_b": "Ветераны",
+      "score": "63:76",
+      "date": "2026-01-24",
+      "venue": "Манеж УлГПУ",
+      "time": "15:20",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_087"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "УИГА",
+      "score": "98:101",
+      "date": "2026-01-24",
+      "venue": "Манеж УлГПУ",
+      "time": "17:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_088"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "АВВА-МЧС",
+      "score": "55:69",
+      "date": "2026-01-25",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_089"
+  },
+  {
+    "match_info": {
+      "team_a": "Авангард",
+      "team_b": "УУОР-2",
+      "score": "56:47",
+      "date": "2026-01-25",
+      "venue": "Зал УлГУ",
+      "time": "19:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_090"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "БК Петровск",
+      "score": "96:100",
+      "date": "2026-01-25",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_091"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "УСУТ",
+      "score": "87:47",
+      "date": "2026-01-25",
+      "venue": "Зал УлГУ",
+      "time": "14:30",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_092"
+  },
+  {
+    "match_info": {
+      "team_a": "Old School",
+      "team_b": "Феникс",
+      "score": "60:55",
+      "date": "2026-01-31",
+      "venue": "Манеж УлГПУ",
+      "time": "13:00",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_093"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "УлГПУ",
+      "score": "105:33",
+      "date": "2026-01-31",
+      "venue": "Манеж УлГПУ",
+      "time": "14:40",
+      "league": "F"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_094"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "Спарта-УлГПУ",
+      "score": "91:117",
+      "date": "2026-01-31",
+      "venue": "Манеж УлГПУ",
+      "time": "16:20",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_095"
+  },
+  {
+    "match_info": {
+      "team_a": "Авангард",
+      "team_b": "Ветераны",
+      "score": "65:90",
+      "date": "2026-01-31",
+      "venue": "Манеж УлГПУ",
+      "time": "18:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_096"
+  },
+  {
+    "match_info": {
+      "team_a": "Дельта",
+      "team_b": "УлГТУ",
+      "score": "79:71",
+      "date": "2026-02-01",
+      "venue": "ФОК Фаворит",
+      "time": "09:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_097"
+  },
+  {
+    "match_info": {
+      "team_a": "7 Ветров",
+      "team_b": "Приборка",
+      "score": "80:43",
+      "date": "2026-02-01",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_098"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "УлГУ",
+      "score": "74:82",
+      "date": "2026-02-01",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_099"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "УИГА",
+      "score": "71:89",
+      "date": "2026-02-01",
+      "venue": "ФОК Фаворит",
+      "time": "13:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_100"
+  },
+  {
+    "match_info": {
+      "team_a": "БК Петровск",
+      "team_b": "Перевалбаскет",
+      "score": "76:78",
+      "date": "2026-02-01",
+      "venue": "ДС Дельфин",
+      "time": "14:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_101"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф-2",
+      "team_b": "УлГТУ",
+      "score": "95:71",
+      "date": "2026-02-08",
+      "venue": "ФОК Фаворит",
+      "time": "09:00",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_102"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "УИГА",
+      "score": "62:83",
+      "date": "2026-02-08",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_103"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "БК Петровск",
+      "score": "71:56",
+      "date": "2026-02-08",
+      "venue": "Манеж УлГПУ",
+      "time": "16:00",
+      "league": "A"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_104"
+  },
+  {
+    "match_info": {
+      "team_a": "ЦЕМРОС",
+      "team_b": "7 Ветров",
+      "score": "59:69",
+      "date": "2026-02-08",
+      "venue": "Манеж УлГПУ",
+      "time": "17:30",
+      "league": "B"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_105"
+  },
+  {
+    "match_info": {
+      "team_a": "ЦЕМРОС",
+      "team_b": "УлГТУ",
+      "score": "77:70",
+      "date": "2026-02-15",
+      "venue": "ФОК Фаворит",
+      "time": "09:00",
+      "league": "B",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_106"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф-2",
+      "team_b": "7 Ветров",
+      "score": "61:58",
+      "date": "2026-02-15",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "B",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_107"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "АВВА-МЧС",
+      "score": "80:77",
+      "date": "2026-02-15",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_108"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "Триумф",
+      "score": "75:92",
+      "date": "2026-02-15",
+      "venue": "ФОК Фаворит",
+      "time": "13:30",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_109"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГПУ",
+      "team_b": "Old School",
+      "score": "28:52",
+      "date": "2026-02-15",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "F",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_110"
+  },
+  {
+    "match_info": {
+      "team_a": "УИГА",
+      "team_b": "Перевалбаскет",
+      "score": "60:91",
+      "date": "2026-02-15",
+      "venue": "ДС Дельфин",
+      "time": "15:30",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_111"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Спарта-УлГПУ",
+      "score": "108:62",
+      "date": "2026-02-15",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_112"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "УИГА",
+      "score": "83:77",
+      "date": "2026-02-21",
+      "venue": "Манеж УлГПУ",
+      "time": "13:40",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_113"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "БК Петровск",
+      "score": "87:70",
+      "date": "2026-02-21",
+      "venue": "Манеж УлГПУ",
+      "time": "15:20",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_114"
+  },
+  {
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "ЦЕМРОС",
+      "score": "69:49",
+      "date": "2026-02-22",
+      "venue": "ФОК Фаворит",
+      "time": "09:00",
+      "league": "B",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_115"
+  },
+  {
+    "match_info": {
+      "team_a": "Дельта",
+      "team_b": "Триумф-2",
+      "score": "88:67",
+      "date": "2026-02-22",
+      "venue": "ФОК Фаворит",
+      "time": "10:30",
+      "league": "B",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_116"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "Триумф",
+      "score": "57:103",
+      "date": "2026-02-22",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_117"
+  },
+  {
+    "match_info": {
+      "team_a": "Перевалбаскет",
+      "team_b": "Цементник-Марбакс",
+      "score": "59:69",
+      "date": "2026-02-22",
+      "venue": "ФОК Фаворит",
+      "time": "13:30",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_118"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "БК Петровск",
+      "score": "85:69",
+      "date": "2026-02-28",
+      "venue": "Манеж УлГПУ",
+      "time": "15:20",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_119"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Феникс",
+      "score": "94:57",
+      "date": "2026-03-01",
+      "venue": "Зал УлГУ",
+      "time": "14:30",
+      "league": "F",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_120"
+  },
+  {
+    "match_info": {
+      "team_a": "ЦЕМРОС",
+      "team_b": "Триумф-2",
+      "score": "54:35",
+      "date": "2026-03-01",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "B",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_121"
+  },
+  {
+    "match_info": {
+      "team_a": "Дельта",
+      "team_b": "Ветераны",
+      "score": "68:73",
+      "date": "2026-03-01",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "B",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_122"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "Перевалбаскет",
+      "score": "0:20",
+      "date": "2026-03-01",
+      "venue": "ДС Дельфин",
+      "time": "16:15",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_123"
+  },
+  {
+    "match_info": {
+      "team_a": "Old School",
+      "team_b": "УСУТ",
+      "score": "57:79",
+      "date": "2026-03-07",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "F",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_124"
+  },
+  {
+    "match_info": {
+      "team_a": "УИГА",
+      "team_b": "Цементник-Марбакс",
+      "score": "74:99",
+      "date": "2026-03-07",
+      "venue": "Манеж УлГПУ",
+      "time": "13:40",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_125"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "Спарта-УлГПУ",
+      "score": "102:85",
+      "date": "2026-03-07",
+      "venue": "Манеж УлГПУ",
+      "time": "15:20",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_126"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Перевалбаскет",
+      "score": "0:20",
+      "date": "2026-03-07",
+      "venue": "ДС Дельфин",
+      "time": "17:00",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_127"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "Спарта-УлГПУ",
+      "score": "73:81",
+      "date": "2026-03-14",
+      "venue": "Манеж УлГПУ",
+      "time": "12:00",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_128"
+  },
+  {
+    "match_info": {
+      "team_a": "Old School",
+      "team_b": "Феникс",
+      "score": "51:38",
+      "date": "2026-03-14",
+      "venue": "Манеж УлГПУ",
+      "time": "13:40",
+      "league": "F",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_129"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "УСУТ",
+      "score": "73:68",
+      "date": "2026-03-14",
+      "venue": "Манеж УлГПУ",
+      "time": "15:20",
+      "league": "F",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_130"
+  },
+  {
+    "match_info": {
+      "team_a": "УИГА",
+      "team_b": "УлГУ",
+      "score": "68:75",
+      "date": "2026-03-15",
+      "venue": "ФОК Фаворит",
+      "time": "12:00",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_131"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "Перевалбаскет",
+      "score": "77:86",
+      "date": "2026-03-15",
+      "venue": "ДС Дельфин",
+      "time": "15:00",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_132"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "Триумф",
+      "score": "69:48",
+      "date": "2026-03-22",
+      "venue": "Зал УлГУ",
+      "time": "14:30",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_133"
+  },
+  {
+    "match_info": {
+      "team_a": "БК Петровск",
+      "team_b": "УлГУ",
+      "score": "50:97",
+      "date": "2026-03-22",
+      "venue": "Зал УлГУ",
+      "time": "16:00",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_134"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "УИГА",
+      "score": "77:70",
+      "date": "2026-03-29",
+      "venue": "Зал УлГУ",
+      "time": "17:30",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_135"
+  },
+  {
+    "match_info": {
+      "team_a": "Спарта-УлГПУ",
+      "team_b": "Триумф",
+      "score": "52:67",
+      "date": "2026-03-29",
+      "venue": "Зал УлГУ",
+      "time": "19:00",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_136"
+  },
+  {
+    "match_info": {
+      "team_a": "УУОР",
+      "team_b": "УлГУ",
+      "score": "51:68",
+      "date": "2026-04-05",
+      "venue": "Зал УлГУ",
+      "time": "14:30",
+      "league": "A",
+      "gameType": "regular"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_137"
+  },
+  {
+    "match_info": {
+      "team_a": "Перевалбаскет",
+      "team_b": "Цементник-Марбакс",
+      "score": "65:71",
+      "date": "2026-04-19",
+      "venue": "Зал УлГУ",
+      "time": "15:00",
+      "league": "A",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_138"
+  },
+  {
+    "match_info": {
+      "team_a": "АВВА-МЧС",
+      "team_b": "УУОР",
+      "score": "59:72",
+      "date": "2026-04-19",
+      "venue": "Зал УлГУ",
+      "time": "16:30",
+      "league": "A",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_139"
+  },
+  {
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "УУОР",
+      "score": "91:84",
+      "date": "2026-05-17",
+      "venue": "ФОК Фаворит",
+      "time": "17:00",
+      "league": "A",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_140"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Цементник-Марбакс",
+      "score": "98:56",
+      "date": "2026-05-17",
+      "venue": "ФОК Фаворит",
+      "time": "18:30",
+      "league": "A",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_141"
+  },
+  {
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "УУОР",
+      "score": "75:71",
+      "date": "2026-05-24",
+      "venue": "ФОК Фаворит",
+      "time": "10:00",
+      "league": "A",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_142"
+  },
+  {
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Триумф",
+      "score": "69:77",
+      "date": "2026-05-24",
+      "venue": "ФОК Фаворит",
+      "time": "11:50",
+      "league": "A",
+      "gameType": "playoff"
+    },
+    "added_by": "cgnikolay",
+    "id": "game_143"
+  }
+]

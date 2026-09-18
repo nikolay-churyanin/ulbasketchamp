@@ -8,13 +8,13 @@
 @import url('sections/teams.css');
 @import url('sections/schedule.css');
 @import url('sections/matches.css'); /* Карточки матчей */
-@import url('sections/home.css'); /* Главная страница */
 @import url('match-details.css');
-@import url('team-modal.css');
+@import url('team-modals.css');
 @import url('playoff.css');
 @import url('components/preview.css');
 @import url('utilities.css');
 @import url('top-stats.css');
+@import url('home.css');
 
 /* Скрытые секции (будут показываться через JavaScript) */
 .hidden-section {

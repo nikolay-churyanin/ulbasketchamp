@@ -17,12 +17,65 @@ class HomePage {
         this.setupScrollSpy();
         this.updateLeagueIndicator('home');
         
-        // Ждем загрузки данных перед рендерингом
         if (this.dataManager.ready) {
             this.dataManager.ready.then(() => {
+                this.setupSeasonSwitcher();
                 this.renderHomePage();
                 this.setupNewsFilter();
             });
+        }
+    }
+
+    setupSeasonSwitcher() {
+        const select = document.getElementById('season-select');
+        if (!select) return;
+
+        const seasons = this.dataManager.getSeasonList();
+        select.innerHTML = seasons.map(season => {
+            const archived = season.archived ? ' (архив)' : '';
+            return `<option value="${season.id}">${season.label}${archived}</option>`;
+        }).join('');
+        select.value = this.dataManager.seasonId;
+
+        select.addEventListener('change', async () => {
+            const changed = await this.dataManager.switchSeason(select.value);
+            if (changed) {
+                this.newsManager.newsCache = null;
+                await this.refreshAfterSeasonChange();
+            }
+        });
+
+        this.updateSeasonChrome();
+    }
+
+    updateSeasonChrome() {
+        const title = document.getElementById('season-title');
+        const label = this.dataManager.getSeasonLabel();
+        if (title) {
+            title.textContent = `Сезон ${label}`;
+        }
+        document.title = `Чемпионат по баскетболу — ${label}`;
+    }
+
+    async refreshAfterSeasonChange() {
+        this.updateSeasonChrome();
+        await this.renderHomePage();
+
+        const active = document.querySelector('.nav-link.active');
+        const sectionId = active?.dataset.section || 'home';
+
+        if (sectionId === 'news') {
+            await this.newsManager.loadAndDisplayNews('news-container', this.newsManager.currentFilter || 'all');
+            return;
+        }
+        if (sectionId === 'top-stats' && window.topStatsManager) {
+            window.topStatsManager.loadAndDisplayStats(window.topStatsManager.currentFilter || 'A');
+            return;
+        }
+        if (sectionId.startsWith('league-')) {
+            const league = sectionId.split('-')[1].toUpperCase();
+            this.currentLeague = league;
+            this.renderLeaguePage(league);
         }
     }
 
@@ -151,11 +204,11 @@ class HomePage {
     }
 
     async renderHomePage() {
-        if (!this.dataManager || !this.dataManager.teams || this.dataManager.teams.length === 0) {
-            console.log('Waiting for data to load...');
+        if (!this.dataManager) {
             return;
         }
-        
+
+        this.updateSeasonChrome();
         await this.renderLeagueOverview();
         await this.renderUpcomingGames();
         this.updateStats();
@@ -601,7 +654,7 @@ class HomePage {
     }
 
     getPluralFormTeam(count) {
-        return BasketballUtils.getPluralForm(count, ['команда','команды','команды']);
+        return BasketballUtils.getPluralForm(count, ['команда','команды','команд']);
     }
 
     getPluralFormPlayed(count) {
