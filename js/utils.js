@@ -119,7 +119,7 @@ class BasketballUtils {
     }
 
     static get placeholderLogo() {
-        return 'data/images/team-placeholder.svg';
+        return 'data/images/team-placeholder.svg?v=4';
     }
 
     static resolveTeamLogo(logo) {
