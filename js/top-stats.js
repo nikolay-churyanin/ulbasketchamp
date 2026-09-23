@@ -38,11 +38,16 @@ class TopStatsManager {
     // Основной метод загрузки и отображения статистики
     loadAndDisplayStats(filter = 'A') {
         this.currentFilter = filter;
-        
-        // Получаем данные для отображения
+
+        document.querySelectorAll('.top-filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+
+        if (window.homePage) {
+            window.homePage.updateLeagueIndicator('top-stats', filter);
+        }
+
         const stats = this.calculateAllStats(filter);
-        
-        // Рендерим основную сетку
         this.renderMainStats(stats);
     }
 
@@ -294,11 +299,12 @@ class TopStatsManager {
                     return;
                 }
                 
-                const conceded = Math.min(game.scoreHome, game.scoreAway);
-                const defender = game.scoreHome < game.scoreAway ? game.teamHome : game.teamAway;
-                const opponent = game.scoreHome < game.scoreAway ? game.teamAway : game.teamHome;
-                const opponentScore = Math.max(game.scoreHome, game.scoreAway);
-                const defenderScore = conceded;
+                const defenderIsHome = game.scoreAway <= game.scoreHome;
+                const defender = defenderIsHome ? game.teamHome : game.teamAway;
+                const opponent = defenderIsHome ? game.teamAway : game.teamHome;
+                const defenderScore = defenderIsHome ? game.scoreHome : game.scoreAway;
+                const opponentScore = defenderIsHome ? game.scoreAway : game.scoreHome;
+                const conceded = opponentScore;
                 
                 const defenderTeam = this.dataManager.getTeamByName(defender, league);
                 const opponentTeam = this.dataManager.getTeamByName(opponent, league);
@@ -493,7 +499,7 @@ class TopStatsManager {
                     return `
                         <div class="match-teams-display">
                             <div class="match-teams-row winner">
-                                <span class="match-team">🏆 ${item.winner}</span>
+                                <span class="match-team">${item.winner}</span>
                                 <span class="match-score">${item.winnerScore}</span>
                             </div>
                             <div class="match-teams-row loser">
@@ -547,7 +553,7 @@ class TopStatsManager {
                     return `
                         <div class="match-teams-display">
                             <div class="match-teams-row defender">
-                                <span class="match-team">🛡️ ${item.defender}</span>
+                                <span class="match-team">${item.defender}</span>
                                 <span class="match-score">${item.defenderScore}</span>
                             </div>
                             <div class="match-teams-row opponent">
@@ -621,9 +627,7 @@ class TopStatsManager {
                                 </div>
                             `;
                         } else {
-                            const teamLogo = item.team && item.team.logo 
-                                ? item.team.logo 
-                                : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
+                            const teamLogo = BasketballUtils.resolveTeamLogo(item.team && item.team.logo);
                             
                             // Для карточки "Победные серии" используем специальное отображение
                             let displayValue = '';
@@ -653,9 +657,7 @@ class TopStatsManager {
 
     // Рендер топ команды
     renderTopTeam(item, card) {
-        const teamLogo = item.team && item.team.logo 
-            ? item.team.logo 
-            : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
+        const teamLogo = BasketballUtils.resolveTeamLogo(item.team && item.team.logo);
         
         return `
             <div class="top-team" data-team-name="${item.teamName}" data-league="${item.league || 'A'}">
@@ -698,9 +700,9 @@ class TopStatsManager {
         ];
         
         if (noTechCategories.includes(cardTitle)) {
-            return `<span class="tech-indicator no-tech" title="Технические победы (20:0) не учитываются">⚖️❌</span>`;
+            return `<span class="tech-indicator no-tech" title="Технические победы (20:0) не учитываются">без 20:0</span>`;
         } else if (techCategories.includes(cardTitle)) {
-            return `<span class="tech-indicator with-tech" title="Технические победы (20:0) учитываются">⚖️✓</span>`;
+            return `<span class="tech-indicator with-tech" title="Технические победы (20:0) учитываются">с 20:0</span>`;
         }
         return '';
     }
@@ -805,9 +807,7 @@ class TopStatsManager {
             // Определяем, это команда или игра
             if (item.teamName && !item.homeTeam) {
                 // Это команда
-                const teamLogo = item.team && item.team.logo 
-                    ? item.team.logo 
-                    : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
+                const teamLogo = BasketballUtils.resolveTeamLogo(item.team && item.team.logo);
                 
                 html += `
                     <div class="top-stats-detail-item" data-team-name="${item.teamName}" data-league="${item.league || 'A'}">
@@ -951,7 +951,6 @@ class TopStatsManager {
     }
 
     onImageError(img) {
-        img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
-        img.onerror = null;
+        BasketballUtils.handleImageError({ target: img });
     }
 }

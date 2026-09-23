@@ -67,7 +67,9 @@ class BasketballUI {
         const title = document.getElementById('team-modal-title');
         const body = document.getElementById('team-modal-body');
 
-        title.textContent = team.name;
+        title.textContent = this.dataManager.getLeaguesForTeam(team.name).length > 1
+            ? `${team.name} · ${this.dataManager.getLeagueName(league)}`
+            : team.name;
 
         const games = this.dataManager.getGamesByTeam(team.name, league);
         const completedGames = games.filter(game => game.scoreHome !== null && game.scoreAway !== null);
@@ -77,29 +79,34 @@ class BasketballUI {
         }).length;
         const losses = completedGames.length - wins;
 
+        const placeholderLogo = BasketballUtils.placeholderLogo;
+        const gamesHtml = games.length > 0
+            ? games.map(game => this.renderTeamGameItem(game, team, league, placeholderLogo)).join('')
+            : '<p class="no-games-message">Матчей не найдено</p>';
+
         let html = `
             <div class="team-info-header">
                 <div class="team-logo-container">
-                    <img src="${team.logo}" alt="${team.name}" class="team-info-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplePSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+'">
+                    <img src="${BasketballUtils.resolveTeamLogo(team.logo)}" alt="${team.name}" class="team-info-logo" onerror="this.src='${placeholderLogo}'">
                 </div>
                 <div class="team-info-details">
                     <h2>${team.name}</h2>
                     <div class="team-meta-info">
                         <div class="meta-item">
-                            <span class="meta-label">Город:</span>
+                            <span class="meta-label">Город</span>
                             <span class="meta-value">${team.city || 'Не указан'}</span>
                         </div>
                         <div class="meta-item">
-                            <span class="meta-label">Лига:</span>
+                            <span class="meta-label">Лига</span>
                             <span class="meta-value">${this.dataManager.getLeagueName(league)}</span>
                         </div>
                         <div class="meta-item">
-                            <span class="meta-label">Рекорд:</span>
-                            <span class="meta-value record-value">${wins}-${losses}</span>
+                            <span class="meta-label">Рекорд</span>
+                            <span class="meta-value record-value">${wins}–${losses}</span>
                         </div>
                         <div class="meta-item">
-                            <span class="meta-label">Сыграно:</span>
-                            <span class="meta-value">${completedGames.length} матчей</span>
+                            <span class="meta-label">Сыграно</span>
+                            <span class="meta-value">${completedGames.length}</span>
                         </div>
                     </div>
                 </div>
@@ -107,61 +114,7 @@ class BasketballUI {
 
             <div class="team-section">
                 <h3 class="team-section-title">Матчи команды</h3>
-                <div class="team-games-list">
-                    ${games.length > 0 ? games.map(game => {
-                        const normalizedTeamName = this.dataManager.normalizeTeamName(team.name);
-                        const isHome = this.dataManager.normalizeTeamName(game.teamHome) === normalizedTeamName;
-                        const opponentName = isHome ? game.teamAway : game.teamHome;
-                        const hasScore = game.scoreHome !== null && game.scoreAway !== null;
-                        
-                        let teamScore, opponentScore;
-                        if (hasScore) {
-                            teamScore = isHome ? game.scoreHome : game.scoreAway;
-                            opponentScore = isHome ? game.scoreAway : game.scoreHome;
-                        }
-                        
-                        const isWin = hasScore && teamScore > opponentScore;
-                        const scoreClass = hasScore ? (isWin ? 'win' : 'loss') : '';
-                        
-                        // Определяем статус матча
-                        let matchStatus = '';
-                        let statusClass = '';
-                        
-                        if (game.gameType === 'playoff') {
-                            matchStatus = 'ПЛЕЙ-ОФФ';
-                            statusClass = 'status-upcoming';
-                        } else {
-                            matchStatus = 'Регулярный сезон';
-                            statusClass = 'status-upcoming';
-                        }
-
-                        return `
-                            <div class="team-game-item" data-game-id="${game.id}" data-league="${league}">
-                                <div class="game-info">
-                                    <div class="game-date-status">
-                                        <div class="game-date">${this.formatDate(game._fullDate)}</div>
-                                        <div class="game-status ${statusClass}">${matchStatus}</div>
-                                    </div>
-                                    <div class="game-versus">
-                                        <span class="game-home-away">${isHome ? '🏠 Дома' : '✈️ В гостях'}</span>
-                                        <span class="game-vs">vs</span>
-                                        <span class="game-opponent">${opponentName}</span>
-                                    </div>
-                                </div>
-                                <div class="game-score">
-                                    ${hasScore ? 
-                                        `<div class="${scoreClass}-game-score">
-                                            <span class="score-team">${teamScore}</span>
-                                            <span class="score-separator">:</span>
-                                            <span class="score-opponent">${opponentScore}</span>
-                                        </div>` : 
-                                        '<div class="no-score">- : -</div>'
-                                    }
-                                </div>
-                            </div>
-                        `;
-                    }).join('') : '<p class="no-games-message">Матчей не найдено</p>'}
-                </div>
+                <div class="team-games-list">${gamesHtml}</div>
             </div>
         `;
 
@@ -173,9 +126,6 @@ class BasketballUI {
             const gameItems = body.querySelectorAll('.team-game-item');
             gameItems.forEach(item => {
                 item.addEventListener('click', async (e) => {
-                    // Не открываем результат если кликнули на счет (это просто текст)
-                    if (e.target.closest('.game-score')) return;
-                    
                     const gameId = item.dataset.gameId;
                     const league = item.dataset.league;
                     
@@ -202,14 +152,80 @@ class BasketballUI {
         }, 100);
     }
 
+    renderTeamGameItem(game, team, league, placeholderLogo) {
+        const hasScore = game.scoreHome !== null && game.scoreAway !== null;
+        const currentName = this.dataManager.normalizeTeamName(team.name);
+        const isTeamA = this.dataManager.normalizeTeamName(game.teamHome) === currentName;
+        const isTeamB = this.dataManager.normalizeTeamName(game.teamAway) === currentName;
+        const teamA = this.dataManager.getTeamByName(game.teamHome, league);
+        const teamB = this.dataManager.getTeamByName(game.teamAway, league);
+        const logoA = teamA?.logo || placeholderLogo;
+        const logoB = teamB?.logo || placeholderLogo;
+        const isPlayoff = game.gameType === 'playoff';
+        let resultClass = '';
+        let statusText = isPlayoff ? 'Плей-офф' : 'Анонс';
+        let statusClass = 'status-upcoming';
+        if (hasScore) {
+            const currentWon = (isTeamA && game.scoreHome > game.scoreAway)
+                || (isTeamB && game.scoreAway > game.scoreHome);
+            const currentLost = (isTeamA && game.scoreHome < game.scoreAway)
+                || (isTeamB && game.scoreAway < game.scoreHome);
+            if (currentWon) {
+                resultClass = 'is-win';
+                statusText = 'Победа';
+                statusClass = 'status-win';
+            } else if (currentLost) {
+                resultClass = 'is-loss';
+                statusText = 'Поражение';
+                statusClass = 'status-loss';
+            } else {
+                statusText = 'Ничья';
+                statusClass = 'status-finished';
+            }
+        }
+
+        const typeBadge = isPlayoff && hasScore ? '<span class="team-game-type">Плей-офф</span>' : '';
+
+        return `
+            <div class="team-game-item ${resultClass}" data-game-id="${game.id}" data-league="${game.league || league}">
+                <div class="team-game-top">
+                    <div class="team-game-when">
+                        <span class="team-game-date">${this.formatDate(game._fullDate)}</span>
+                        ${game.time ? `<span class="team-game-time">${game.time}</span>` : ''}
+                    </div>
+                    <div class="team-game-badges">
+                        ${typeBadge}
+                        <span class="game-status ${statusClass}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="team-game-main">
+                    <div class="team-game-side${isTeamA ? ' is-current' : ''}">
+                        <img src="${logoA}" alt="${game.teamHome}" class="team-game-logo" onerror="this.src='${placeholderLogo}'">
+                        <span class="team-game-name">${game.teamHome}</span>
+                    </div>
+                    <div class="team-game-score">
+                        ${hasScore
+                            ? `<span>${game.scoreHome}</span>
+                               <span class="score-separator">:</span>
+                               <span>${game.scoreAway}</span>`
+                            : '<span class="no-score">VS</span>'}
+                    </div>
+                    <div class="team-game-side team-game-side-right${isTeamB ? ' is-current' : ''}">
+                        <span class="team-game-name">${game.teamAway}</span>
+                        <img src="${logoB}" alt="${game.teamAway}" class="team-game-logo" onerror="this.src='${placeholderLogo}'">
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
     formatDate(date) {
         if (!date || isNaN(date.getTime())) {
             return 'Дата не указана';
         }
         return date.toLocaleDateString('ru-RU', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
+            day: 'numeric',
+            month: 'short'
         });
     }
 }

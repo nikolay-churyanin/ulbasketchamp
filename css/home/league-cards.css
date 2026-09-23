@@ -76,10 +76,14 @@
     border: 1px solid var(--line);
 }
 
-.league-team-preview span {
+.league-team-preview .team-name {
     font-weight: 600;
     flex: 1;
     font-size: 0.9rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .league-team-preview .team-record {

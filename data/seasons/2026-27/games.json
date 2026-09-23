@@ -1,1 +1,122 @@
-[]
+[
+  {
+    "id": "game_001",
+    "match_info": {
+      "team_a": "Дельта - УИГА",
+      "team_b": "УСУТ-УлГПУ",
+      "date": "2026-09-26",
+      "time": "16:30",
+      "venue": "Манеж УлГПУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_002",
+    "match_info": {
+      "team_a": "Спарта",
+      "team_b": "Перевалбаскет",
+      "date": "2026-09-26",
+      "time": "18:00",
+      "venue": "Манеж УлГПУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_003",
+    "match_info": {
+      "team_a": "Цементник-Марбакс",
+      "team_b": "УСУТ",
+      "date": "2026-09-27",
+      "time": "09:00",
+      "venue": "ФОК Фаворит",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_004",
+    "match_info": {
+      "team_a": "УлГПУ",
+      "team_b": "Север",
+      "date": "2026-09-27",
+      "time": "10:30",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_005",
+    "match_info": {
+      "team_a": "УМЗ-Авангард",
+      "team_b": "Атом",
+      "date": "2026-09-27",
+      "time": "12:00",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_006",
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "БК Петровск",
+      "date": "2026-09-27",
+      "time": "13:30",
+      "venue": "ФОК Фаворит",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_007",
+    "match_info": {
+      "team_a": "Дельта - УИГА (Ф)",
+      "team_b": "40-Данко",
+      "date": "2026-09-27",
+      "time": "14:00",
+      "venue": "Зал УлГУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_008",
+    "match_info": {
+      "team_a": "Приборка",
+      "team_b": "Симбирские орлы",
+      "date": "2026-09-27",
+      "time": "15:00",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_009",
+    "match_info": {
+      "team_a": "Цемрос (Ф)",
+      "team_b": "Ульяновское ВВАУЛ",
+      "date": "2026-09-27",
+      "time": "15:30",
+      "venue": "Зал УлГУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_010",
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Цемрос",
+      "date": "2026-09-27",
+      "time": "17:00",
+      "venue": "Зал УлГУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  }
+]

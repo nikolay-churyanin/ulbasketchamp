@@ -656,11 +656,6 @@ class MatchesRenderer {
                 <div class="fullscreen-image-content">
                     <img src="${imageUrl}" alt="${title}" class="fullscreen-image">
                 </div>
-                <div class="fullscreen-image-footer">
-                    <button class="download-image" onclick="window.open('${imageUrl}', '_blank')">
-                        📥 Открыть в новой вкладке
-                    </button>
-                </div>
             </div>
         `;
         
@@ -731,11 +726,10 @@ class MatchesRenderer {
     // Вспомогательные методы
     getTeamLogo(teamName, league) {
         const team = this.dataManager.getTeamByName(teamName, league);
-        return team?.logo || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
+        return BasketballUtils.resolveTeamLogo(team?.logo);
     }
 
     onImageError(img) {
-        img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
-        img.onerror = null;
+        BasketballUtils.handleImageError({ target: img });
     }
 }

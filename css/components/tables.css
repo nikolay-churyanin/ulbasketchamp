@@ -38,7 +38,11 @@ tr:hover {
 }
 
 .clickable-row:hover {
-    background: #ebe7df !important;
+    background: #ebe7df;
+}
+
+.standings-table tr.playoff-spot.clickable-row:hover {
+    background: transparent;
 }
 
 .table-container {

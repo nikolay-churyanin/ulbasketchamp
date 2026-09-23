@@ -1,1 +1,164 @@
-[]
+[
+  {
+    "name": "Триумф",
+    "logo": "data/images/triumph.jpg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "УлГУ",
+    "logo": "data/images/ulsu.svg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "УСУТ-УлГПУ",
+    "logo": "",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "Перевалбаскет",
+    "logo": "data/images/pereval.jpg",
+    "city": "Димитровград",
+    "league": "A"
+  },
+  {
+    "name": "Цемрос",
+    "logo": "data/images/cemros.jpg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "Дельта - УИГА",
+    "logo": "data/images/uiga_delta.jpg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "УСУТ",
+    "logo": "data/images/usut.jpg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "Спарта",
+    "logo": "data/images/sparta_ulspu.jpg",
+    "city": "Ульяновск",
+    "league": "A"
+  },
+  {
+    "name": "Цементник-Марбакс",
+    "logo": "data/images/marrbaxx.jpg",
+    "city": "Новоульяновск",
+    "league": "A"
+  },
+  {
+    "name": "БК Петровск",
+    "logo": "data/images/petrovsk.jpg",
+    "city": "Петровск",
+    "league": "A"
+  },
+  {
+    "name": "УМЗ-Авангард",
+    "logo": "data/images/avangard.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Приборка",
+    "logo": "data/images/priborka.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Симбирские орлы",
+    "logo": "",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Атом",
+    "logo": "",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Север",
+    "logo": "",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Ульяновское ВВАУЛ",
+    "logo": "",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Цемрос (Ф)",
+    "logo": "data/images/cemros.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Дельта - УИГА (Ф)",
+    "logo": "data/images/uiga_delta.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "УлГПУ",
+    "logo": "data/images/ulspu.jpg",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "Ветераны",
+    "logo": "",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "40-Данко",
+    "logo": "",
+    "city": "Ульяновск",
+    "league": "B"
+  },
+  {
+    "name": "УлГУ",
+    "logo": "data/images/ulsu.svg",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "УСУТ",
+    "logo": "data/images/usut.jpg",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "УлГПУ",
+    "logo": "data/images/sparta_f.jpg",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "Ульяночка",
+    "logo": "",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "Феникс",
+    "logo": "data/images/feniks.jpg",
+    "city": "Ульяновск",
+    "league": "F"
+  },
+  {
+    "name": "OldSchool",
+    "logo": "data/images/oldshcool.jpg",
+    "city": "Ульяновск",
+    "league": "F"
+  }
+]

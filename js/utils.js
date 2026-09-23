@@ -118,9 +118,20 @@ class BasketballUtils {
         return statuses[status] || { class: 'upcoming', text: 'Предстоящий' };
     }
 
+    static get placeholderLogo() {
+        return 'data/images/team-placeholder.svg';
+    }
+
+    static resolveTeamLogo(logo) {
+        return logo && String(logo).trim() ? logo : BasketballUtils.placeholderLogo;
+    }
+
     static handleImageError(event) {
-        event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
-        event.target.onerror = null;
+        const img = event?.target;
+        if (!img || img.dataset.placeholderApplied) return;
+        img.dataset.placeholderApplied = '1';
+        img.src = this.placeholderLogo;
+        img.onerror = null;
     }
 
     static isMobileDevice() {
@@ -298,6 +309,10 @@ if (!Array.prototype.includes) {
         return false;
     };
 }
+
+HTMLImageElement.prototype.onImageError = function onImageError(img) {
+    BasketballUtils.handleImageError({ target: img || this });
+};
 
 // Инициализация утилит
 document.addEventListener('DOMContentLoaded', function() {

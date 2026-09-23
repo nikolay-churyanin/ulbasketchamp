@@ -112,20 +112,22 @@
 .top-stat-card:hover {
     transform: none;
     box-shadow: none;
+    border-color: var(--navy);
 }
 
 .stat-card-header {
-    padding: 12px 14px;
+    padding: 14px 16px;
     background: var(--navy);
     color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
 }
 
 .stat-card-header h3 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -133,7 +135,7 @@
 }
 
 .stat-card-header .stat-emoji {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .disclaimer-hint {
@@ -145,322 +147,241 @@
 }
 
 .tech-indicator {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    font-size: 14px;
-    margin-left: 8px;
+    flex-shrink: 0;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.9);
     cursor: help;
-    transition: all 0.2s ease;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(4px);
 }
 
-.tech-indicator.no-tech {
-    color: #ff6b6b;
-}
-
+.tech-indicator.no-tech,
 .tech-indicator.with-tech {
-    color: #51cf66;
+    color: rgba(255, 255, 255, 0.9);
 }
 
-.tech-indicator:hover {
-    transform: scale(1.1);
-    background: rgba(255, 255, 255, 0.3);
-}
-
-/* Тело карточки */
 .stat-card-body {
-    padding: 20px;
+    padding: var(--space-2);
     flex: 1;
-    background: var(--card-bg, white);
+    background: var(--surface);
 }
 
-/* Команда-лидер */
-.top-team {
+.top-team,
+.top-game {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 12px;
-    border-radius: 12px;
-    background: var(--bg-highlight, #f8f9fa);
-    border: 1px solid var(--border-color, #e9ecef);
+    padding: 8px;
+    border-radius: 8px;
+    background: var(--paper);
+    border: 1px solid var(--line);
 }
 
-.top-team:hover {
-    background: var(--bg-hover, #e9ecef);
-    transform: translateX(4px);
+.top-game {
+    display: block;
+}
+
+.top-team:hover,
+.top-game:hover {
+    background: #ebe7df;
+    transform: none;
 }
 
 .top-team-logo {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: var(--bg-secondary, #f5f5f5);
-    border: 2px solid var(--border-color, #ddd);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: white;
+    padding: 2px;
+    border: 1px solid var(--line);
+    flex-shrink: 0;
 }
 
 .top-team-info {
     flex: 1;
+    min-width: 0;
 }
 
 .top-team-name {
-    font-size: 16px;
+    font-size: 0.95rem;
     font-weight: 600;
-    color: var(--text-primary, #333);
-    margin-bottom: 4px;
+    color: var(--ink);
+    margin-bottom: 2px;
 }
 
 .top-team-value {
-    font-size: 20px;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: var(--accent-color, #0055a5);
+    color: var(--navy);
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
 }
 
 .value-unit {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text-secondary, #666);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
 }
 
-/* Топ игра */
-.top-game {
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 12px;
-    border-radius: 12px;
-    background: var(--bg-highlight, #f8f9fa);
-    border: 1px solid var(--border-color, #e9ecef);
-}
-
-.top-game:hover {
-    background: var(--bg-hover, #e9ecef);
-    transform: translateX(4px);
-}
-
-/* Отображение матча в карточке */
 .match-teams-display {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .match-teams-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px 0;
-    border-bottom: 1px dashed rgba(0,0,0,0.1);
+    gap: 8px;
+    padding: 4px 0;
 }
 
-.match-teams-row:last-child {
-    border-bottom: none;
-}
-
-.match-teams-row.winner {
-    background: rgba(40, 167, 69, 0.05);
-    border-radius: 6px;
-    padding: 6px 8px;
-    margin: 0 -4px;
-}
-
-.match-teams-row.defender {
-    background: rgba(23, 162, 184, 0.05);
-    border-radius: 6px;
-    padding: 6px 8px;
-    margin: 0 -4px;
+.match-teams-row.winner .match-team,
+.match-teams-row.defender .match-team {
+    font-weight: 700;
+    color: var(--navy);
 }
 
 .match-team {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-primary, #333);
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    min-width: 0;
+}
+
+.top-game .match-team {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
 }
 
 .match-team:before {
-    content: "•";
-    color: var(--accent-color, #0055a5);
-    font-size: 18px;
-}
-
-.match-teams-row.winner .match-team:before {
-    content: "🏆";
-    font-size: 14px;
-}
-
-.match-teams-row.defender .match-team:before {
-    content: "🛡️";
-    font-size: 14px;
+    content: none;
 }
 
 .match-score {
-    font-size: 16px;
+    font-size: 0.95rem;
     font-weight: 700;
-    color: var(--accent-color, #0055a5);
-    background: rgba(0, 85, 165, 0.1);
-    padding: 2px 8px;
-    border-radius: 20px;
+    color: var(--navy);
+    font-variant-numeric: tabular-nums;
 }
 
 .match-total {
-    margin-top: 8px;
+    margin-top: 6px;
     padding-top: 8px;
-    border-top: 1px solid var(--border-color, #eee);
-    font-size: 13px;
+    border-top: 1px solid var(--line);
+    font-size: 0.8rem;
     font-weight: 600;
-    color: var(--text-secondary, #666);
-    text-align: right;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
+    color: var(--muted);
+    text-align: left;
 }
 
 .match-total:before {
-    content: "📊";
-    font-size: 14px;
-    opacity: 0.7;
+    content: none;
 }
 
-/* Список остальных команд/игр */
 .top-teams-list {
-    border-top: 1px solid var(--border-color, #eee);
-    padding-top: 15px;
-    max-height: 200px;
+    border-top: 1px solid var(--line);
+    padding-top: 8px;
+    max-height: 220px;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent-color, #0055a5) var(--bg-secondary, #f5f5f5);
-}
-
-.top-teams-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.top-teams-list::-webkit-scrollbar-track {
-    background: var(--bg-secondary, #f5f5f5);
-    border-radius: 10px;
-}
-
-.top-teams-list::-webkit-scrollbar-thumb {
-    background: var(--accent-color, #0055a5);
-    border-radius: 10px;
 }
 
 .top-list-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 8px;
+    padding: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
     border-radius: 8px;
-    margin-bottom: 2px;
 }
 
 .top-list-item:hover {
-    background: var(--bg-hover, #f5f5f5);
-    transform: translateX(4px);
-}
-
-.top-list-item.game-list-item {
-    padding: 12px 8px;
-    border-bottom: 1px solid var(--border-color, #f0f0f0);
-}
-
-.top-list-item.game-list-item:last-child {
-    border-bottom: none;
+    background: var(--paper);
+    transform: none;
 }
 
 .list-item-logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: var(--bg-secondary, #f5f5f5);
-    border: 1px solid var(--border-color, #ddd);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    object-fit: contain;
+    background: white;
+    padding: 2px;
+    border: 1px solid var(--line);
+    flex-shrink: 0;
 }
 
 .list-item-name {
     flex: 1;
-    font-size: 14px;
-    color: var(--text-primary, #333);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-width: 0;
 }
 
 .list-item-name.game-name {
-    font-size: 13px;
+    font-size: 0.82rem;
+    font-weight: 500;
     white-space: normal;
-    line-height: 1.4;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    line-height: 1.35;
 }
 
 .list-item-value {
     font-weight: 600;
     color: var(--navy);
-    font-size: 13px;
+    font-size: 0.8rem;
     white-space: nowrap;
     background: var(--paper);
     padding: 2px 8px;
     border-radius: 8px;
 }
 
-/* Победные серии */
 .streak-badge {
     display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.75rem;
     font-weight: 600;
-    margin-left: 10px;
 }
 
 .streak-badge.active {
-    background: #28a745;
+    background: var(--win);
     color: white;
 }
 
-/* Секция "В зоне огня" */
 .hot-streaks-section {
-    margin-top: 40px;
+    margin-top: 24px;
 }
 
 .hot-streaks-section h3 {
-    font-size: 22px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-primary, #333);
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+    color: var(--navy);
 }
 
 .hot-streaks-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 12px;
 }
 
 .hot-streak-card {
     background: var(--navy);
-    border-radius: 8px;
-    padding: 14px;
+    border-radius: var(--radius);
+    padding: 12px 14px;
     color: white;
     display: flex;
     align-items: center;
@@ -476,414 +397,203 @@
 }
 
 .hot-streak-logo {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    object-fit: contain;
     background: white;
-    padding: 3px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    padding: 2px;
 }
 
 .hot-streak-info {
     flex: 1;
+    min-width: 0;
 }
 
 .hot-streak-team {
     font-weight: 600;
-    margin-bottom: 4px;
-    font-size: 16px;
+    margin-bottom: 2px;
+    font-size: 0.95rem;
 }
 
 .hot-streak-value {
-    font-size: 18px;
+    font-size: 0.9rem;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
-.hot-streak-icon {
-    font-size: 20px;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-}
-
-/* Подвал с пояснениями */
 .stats-footer {
     margin-top: 24px;
-    padding: 16px;
+    padding: 14px 16px;
     background: var(--paper);
     border-radius: 8px;
     border: 1px solid var(--line);
 }
 
 .stats-footer h4 {
-    margin: 0 0 15px 0;
-    color: #212529;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    margin: 0 0 10px;
+    color: var(--navy);
+    font-size: 1rem;
 }
 
 .stats-legend {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 15px;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .legend-item {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
 }
 
 .legend-marker {
-    font-size: 18px;
-    min-width: 28px;
+    font-size: 14px;
+    min-width: 20px;
     text-align: center;
 }
 
 .legend-text {
-    font-size: 14px;
-    line-height: 1.5;
-    color: #495057;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--ink);
 }
 
 .legend-text strong {
-    color: #212529;
+    color: var(--navy);
 }
 
 .stats-note {
-    margin: 15px 0 0 0;
-    padding: 15px 0 0 0;
-    border-top: 1px dashed #dee2e6;
-    font-size: 13px;
-    color: #6c757d;
-    font-style: italic;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    margin: 10px 0 0;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    color: var(--muted);
 }
 
-/* Пустое состояние */
 .no-data {
-    text-align: center;
-    padding: 30px 20px;
-    color: var(--text-secondary, #999);
-    font-size: 14px;
-    background: var(--bg-secondary, #f9f9f9);
-    border-radius: 8px;
-    border: 2px dashed var(--border-color, #ddd);
+    text-align: left;
+    padding: 16px 8px;
+    color: var(--muted);
+    font-size: 0.9rem;
 }
 
-/* Модальное окно для деталей */
 .top-stats-modal {
-    max-width: 500px;
+    max-width: 520px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    overflow: hidden;
+}
+
+.top-stats-modal .modal-header {
+    background: var(--navy);
+    color: #fff;
+    padding: 14px 18px;
+}
+
+.top-stats-modal .modal-header h3 {
+    color: #fff;
+    margin: 0;
 }
 
 .top-stats-modal .modal-body {
     max-height: 70vh;
     overflow-y: auto;
-    padding: 20px;
-}
-
-.top-stats-detail {
-    padding: 0;
-}
-
-.top-stats-detail h4 {
-    margin: 0 0 15px 0;
-    color: var(--text-primary, #333);
-    font-size: 16px;
+    padding: 16px 18px 20px;
 }
 
 .top-stats-detail-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .top-stats-detail-item {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 15px;
-    background: var(--bg-secondary, #f8f9fa);
-    border-radius: 12px;
+    gap: 10px;
+    padding: 8px;
+    background: var(--paper);
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid var(--border-color, #e9ecef);
+    border: 1px solid var(--line);
 }
 
 .top-stats-detail-item:hover {
-    background: var(--bg-hover, #e9ecef);
-    transform: translateX(5px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.top-stats-detail-item.game-detail-item {
-    flex-direction: column;
-    align-items: flex-start;
+    background: #ebe7df;
+    transform: none;
+    box-shadow: none;
 }
 
 .detail-rank {
-    font-size: 18px;
-    min-width: 32px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--navy);
+    min-width: 28px;
     text-align: center;
 }
 
 .detail-item-logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--border-color, #ddd);
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    object-fit: contain;
+    background: white;
+    padding: 2px;
+    border: 1px solid var(--line);
 }
 
 .detail-item-info {
     flex: 1;
-}
-
-.detail-item-info.game-info {
-    width: 100%;
+    min-width: 0;
 }
 
 .detail-item-name {
     font-weight: 600;
-    color: var(--text-primary, #333);
-    margin-bottom: 4px;
-    font-size: 15px;
+    color: var(--ink);
+    font-size: 0.92rem;
 }
 
 .detail-item-meta {
-    font-size: 12px;
-    color: var(--text-secondary, #666);
+    font-size: 0.78rem;
+    color: var(--muted);
 }
 
 .detail-item-value {
     font-weight: 700;
-    color: var(--accent-color, #0055a5);
-    font-size: 16px;
-    background: rgba(0, 85, 165, 0.1);
-    padding: 4px 12px;
-    border-radius: 20px;
+    color: var(--navy);
+    font-size: 0.85rem;
+    background: var(--surface);
+    padding: 2px 8px;
+    border-radius: 8px;
     white-space: nowrap;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .top-stats-header h2 {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
     }
-    
-    .top-filter-btn {
-        padding: 8px 16px;
-        font-size: 13px;
-    }
-    
+
     .top-stats-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 10px;
     }
-    
-    .stat-card-header h3 {
-        font-size: 16px;
-    }
-    
-    .stat-card-header .stat-emoji {
-        font-size: 20px;
-    }
-    
-    .tech-indicator {
-        width: 24px;
-        height: 24px;
-        font-size: 12px;
-    }
-    
-    .top-team-logo {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .top-team-name {
-        font-size: 15px;
-    }
-    
-    .top-team-value {
-        font-size: 18px;
-    }
-    
-    .match-team {
-        font-size: 13px;
-    }
-    
-    .match-score {
-        font-size: 14px;
-        padding: 2px 6px;
-    }
-    
-    .match-total {
-        font-size: 12px;
-    }
-    
-    .hot-streaks-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .hot-streak-card {
-        padding: 12px;
-    }
-    
-    .hot-streak-logo {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .hot-streak-team {
-        font-size: 15px;
-    }
-    
-    .hot-streak-value {
-        font-size: 16px;
-    }
-    
-    .stats-footer {
-        margin-top: 30px;
-        padding: 15px;
-    }
-    
-    .stats-footer h4 {
-        font-size: 16px;
-    }
-    
-    .legend-item {
-        gap: 8px;
-    }
-    
-    .legend-text {
-        font-size: 13px;
-    }
-    
-    .stats-disclaimer {
-        padding: 10px 12px;
-        font-size: 13px;
-        margin: 0 0 15px 0;
-    }
-    
-    .disclaimer-icon {
-        font-size: 20px;
-        min-width: 28px;
-    }
-    
+
     .disclaimer-hint {
-        display: none; /* Скрываем подсказку на мобильных */
+        display: none;
     }
 }
 
 @media (max-width: 480px) {
     .top-filter-btn {
-        width: calc(50% - 5px);
-        justify-content: center;
-        padding: 10px 8px;
+        padding: 7px 10px;
+        font-size: 0.8rem;
     }
-    
-    .stat-card-header {
-        padding: 14px 16px;
-    }
-    
+
+    .stat-card-header,
     .stat-card-body {
-        padding: 16px;
-    }
-    
-    .top-team {
-        padding: 10px;
-        gap: 12px;
-    }
-    
-    .top-team-logo {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .top-team-name {
-        font-size: 14px;
-    }
-    
-    .top-team-value {
-        font-size: 16px;
-    }
-    
-    .match-teams-row {
-        padding: 4px 0;
-    }
-    
-    .match-team {
-        font-size: 12px;
-    }
-    
-    .match-team:before {
-        font-size: 14px;
-    }
-    
-    .match-score {
-        font-size: 13px;
-        padding: 2px 4px;
-    }
-    
-    .match-total {
-        font-size: 11px;
-        margin-top: 6px;
-        padding-top: 6px;
-    }
-    
-    .top-list-item {
-        padding: 8px 6px;
-    }
-    
-    .list-item-logo {
-        width: 24px;
-        height: 24px;
-    }
-    
-    .list-item-name {
-        font-size: 12px;
-    }
-    
-    .list-item-name.game-name {
-        font-size: 12px;
-    }
-    
-    .list-item-value {
-        font-size: 12px;
-        padding: 2px 6px;
-    }
-    
-    .stats-footer {
         padding: 12px;
-    }
-    
-    .stats-disclaimer {
-        flex-direction: column;
-        text-align: center;
-        gap: 6px;
-        padding: 10px;
-    }
-    
-    .hot-streak-card {
-        padding: 10px;
-    }
-    
-    .hot-streak-logo {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .hot-streak-team {
-        font-size: 14px;
-    }
-    
-    .hot-streak-value {
-        font-size: 14px;
     }
 }

@@ -205,8 +205,12 @@
     border-bottom: none;
 }
 
-.standings-table tr:hover {
-    background: #f8f9fa;
+.standings-table tr.playoff-spot td {
+    background: rgba(40, 167, 69, 0.05);
+}
+
+.standings-table tr.playoff-spot:hover td {
+    background: rgba(40, 167, 69, 0.08);
 }
 
 .team-row {

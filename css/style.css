@@ -1,18 +1,18 @@
 @import url('base.css?v=15');
-@import url('layout.css?v=15');
-@import url('components/header.css?v=15');
-@import url('components/navigation.css?v=15');
-@import url('components/modals.css?v=15');
-@import url('components/tables.css?v=15');
-@import url('sections/teams.css?v=15');
+@import url('layout.css?v=16');
+@import url('components/header.css?v=19');
+@import url('components/navigation.css?v=16');
+@import url('components/modals.css?v=16');
+@import url('components/tables.css?v=16');
+@import url('sections/teams.css?v=17');
 @import url('sections/matches.css?v=15');
-@import url('match-details.css?v=15');
-@import url('team-modals.css?v=15');
+@import url('match-details.css?v=16');
+@import url('team-modals.css?v=17');
 @import url('playoff.css?v=15');
 @import url('components/preview.css?v=15');
 @import url('utilities.css?v=15');
-@import url('top-stats.css?v=15');
-@import url('home.css?v=15');
+@import url('top-stats.css?v=17');
+@import url('home.css?v=17');
 
 [hidden] {
     display: none !important;

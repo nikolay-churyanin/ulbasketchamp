@@ -7,7 +7,7 @@ class BasketballData {
         this.seasonsCatalog = { current: '2025-26', seasons: [] };
         this.seasonId = null;
         this.seasonMeta = null;
-        this.dataVersion = '3.0';
+        this.dataVersion = '3.5';
         this.ready = this.init();
     }
 
@@ -17,16 +17,19 @@ class BasketballData {
             await this.loadSeasonsCatalog();
             const requested = this.readRequestedSeasonId();
             await this.loadSeason(this.resolveSeasonId(requested));
-            this.hideLoading();
         } catch (error) {
             console.error('Error in init:', error);
+        } finally {
             this.hideLoading();
         }
     }
 
     showLoading() {
         const overlay = document.getElementById('fullscreen-loading');
-        if (overlay) overlay.style.display = 'flex';
+        if (overlay) {
+            overlay.classList.remove('hidden');
+            overlay.style.display = 'flex';
+        }
         const indicator = document.getElementById('loading-indicator');
         if (indicator) indicator.classList.add('active');
     }
@@ -150,32 +153,53 @@ class BasketballData {
     }
 
     async loadSeason(seasonId) {
+        const previousId = this.seasonId;
+        const previousMeta = this.seasonMeta;
+        const previousTeams = this.teams;
+        const previousGames = this.games;
+        const previousConfigs = this.leagueConfigs;
+        const previousNews = this.newsIndex;
+
         this.seasonId = seasonId;
         this.seasonMeta = this.getSeasonList().find(season => season.id === seasonId) || { id: seasonId };
-        this.persistSeasonId(seasonId);
-
-        this.teams = [];
-        this.games = [];
-        this.leagueConfigs = {};
-        this.newsIndex = [];
-
-        this.updateProgress(15, 'Загрузка конфигурации лиг...');
-        this.leagueConfigs = await this.loadJSON(this.seasonFile('leagues-config.json'));
-
-        this.updateProgress(35, 'Загрузка команд...');
-        this.teams = await this.loadJSON(this.seasonFile('teams.json'));
-
-        this.updateProgress(55, 'Загрузка матчей...');
-        const packedGames = await this.loadJSON(this.seasonFile('games.json'));
-        this.ingestPackedGames(packedGames);
 
         try {
-            this.newsIndex = await this.loadJSON(this.seasonFile('news-index.json'));
-        } catch (error) {
+            this.teams = [];
+            this.games = [];
+            this.leagueConfigs = {};
             this.newsIndex = [];
-        }
 
-        this.updateProgress(100, 'Готово!');
+            this.updateProgress(15, 'Загрузка конфигурации лиг...');
+            this.leagueConfigs = await this.loadJSON(this.seasonFile('leagues-config.json'));
+
+            this.updateProgress(35, 'Загрузка команд...');
+            const teams = await this.loadJSON(this.seasonFile('teams.json'));
+            this.teams = (Array.isArray(teams) ? teams : []).map(team => ({
+                ...team,
+                logo: BasketballUtils.resolveTeamLogo(team.logo)
+            }));
+
+            this.updateProgress(55, 'Загрузка матчей...');
+            const packedGames = await this.loadJSON(this.seasonFile('games.json'));
+            this.ingestPackedGames(packedGames);
+
+            try {
+                this.newsIndex = await this.loadJSON(this.seasonFile('news-index.json'));
+            } catch (error) {
+                this.newsIndex = [];
+            }
+
+            this.persistSeasonId(seasonId);
+            this.updateProgress(100, 'Готово!');
+        } catch (error) {
+            this.seasonId = previousId;
+            this.seasonMeta = previousMeta;
+            this.teams = previousTeams;
+            this.games = previousGames;
+            this.leagueConfigs = previousConfigs;
+            this.newsIndex = previousNews;
+            throw error;
+        }
     }
 
     async switchSeason(seasonId) {
@@ -186,6 +210,9 @@ class BasketballData {
         try {
             await this.loadSeason(seasonId);
             return true;
+        } catch (error) {
+            console.error('Ошибка смены сезона:', error);
+            return false;
         } finally {
             this.hideLoading();
         }
@@ -224,7 +251,10 @@ class BasketballData {
 
     hideLoading() {
         const overlay = document.getElementById('fullscreen-loading');
-        if (overlay) overlay.style.display = 'none';
+        if (overlay) {
+            overlay.classList.add('hidden');
+            overlay.style.display = 'none';
+        }
         const indicator = document.getElementById('loading-indicator');
         if (indicator) indicator.classList.remove('active');
     }
@@ -411,6 +441,7 @@ class BasketballData {
         game.location = info.venue;
         game.gameType = info.gameType || 'regular';
         game.league = info.league || 'A';
+        game._fullDate = this.createValidDate(game.date, game.time);
     }
 
     hasGameScore(game) {
@@ -418,7 +449,7 @@ class BasketballData {
     }
 
     normalizeTeamName(teamName) {
-        return teamName.trim().toUpperCase();
+        return String(teamName || '').trim().toUpperCase();
     }
 
     getLeagueName(league) {
@@ -429,6 +460,15 @@ class BasketballData {
         const normalizedName = this.normalizeTeamName(teamName);
         return this.teams.find(team => 
             this.normalizeTeamName(team.name) === normalizedName && team.league === league
+        );
+    }
+
+    getLeaguesForTeam(teamName) {
+        const normalizedName = this.normalizeTeamName(teamName);
+        return this.getLeagueIds().filter(leagueId =>
+            this.teams.some(team =>
+                this.normalizeTeamName(team.name) === normalizedName && team.league === leagueId
+            )
         );
     }
 
@@ -470,8 +510,10 @@ class BasketballData {
     removeDuplicateGames(games) {
         const seen = new Set();
         return games.filter(game => {
-            // Создаем ключ на основе команд и даты
-            const key = `${this.normalizeTeamName(game.teamHome)}_${this.normalizeTeamName(game.teamAway)}_${game._fullDate.toISOString().split('T')[0]}`;
+            if (!game.teamHome || !game.teamAway || !game._fullDate || isNaN(game._fullDate.getTime())) {
+                return false;
+            }
+            const key = `${game.league}_${this.normalizeTeamName(game.teamHome)}_${this.normalizeTeamName(game.teamAway)}_${game._fullDate.toISOString().split('T')[0]}`;
             
             if (seen.has(key)) {
                 console.log(`Removing duplicate: ${game.teamHome} vs ${game.teamAway}`);
@@ -516,9 +558,9 @@ class BasketballData {
     getGamesByTeam(teamName, league) {
         const allGames = this.getAllGamesForDisplay();
         const normalizedTeamName = this.normalizeTeamName(teamName);
-        return allGames.filter(game => 
-            game.league == league && (
-            this.normalizeTeamName(game.teamHome) === normalizedTeamName || 
+        return allGames.filter(game =>
+            game.league === league && (
+            this.normalizeTeamName(game.teamHome) === normalizedTeamName ||
             this.normalizeTeamName(game.teamAway) === normalizedTeamName)
         );
     }
@@ -865,11 +907,97 @@ class BasketballData {
     generateEmptyBracket(league) {
         const standings = this.getLeagueStandings(league);
         const config = this.getLeagueConfig(league);
-        const playoffTeamsCount = config.playoffTeams || 6;
+        const playoffTeamsCount = Number(config?.playoffTeams) || 6;
         
         // Берем топ команд
         const topTeams = standings.slice(0, playoffTeamsCount);
         
+        if (playoffTeamsCount === 8) {
+            return {
+                quarterfinals: [
+                    {
+                        id: 'qf_1',
+                        team1: topTeams[0]?.teamName,
+                        team1Seed: 1,
+                        team2: topTeams[7]?.teamName,
+                        team2Seed: 8,
+                        winner: null,
+                        games: []
+                    },
+                    {
+                        id: 'qf_2',
+                        team1: topTeams[3]?.teamName,
+                        team1Seed: 4,
+                        team2: topTeams[4]?.teamName,
+                        team2Seed: 5,
+                        winner: null,
+                        games: []
+                    },
+                    {
+                        id: 'qf_3',
+                        team1: topTeams[1]?.teamName,
+                        team1Seed: 2,
+                        team2: topTeams[6]?.teamName,
+                        team2Seed: 7,
+                        winner: null,
+                        games: []
+                    },
+                    {
+                        id: 'qf_4',
+                        team1: topTeams[2]?.teamName,
+                        team1Seed: 3,
+                        team2: topTeams[5]?.teamName,
+                        team2Seed: 6,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                semifinals: [
+                    {
+                        id: 'sf_1',
+                        team1: null,
+                        team1Seed: null,
+                        team2: null,
+                        team2Seed: null,
+                        winner: null,
+                        games: []
+                    },
+                    {
+                        id: 'sf_2',
+                        team1: null,
+                        team1Seed: null,
+                        team2: null,
+                        team2Seed: null,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                thirdPlace: [
+                    {
+                        id: 'tp',
+                        team1: null,
+                        team1Seed: null,
+                        team2: null,
+                        team2Seed: null,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                final: [
+                    {
+                        id: 'final',
+                        team1: null,
+                        team1Seed: null,
+                        team2: null,
+                        team2Seed: null,
+                        winner: null,
+                        games: []
+                    }
+                ],
+                champion: null
+            };
+        }
+
         if (playoffTeamsCount === 6) {
             // ПРАВИЛЬНАЯ СЕТКА ДЛЯ 6 КОМАНД:
             // 3-6 и 4-5 играют в 1/4
@@ -1318,7 +1446,7 @@ class BasketballData {
     generatePlayoffBracket(league) {
         const standings = this.getLeagueStandings(league);
         const config = this.getLeagueConfig(league);
-        const playoffTeamsCount = config.playoffTeams || 6;
+        const playoffTeamsCount = Number(config?.playoffTeams) || 6;
         
         // Берем топ команд для плей-офф с их местами
         const playoffTeams = standings.slice(0, playoffTeamsCount).map((team, index) => ({
@@ -1334,7 +1462,85 @@ class BasketballData {
             champion: null
         };
         
-        if (playoffTeamsCount === 6) {
+        if (playoffTeamsCount === 8) {
+            bracket.quarterfinals = [
+                {
+                    team1: playoffTeams[0]?.teamName || "TBD",
+                    team1Seed: 1,
+                    team2: playoffTeams[7]?.teamName || "TBD",
+                    team2Seed: 8,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                },
+                {
+                    team1: playoffTeams[3]?.teamName || "TBD",
+                    team1Seed: 4,
+                    team2: playoffTeams[4]?.teamName || "TBD",
+                    team2Seed: 5,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                },
+                {
+                    team1: playoffTeams[1]?.teamName || "TBD",
+                    team1Seed: 2,
+                    team2: playoffTeams[6]?.teamName || "TBD",
+                    team2Seed: 7,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                },
+                {
+                    team1: playoffTeams[2]?.teamName || "TBD",
+                    team1Seed: 3,
+                    team2: playoffTeams[5]?.teamName || "TBD",
+                    team2Seed: 6,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                }
+            ];
+            bracket.semifinals = [
+                {
+                    team1: "Победитель 1/4 1",
+                    team1Seed: null,
+                    team2: "Победитель 1/4 2",
+                    team2Seed: null,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                },
+                {
+                    team1: "Победитель 1/4 3",
+                    team1Seed: null,
+                    team2: "Победитель 1/4 4",
+                    team2Seed: null,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null
+                }
+            ];
+            bracket.thirdPlace = [
+                {
+                    team1: "Проигравший 1/2 1",
+                    team1Seed: null,
+                    team2: "Проигравший 1/2 2",
+                    team2Seed: null,
+                    score1: 0,
+                    score2: 0,
+                    winner: null,
+                    winnerSeed: null,
+                    isThirdPlace: true
+                }
+            ];
+        } else if (playoffTeamsCount === 6) {
             // Формат для 6 команд: 3-6, 4-5 в четвертьфинале
             bracket.quarterfinals = [
                 {

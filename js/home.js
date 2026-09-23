@@ -18,10 +18,13 @@ class HomePage {
         this.updateLeagueIndicator('home');
         
         if (this.dataManager.ready) {
-            this.dataManager.ready.then(() => {
+            this.dataManager.ready.then(async () => {
                 this.setupSeasonSwitcher();
                 this.renderLeagueShell();
-                this.renderHomePage();
+                await this.renderHomePage();
+            }).catch(error => {
+                console.error('Ошибка отрисовки сезона:', error);
+                this.dataManager.hideLoading();
             });
         }
     }
@@ -38,10 +41,19 @@ class HomePage {
         select.value = this.dataManager.seasonId;
 
         select.addEventListener('change', async () => {
-            const changed = await this.dataManager.switchSeason(select.value);
-            if (changed) {
-                this.newsManager.newsCache = null;
-                await this.refreshAfterSeasonChange();
+            try {
+                const changed = await this.dataManager.switchSeason(select.value);
+                if (changed) {
+                    this.newsManager.newsCache = null;
+                    await this.refreshAfterSeasonChange();
+                } else {
+                    select.value = this.dataManager.seasonId;
+                }
+            } catch (error) {
+                console.error('Ошибка обновления сезона:', error);
+                select.value = this.dataManager.seasonId;
+            } finally {
+                this.dataManager.hideLoading();
             }
         });
 
@@ -62,11 +74,19 @@ class HomePage {
         const sectionId = active?.dataset.section || 'home';
 
         if (sectionId === 'news') {
+            if (!this.dataManager.hasNews()) {
+                this.openSection('home');
+                return;
+            }
             await this.newsManager.loadAndDisplayNews('news-container', this.newsManager.currentFilter || 'all');
             return;
         }
         if (sectionId === 'top-stats' && window.topStatsManager) {
             const leagues = this.dataManager.getLeaguesReadyForTopStats();
+            if (!leagues.length) {
+                this.openSection('home');
+                return;
+            }
             window.topStatsManager.syncLeagueFilters(leagues);
             window.topStatsManager.loadAndDisplayStats(window.topStatsManager.currentFilter);
             return;
@@ -145,6 +165,8 @@ class HomePage {
         this.renderLeagueNav();
         this.renderLeaguePages();
         this.renderNewsFilters();
+        const active = document.querySelector('.nav-link.active');
+        this.showSection(active?.dataset.section || 'home');
     }
 
     renderLeagueNav() {
@@ -197,30 +219,38 @@ class HomePage {
         `;
     }
 
-    updateLeagueIndicator(sectionId) {
+    updateLeagueIndicator(sectionId, leagueId) {
         const indicator = document.getElementById('league-indicator');
-        if (!indicator) return;
+        const header = document.querySelector('header');
+        const leagueClasses = ['league-a', 'league-b', 'league-f', 'home'];
 
-        indicator.className = 'current-league-indicator';
-
-        if (sectionId === 'home') {
-            indicator.classList.add('home');
-            return;
+        header?.classList.remove(...leagueClasses);
+        if (indicator) {
+            indicator.className = 'current-league-indicator';
         }
 
-        const league = this.dataManager.getLeagueBySectionId(sectionId);
+        let league = null;
+        if (sectionId === 'top-stats') {
+            league = this.dataManager.getLeagueById(leagueId || window.topStatsManager?.currentFilter);
+        } else if (sectionId && sectionId !== 'home' && sectionId !== 'news') {
+            league = this.dataManager.getLeagueBySectionId(sectionId);
+        }
+
         if (league) {
-            indicator.classList.add(league.cssClass);
+            header?.classList.add(league.cssClass);
+            indicator?.classList.add(league.cssClass);
         }
     }
 
     showSection(sectionId) {
         document.querySelectorAll('section').forEach(section => {
             section.style.display = 'none';
+            section.classList.add('hidden-section');
         });
 
         const targetSection = document.getElementById(sectionId);
         if (targetSection) {
+            targetSection.classList.remove('hidden-section');
             targetSection.style.display = 'block';
         }
     }
@@ -243,40 +273,71 @@ class HomePage {
         if (!el) return;
 
         const archived = Boolean(this.dataManager.seasonMeta?.archived);
-        const hasGames = this.dataManager.getAllGamesForDisplay().length > 0;
+        const games = this.dataManager.getAllGamesForDisplay().filter(game =>
+            game._fullDate && !isNaN(game._fullDate.getTime())
+        );
+        const total = games.length;
+        const played = games.filter(game => game._hasResult).length;
+        const remaining = Math.max(0, total - played);
+        const lateThreshold = Math.min(8, Math.max(3, Math.ceil(total * 0.1)));
 
-        if (archived) {
-            el.dataset.state = 'archived';
+        const setIntro = (state, title, badge, text) => {
+            el.dataset.state = state;
             el.innerHTML = `
                 <div class="home-intro-row">
-                    <h2>Сезон завершён</h2>
-                    <span class="home-intro-badge">Архив</span>
+                    <h2>${title}</h2>
+                    <span class="home-intro-badge">${badge}</span>
                 </div>
-                <p>Спасибо командам, судьям и болельщикам. Чемпионы определены — таблицы, плей-офф и новости остаются здесь.</p>
+                <p>${text}</p>
             `;
+        };
+
+        if (archived || (total > 0 && remaining === 0 && played > 0)) {
+            setIntro(
+                archived ? 'archived' : 'done',
+                'Сезон завершён',
+                archived ? 'Архив' : 'Финиш',
+                'Все матчи сыграны. Таблицы, плей-офф остаются здесь — спасибо командам, судьям и болельщикам.'
+            );
             return;
         }
 
-        if (hasGames) {
-            el.dataset.state = 'live';
-            el.innerHTML = `
-                <div class="home-intro-row">
-                    <h2>Сезон в разгаре</h2>
-                    <span class="home-intro-badge">Идёт</span>
-                </div>
-                <p>Следите за таблицей, ближайшими матчами и новостями. Результаты появляются по ходу туров.</p>
-            `;
+        if (total === 0 || played === 0) {
+            if (total === 0) {
+                setIntro(
+                    'upcoming',
+                    'Сезон начинается',
+                    'Скоро',
+                    'Добро пожаловать на чемпионат Ульяновской области. Расписание и результаты появятся здесь.'
+                );
+                return;
+            }
+
+            setIntro(
+                'start',
+                'Старт сезона',
+                'Анонс',
+                `В календаре уже ${total} ${this.getPluralFormMatch(total)} — первый результат откроет таблицу. Следите за анонсами ближайшего тура.`
+            );
             return;
         }
 
-        el.dataset.state = 'upcoming';
-        el.innerHTML = `
-            <div class="home-intro-row">
-                <h2>Сезон начинается</h2>
-                <span class="home-intro-badge">Скоро</span>
-            </div>
-            <p>Добро пожаловать на чемпионат Ульяновской области. Следите за ходом сезона — расписание и результаты появятся здесь.</p>
-        `;
+        if (remaining <= lateThreshold) {
+            setIntro(
+                'stretch',
+                'Финишная прямая',
+                'Финиш',
+                `Осталось ${remaining} ${this.getPluralFormMatch(remaining)}. Таблица и плей-офф решаются в ближайших матчах.`
+            );
+            return;
+        }
+
+        setIntro(
+            'live',
+            'Сезон в разгаре',
+            'Идёт',
+            `Сыграно ${played} из ${total} ${this.getPluralFormMatch(total)}. Результаты появляются по ходу туров — следите за таблицей и ближайшими играми.`
+        );
     }
 
     updateSeasonNav() {
@@ -290,6 +351,9 @@ class HomePage {
 
         if (window.topStatsManager) {
             window.topStatsManager.syncLeagueFilters(topLeagues);
+            if (!topLeagues.includes(window.topStatsManager.currentFilter)) {
+                window.topStatsManager.currentFilter = topLeagues[0] || 'A';
+            }
         }
 
         const active = document.querySelector('.nav-link.active');
@@ -478,8 +542,7 @@ class HomePage {
     }
 
     onImageError(img) {
-        img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
-        img.onerror = null;
+        BasketballUtils.handleImageError({ target: img });
     }
 
     setupTeamPreviewClickHandlers() {
@@ -817,10 +880,11 @@ class HomePage {
                             </thead>
                             <tbody>
                                 ${standings.map((stand, index) => {
-                                    const isPlayoffTeam = index < config.playoffTeams;
-                                    const style = isPlayoffTeam ? 'background-color: rgba(40, 167, 69, 0.05);' : '';
+                                    const playoffCount = Number(config?.playoffTeams) || 0;
+                                    const isPlayoffTeam = playoffCount > 0 && index < playoffCount;
+                                    const isLastPlayoff = isPlayoffTeam && index === playoffCount - 1;
 
-                                    return `<tr class="clickable-row" data-team-name="${stand.teamName}" style="${style}">
+                                    return `<tr class="clickable-row${isPlayoffTeam ? ' playoff-spot' : ''}${isLastPlayoff ? ' playoff-spot-last' : ''}" data-team-name="${stand.teamName}">
                                         <td>${index + 1}</td>
                                         <td>
                                             <div class="team-row">
@@ -1097,7 +1161,7 @@ class HomePage {
 
     getTeamLogo(teamName, league) {
         const team = this.dataManager.getTeamByName(teamName, league);
-        return team?.logo || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjEyIiB5PSIxMiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1zaXplPSIxMCI+VEVBTTwvdGV4dD4KPC9zdmc+';
+        return BasketballUtils.resolveTeamLogo(team?.logo);
     }
 
     getLeagueName(leagueCode) {
