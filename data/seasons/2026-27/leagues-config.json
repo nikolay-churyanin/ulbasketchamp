@@ -23,7 +23,7 @@
     "name": "Женская лига",
     "format": "round",
     "round": {
-      "numberOfRounds": 1,
+      "numberOfRounds": 2,
       "playoffTeams": 4
     }
   }
