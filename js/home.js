@@ -20,6 +20,7 @@ class HomePage {
         if (this.dataManager.ready) {
             this.dataManager.ready.then(async () => {
                 this.setupSeasonSwitcher();
+                this.setupLeagueFormatPopovers();
                 this.renderLeagueShell();
                 await this.renderHomePage();
             }).catch(error => {
@@ -190,10 +191,23 @@ class HomePage {
         const host = document.getElementById('league-pages');
         if (!host) return;
 
-        host.innerHTML = this.dataManager.getLeagues().map(league => `
+        host.innerHTML = this.dataManager.getLeagues().map(league => {
+            const note = this.dataManager.getLeagueFormatDescription(league.id);
+            const popoverId = `${league.sectionId}-format`;
+            return `
             <section id="${league.sectionId}" class="league-section hidden-section">
                 <div class="league-header ${league.cssClass}">
                     <h2>${league.name}</h2>
+                    <button type="button" class="league-info-btn" aria-label="Формат соревнований" aria-expanded="false" aria-controls="${popoverId}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 11v6"></path>
+                            <circle cx="12" cy="8" r="0.8" fill="currentColor" stroke="none"></circle>
+                        </svg>
+                    </button>
+                    <div id="${popoverId}" class="league-format-popover" hidden>
+                        <p>${note}</p>
+                    </div>
                 </div>
                 <h3 class="league-section-title">Положение команд</h3>
                 <div class="teams-container" id="${league.sectionId}-teams"></div>
@@ -201,7 +215,50 @@ class HomePage {
                 <h3 class="league-section-title">Матчи</h3>
                 <div class="matches-container" id="${league.sectionId}-matches"></div>
             </section>
-        `).join('');
+        `;
+        }).join('');
+    }
+
+    setupLeagueFormatPopovers() {
+        if (this._leagueFormatPopoversReady) return;
+        this._leagueFormatPopoversReady = true;
+
+        document.addEventListener('click', (event) => {
+            const btn = event.target.closest('.league-info-btn');
+            if (btn) {
+                event.stopPropagation();
+                const header = btn.closest('.league-header');
+                const popover = header?.querySelector('.league-format-popover');
+                const willOpen = popover?.hidden;
+                this.closeLeagueFormatPopovers();
+                if (willOpen && popover) {
+                    popover.hidden = false;
+                    btn.setAttribute('aria-expanded', 'true');
+                    const rect = btn.getBoundingClientRect();
+                    popover.style.top = `${Math.round(rect.bottom + 8)}px`;
+                    popover.style.right = `${Math.round(window.innerWidth - rect.right)}px`;
+                    popover.style.left = 'auto';
+                }
+                return;
+            }
+            if (!event.target.closest('.league-format-popover')) {
+                this.closeLeagueFormatPopovers();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') this.closeLeagueFormatPopovers();
+        });
+        window.addEventListener('scroll', () => this.closeLeagueFormatPopovers(), true);
+    }
+
+    closeLeagueFormatPopovers() {
+        document.querySelectorAll('.league-format-popover').forEach(popover => {
+            popover.hidden = true;
+        });
+        document.querySelectorAll('.league-info-btn').forEach(btn => {
+            btn.setAttribute('aria-expanded', 'false');
+        });
     }
 
     renderNewsFilters() {

@@ -59,6 +59,78 @@ class BasketballData {
         return Number(settings?.playoffTeams) || 0;
     }
 
+    pluralRu(n, one, few, many) {
+        const abs = Math.abs(Number(n) || 0);
+        const n10 = abs % 10;
+        const n100 = abs % 100;
+        if (n10 === 1 && n100 !== 11) return one;
+        if (n10 >= 2 && n10 <= 4 && (n100 < 10 || n100 >= 20)) return few;
+        return many;
+    }
+
+    formatRoundCount(n) {
+        const count = Number(n) || 0;
+        return `${count} ${this.pluralRu(count, 'круг', 'круга', 'кругов')}`;
+    }
+
+    formatTeamCount(n) {
+        const count = Number(n) || 0;
+        return `${count} ${this.pluralRu(count, 'команда', 'команды', 'команд')}`;
+    }
+
+    getLeagueFormatDescription(leagueId) {
+        const format = this.getLeagueFormat(leagueId);
+        const settings = this.getFormatSettings(leagueId);
+        const teams = this.getTeamsByLeague(leagueId).length;
+
+        if (format === 'split-groups' && settings) {
+            const groups = Array.isArray(settings.groups) ? settings.groups : [];
+            const stage1 = this.formatRoundCount(settings.stage1Rounds || 1);
+            const groupRounds = this.formatRoundCount(settings.groupRounds || 1);
+            const groupBits = [];
+            let offset = 0;
+            const qualifyBits = [];
+
+            groups.forEach(group => {
+                const size = Number(group.size) || 0;
+                const from = offset + 1;
+                const to = offset + size;
+                offset += size;
+                const name = group.name || `Группа ${group.id}`;
+                groupBits.push(`${name} (места ${from}–${to})`);
+                const playoff = Number(group.playoffTeams) || 0;
+                if (!playoff) return;
+                if (playoff >= size) {
+                    qualifyBits.push(`${name} — все команды`);
+                } else {
+                    qualifyBits.push(`${name} — ${playoff} ${this.pluralRu(playoff, 'лучшая', 'лучшие', 'лучших')}`);
+                }
+            });
+
+            const head = teams
+                ? `${this.formatTeamCount(teams)} играют чемпионат в несколько этапов.`
+                : 'Чемпионат проходит в несколько этапов.';
+            const splitText = groupBits.length
+                ? ` Затем по итогам первого этапа команды делятся: ${groupBits.join('; ')} — и играют ещё ${groupRounds} внутри группы. В таблицу группы идут все игры с начала сезона.`
+                : '';
+            const playoffText = qualifyBits.length
+                ? ` В плей-офф выходят: ${qualifyBits.join('; ')}.`
+                : '';
+
+            return `${head} Сначала ${stage1}.${splitText}${playoffText}`.replace(/\s+/g, ' ').trim();
+        }
+
+        const rounds = Number(settings?.numberOfRounds) || 1;
+        const playoff = this.getPlayoffTeamsCount(leagueId);
+        const head = teams
+            ? `${this.formatTeamCount(teams)} играют ${this.formatRoundCount(rounds)}.`
+            : `Регулярный сезон — ${this.formatRoundCount(rounds)}.`;
+        const playoffText = playoff
+            ? ` В плей-офф выходят ${this.formatTeamCount(playoff)}.`
+            : '';
+        return `${head}${playoffText}`;
+    }
+
     getLeagues() {
         return Object.entries(this.leagueConfigs || {}).map(([id, config]) => {
             const slug = String(id).toLowerCase();
