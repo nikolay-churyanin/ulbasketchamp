@@ -225,28 +225,32 @@ class MatchesRenderer {
             statusClass = 'status-finished';
         } else if (isUpcoming) {
             const now = new Date();
-            
-            // Нормализуем даты до начала дня в UTC для правильного сравнения
-            const gameDay = new Date(Date.UTC(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate()));
-            const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-            
-            // Вычисляем разницу в днях
-            const diffTime = gameDay - today;
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) {
-                statusText = 'Сегодня';
-            } else if (diffDays === 1) {
-                statusText = 'Завтра';
-            } else if (diffDays <= 7) {
-                statusText = 'На этой неделе';
+
+            if (this.dataManager.isGameLive(game, now)) {
+                statusText = 'Идёт';
+                statusClass = 'status-live';
             } else {
-                statusText = 'Предстоящий';
+                // Нормализуем даты до начала дня в UTC для правильного сравнения
+                const gameDay = new Date(Date.UTC(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate()));
+                const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+
+                const diffTime = gameDay - today;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays === 0) {
+                    statusText = 'Сегодня';
+                } else if (diffDays === 1) {
+                    statusText = 'Завтра';
+                } else if (diffDays <= 7) {
+                    statusText = 'На этой неделе';
+                } else {
+                    statusText = 'Предстоящий';
+                }
+                statusClass = 'status-upcoming';
             }
-            statusClass = 'status-upcoming';
         }
 
-        if (showLeague) {
+        if (showLeague && statusClass !== 'status-live') {
             statusText = this.dataManager.getLeagueName(league);
             statusClass = `league-badge-${String(league).toLowerCase()}`;
         }
@@ -401,9 +405,12 @@ class MatchesRenderer {
         if (game._hasResult || game._isFromResults || (game.scoreHome !== null && game.scoreAway !== null)) {
             matchStatus = 'Завершен';
             statusClass = 'status-finished';
-        } else if (gameDate && gameDate < now) {
-            matchStatus = 'Завершен';
-            statusClass = 'status-finished';
+        } else if (this.dataManager.isGameLive(game, now)) {
+            matchStatus = 'Идёт';
+            statusClass = 'status-live';
+        } else if (gameDate && this.dataManager.isGameOnSchedule(game, now)) {
+            matchStatus = 'Предстоящий';
+            statusClass = 'status-upcoming';
         }
         
         const homeLogo = this.getTeamLogo(game.teamHome, league);

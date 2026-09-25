@@ -999,20 +999,33 @@ class BasketballData {
 
     getFilteredScheduledGames(games) {
         const now = new Date();
-        const ninetyMinutesMs = 90 * 60 * 1000;
-        
-        return games.filter(game => {
-            // Игры с результатами показываем всегда
-            if (game._hasResult || game._isFromResults) {
-                return true;
-            }
-            
-            // Для игр без результатов проверяем время
-            const gameTime = game._fullDate;
-            const timeDiff = now - gameTime;
-            
-            return timeDiff <= ninetyMinutesMs;
-        });
+        return games.filter(game => this.isGameScored(game) || this.isGameOnSchedule(game, now));
+    }
+
+    getMatchDurationMs() {
+        return 95 * 60 * 1000;
+    }
+
+    isGameScored(game) {
+        return Boolean(game?._hasResult || game?._isFromResults || this.hasGameScore(game));
+    }
+
+    getGameElapsedMs(game, now = new Date()) {
+        const gameTime = game?._fullDate;
+        if (!gameTime || isNaN(gameTime.getTime())) return null;
+        return now - gameTime;
+    }
+
+    isGameLive(game, now = new Date()) {
+        if (this.isGameScored(game)) return false;
+        const elapsed = this.getGameElapsedMs(game, now);
+        return elapsed !== null && elapsed >= 0 && elapsed <= this.getMatchDurationMs();
+    }
+
+    isGameOnSchedule(game, now = new Date()) {
+        if (this.isGameScored(game)) return false;
+        const elapsed = this.getGameElapsedMs(game, now);
+        return elapsed !== null && elapsed <= this.getMatchDurationMs();
     }
 
     getGameById(gameId) {

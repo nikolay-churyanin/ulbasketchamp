@@ -623,10 +623,8 @@ class HomePage {
         // Получаем ближайшие игры из всех лиг
         const allGames = this.dataManager.getAllGamesForDisplay();
         
-        // Фильтруем предстоящие игры (без результатов)
-        const now = new Date();
         const upcomingGames = allGames
-            .filter(game => !game._hasResult && game._fullDate > now)
+            .filter(game => this.dataManager.isGameOnSchedule(game))
             .sort((a, b) => a._fullDate - b._fullDate);
         const section = container.closest('.upcoming-games-section');
 
