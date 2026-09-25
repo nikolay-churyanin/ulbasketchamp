@@ -190,6 +190,18 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
+.standings-table tr.standings-group-label td {
+    background: #f3f4f6;
+    color: #6b7280;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    border-bottom: 1px solid #ececec;
+    cursor: default;
+}
+
 .standings-table th {
     background: var(--navy);
     color: white;

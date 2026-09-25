@@ -38,6 +38,27 @@ class BasketballData {
         return this.leagueConfigs[league];
     }
 
+    getLeagueFormat(league) {
+        const config = typeof league === 'string' ? this.getLeagueConfig(league) : league;
+        return config?.format || 'round';
+    }
+
+    getFormatSettings(league) {
+        const config = typeof league === 'string' ? this.getLeagueConfig(league) : league;
+        if (!config) return null;
+        const format = config.format || 'round';
+        return config[format] || null;
+    }
+
+    getPlayoffTeamsCount(league) {
+        const format = this.getLeagueFormat(league);
+        const settings = this.getFormatSettings(league);
+        if (format === 'split-groups') {
+            return (settings?.groups || []).reduce((sum, group) => sum + (Number(group.playoffTeams) || 0), 0);
+        }
+        return Number(settings?.playoffTeams) || 0;
+    }
+
     getLeagues() {
         return Object.entries(this.leagueConfigs || {}).map(([id, config]) => {
             const slug = String(id).toLowerCase();
@@ -47,8 +68,8 @@ class BasketballData {
                 slug,
                 sectionId: `league-${slug}`,
                 cssClass: `league-${slug}`,
-                playoffTeams: config?.playoffTeams,
-                regularSeasonRounds: config?.regularSeasonRounds
+                format: this.getLeagueFormat(id),
+                playoffTeams: this.getPlayoffTeamsCount(id)
             };
         });
     }
@@ -77,15 +98,36 @@ class BasketballData {
         return Array.isArray(this.newsIndex) && this.newsIndex.length > 0;
     }
 
-    getRegularSeasonTotals(league) {
-        const config = this.getLeagueConfig(league);
-        const teams = this.getTeamsByLeague(league);
-        const totalTeams = teams.length;
-        if (!config?.regularSeasonRounds || totalTeams < 2) {
-            return { played: 0, total: 0 };
+    getSplitConfig(league) {
+        if (this.getLeagueFormat(league) !== 'split-groups') return null;
+        return this.getFormatSettings(league);
+    }
+
+    getRegularSeasonGameTotal(league) {
+        const totalTeams = this.getTeamsByLeague(league).length;
+        if (totalTeams < 2) return 0;
+
+        const split = this.getSplitConfig(league);
+        if (split) {
+            const stage1Rounds = Number(split.stage1Rounds) || 1;
+            const groupRounds = Number(split.groupRounds) || 1;
+            const stage1 = (totalTeams * (totalTeams - 1) * stage1Rounds) / 2;
+            const groups = Array.isArray(split.groups) ? split.groups : [];
+            const groupGames = groups.reduce((sum, group) => {
+                const size = Number(group.size) || 0;
+                if (size < 2) return sum;
+                return sum + (size * (size - 1) * groupRounds) / 2;
+            }, 0);
+            return stage1 + groupGames;
         }
 
-        const total = (totalTeams * (totalTeams - 1) * config.regularSeasonRounds) / 2;
+        const rounds = Number(this.getFormatSettings(league)?.numberOfRounds) || 0;
+        if (!rounds) return 0;
+        return (totalTeams * (totalTeams - 1) * rounds) / 2;
+    }
+
+    getRegularSeasonTotals(league) {
+        const total = this.getRegularSeasonGameTotal(league);
         const played = this.games.filter(game =>
             game.league === league &&
             game.scoreHome !== null &&
@@ -94,6 +136,73 @@ class BasketballData {
         ).length;
 
         return { played, total };
+    }
+
+    getPairKey(teamA, teamB) {
+        return [this.normalizeTeamName(teamA), this.normalizeTeamName(teamB)].sort().join('|');
+    }
+
+    getScoredRegularGames(league) {
+        return this.games
+            .filter(game =>
+                game.league === league &&
+                game.gameType !== 'playoff' &&
+                game.scoreHome !== null &&
+                game.scoreAway !== null
+            )
+            .slice()
+            .sort((a, b) => (a._fullDate || 0) - (b._fullDate || 0));
+    }
+
+    getStage1Games(league) {
+        const split = this.getSplitConfig(league);
+        const stage1Rounds = Number(split?.stage1Rounds) || 1;
+        const pairCount = new Map();
+        const stage1 = [];
+
+        this.getScoredRegularGames(league).forEach(game => {
+            const key = this.getPairKey(game.teamHome, game.teamAway);
+            const played = (pairCount.get(key) || 0) + 1;
+            pairCount.set(key, played);
+            if (played <= stage1Rounds) stage1.push(game);
+        });
+
+        return stage1;
+    }
+
+    getStage1ExpectedGames(league) {
+        const totalTeams = this.getTeamsByLeague(league).length;
+        const split = this.getSplitConfig(league);
+        if (!split || totalTeams < 2) return 0;
+        const rounds = Number(split.stage1Rounds) || 1;
+        return (totalTeams * (totalTeams - 1) * rounds) / 2;
+    }
+
+    isSplitStage1Complete(league) {
+        if (!this.getSplitConfig(league)) return false;
+        return this.getStage1Games(league).length >= this.getStage1ExpectedGames(league);
+    }
+
+    getSplitGroupTables(league) {
+        const split = this.getSplitConfig(league);
+        if (!split || !this.isSplitStage1Complete(league)) return null;
+
+        const stage1Standings = this.getLeagueStandings(league, { games: this.getStage1Games(league) });
+        const groups = Array.isArray(split.groups) ? split.groups : [];
+        let offset = 0;
+
+        return groups.map(group => {
+            const size = Number(group.size) || 0;
+            const members = stage1Standings.slice(offset, offset + size);
+            offset += size;
+            const teamNames = members.map(row => row.teamName);
+            return {
+                id: group.id,
+                name: group.name || `Группа ${group.id}`,
+                playoffTeams: Number(group.playoffTeams) || 0,
+                standings: this.getLeagueStandings(league, { teamNames })
+            };
+        }).filter(group => group.standings.length > 0);
     }
 
     isLeagueReadyForTopStats(league) {
@@ -565,11 +674,17 @@ class BasketballData {
         );
     }
 
-    getLeagueStandings(league) {
-        const teamsInLeague = this.getTeamsByLeague(league);
+    getLeagueStandings(league, options = {}) {
+        const teamNameFilter = Array.isArray(options.teamNames) ? options.teamNames : null;
+        const allowedNames = teamNameFilter
+            ? new Set(teamNameFilter.map(name => this.normalizeTeamName(name)))
+            : null;
+
+        const teamsInLeague = this.getTeamsByLeague(league).filter(team =>
+            !allowedNames || allowedNames.has(this.normalizeTeamName(team.name))
+        );
         const standings = new Map();
-        
-        // Инициализируем все команды лиги
+
         teamsInLeague.forEach(team => {
             standings.set(this.normalizeTeamName(team.name), {
                 teamName: team.name,
@@ -583,84 +698,74 @@ class BasketballData {
                 trand: ""
             });
         });
-        
-        // Обрабатываем все игры с результатами
-        const leagueGames = this.games
-            .filter(game => game.scoreHome !== null && game.scoreAway !== null && game.league === league && game.gameType != 'playoff');
-        
-        leagueGames.sort((a, b) => a._fullDate - b._fullDate).forEach(game => {
-            const homeTeamName = game.teamHome;
-            const awayTeamName = game.teamAway;
-            
-            const homeNormalized = this.normalizeTeamName(homeTeamName);
-            const awayNormalized = this.normalizeTeamName(awayTeamName);
-            
-            const home = standings.get(homeNormalized);
-            const away = standings.get(awayNormalized);
-            
-            if (home && away) {
-                // Обновляем общую статистику
-                home.played++; 
-                away.played++;
-                home.pointsFor += game.scoreHome; 
-                home.pointsAgainst += game.scoreAway;
-                away.pointsFor += game.scoreAway; 
-                away.pointsAgainst += game.scoreHome;
-                
-                if (game.scoreHome > game.scoreAway) {
-                    // Обработка технического поражения.
-                    if (game.scoreHome != 20 && game.scoreAway != 0) {
-                        away.points += 1;
-                    }
-                    home.wins++;
-                    home.points += 2;
-                    home.trand += "1"; 
-                    
-                    away.losses++; 
-                    away.trand += "0";
-                } else if (game.scoreHome < game.scoreAway) {
-                    // Обработка технического поражения.
-                    if (game.scoreAway != 20 && game.scoreHome != 0) {
-                        home.points += 1;
-                    }
-                    away.wins++; 
-                    away.points += 2;
-                    away.trand += "1";
-                    
-                    home.losses++;
-                    home.trand += "0";
+
+        const sourceGames = Array.isArray(options.games) ? options.games : this.games;
+        const leagueGames = sourceGames
+            .filter(game =>
+                game.scoreHome !== null &&
+                game.scoreAway !== null &&
+                game.league === league &&
+                game.gameType != 'playoff'
+            )
+            .slice()
+            .sort((a, b) => (a._fullDate || 0) - (b._fullDate || 0));
+
+        const applySide = (team, scored, conceded, won) => {
+            if (!team) return;
+            team.played++;
+            team.pointsFor += scored;
+            team.pointsAgainst += conceded;
+            if (won) {
+                team.wins++;
+                team.points += 2;
+                team.trand += "1";
+                return;
+            }
+            if (scored < conceded) {
+                if (!(conceded === 20 && scored === 0)) {
+                    team.points += 1;
                 }
+                team.losses++;
+                team.trand += "0";
+            }
+        };
+
+        leagueGames.forEach(game => {
+            const home = standings.get(this.normalizeTeamName(game.teamHome));
+            const away = standings.get(this.normalizeTeamName(game.teamAway));
+            if (!home && !away) return;
+
+            if (game.scoreHome > game.scoreAway) {
+                applySide(home, game.scoreHome, game.scoreAway, true);
+                applySide(away, game.scoreAway, game.scoreHome, false);
+            } else if (game.scoreHome < game.scoreAway) {
+                applySide(away, game.scoreAway, game.scoreHome, true);
+                applySide(home, game.scoreHome, game.scoreAway, false);
             }
         });
-        
-        // Конвертируем в массив
+
         let standingsArray = Array.from(standings.values());
-        
-        // Сортируем по очкам (предварительная сортировка)
         standingsArray.sort((a, b) => b.points - a.points);
-        
-        // Группируем команды с одинаковыми очками и сортируем внутри групп
+
         const result = [];
         let i = 0;
-        
+
         while (i < standingsArray.length) {
             const currentPoints = standingsArray[i].points;
             const group = [];
-            
-            // Собираем все команды с одинаковыми очками
+
             while (i < standingsArray.length && standingsArray[i].points === currentPoints) {
                 group.push(standingsArray[i]);
                 i++;
             }
-            
+
             if (group.length > 1) {
-                // Сортируем группу по разнице очков в матчах ТОЛЬКО между собой
                 this.sortGroupByHeadToHeadDiff(group, leagueGames);
             }
-            
+
             result.push(...group);
         }
-        
+
         return result;
     }
 
@@ -906,8 +1011,7 @@ class BasketballData {
 
     generateEmptyBracket(league) {
         const standings = this.getLeagueStandings(league);
-        const config = this.getLeagueConfig(league);
-        const playoffTeamsCount = Number(config?.playoffTeams) || 6;
+        const playoffTeamsCount = this.getPlayoffTeamsCount(league) || 6;
         
         // Берем топ команд
         const topTeams = standings.slice(0, playoffTeamsCount);
@@ -1420,33 +1524,13 @@ class BasketballData {
     }
 
     calculateRegularSeasonCompleted(league) {
-        const config = this.getLeagueConfig(league);
-        if (!config || !config.regularSeasonRounds) return false;
-        
-        const teams = this.getTeamsByLeague(league);
-        const totalTeams = teams.length;
-        if (totalTeams < 2) {
-            return false;
-        }
-        
-        // Общее количество игр в регулярке
-        const totalRegularGames = (totalTeams * (totalTeams - 1) * config.regularSeasonRounds) / 2;
-        
-        // Подсчитываем сыгранные игры в регулярке (без playoff)
-        const playedRegularGames = this.games.filter(game => 
-            game.league === league && 
-            game.scoreHome !== null && 
-            game.scoreAway !== null &&
-            game.gameType !== 'playoff'
-        ).length;
-        
-        return playedRegularGames >= totalRegularGames;
+        const { played, total } = this.getRegularSeasonTotals(league);
+        return total > 0 && played >= total;
     }
 
     generatePlayoffBracket(league) {
         const standings = this.getLeagueStandings(league);
-        const config = this.getLeagueConfig(league);
-        const playoffTeamsCount = Number(config?.playoffTeams) || 6;
+        const playoffTeamsCount = this.getPlayoffTeamsCount(league) || 6;
         
         // Берем топ команд для плей-офф с их местами
         const playoffTeams = standings.slice(0, playoffTeamsCount).map((team, index) => ({

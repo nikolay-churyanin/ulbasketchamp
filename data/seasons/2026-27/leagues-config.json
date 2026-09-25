@@ -1,17 +1,30 @@
 {
   "A": {
     "name": "Лига А",
-    "playoffTeams": 8,
-    "regularSeasonRounds": 2
+    "format": "split-groups",
+    "split-groups": {
+      "stage1Rounds": 1,
+      "groupRounds": 1,
+      "groups": [
+        { "id": "A", "name": "Группа А", "size": 5, "playoffTeams": 5 },
+        { "id": "B", "name": "Группа Б", "size": 5, "playoffTeams": 3 }
+      ]
+    }
   },
   "B": {
     "name": "Лига Б",
-    "playoffTeams": 8,
-    "regularSeasonRounds": 1
+    "format": "round",
+    "round": {
+      "numberOfRounds": 1,
+      "playoffTeams": 8
+    }
   },
   "F": {
     "name": "Женская лига",
-    "playoffTeams": 4,
-    "regularSeasonRounds": 1
+    "format": "round",
+    "round": {
+      "numberOfRounds": 1,
+      "playoffTeams": 4
+    }
   }
 }

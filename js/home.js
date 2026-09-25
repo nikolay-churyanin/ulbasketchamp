@@ -820,48 +820,50 @@ class HomePage {
         this.renderLeagueMatches(league);
     }
 
-    async renderLeagueStandings(league) {
-        const container = document.getElementById(`league-${league.toLowerCase()}-teams`);
-        if (!container) return;
+    renderStandingsRows(standings, playoffCount = 0) {
+        return standings.map((stand, index) => {
+            const spots = Number(playoffCount) || 0;
+            const isPlayoffTeam = spots > 0 && index < spots;
+            const isLastPlayoff = isPlayoffTeam && index === spots - 1;
+            const diff = stand.pointsFor - stand.pointsAgainst;
 
-        const standings = this.dataManager.getLeagueStandings(league);
-        const config = this.dataManager.getLeagueConfig(league);
-        
-        if (standings.length === 0) {
-            container.innerHTML = '<p class="no-teams">Команды не найдены</p>';
-            return;
-        }
+            return `<tr class="clickable-row${isPlayoffTeam ? ' playoff-spot' : ''}${isLastPlayoff ? ' playoff-spot-last' : ''}" data-team-name="${stand.teamName}">
+                <td>${index + 1}</td>
+                <td>
+                    <div class="team-row">
+                        <img src="${stand.team.logo}" alt="${stand.teamName}" class="team-logo-small" onerror="this.onImageError(this)">
+                        ${stand.teamName}
+                    </div>
+                </td>
+                <td>${stand.played}</td>
+                <td>${stand.wins}/${stand.losses}</td>
+                <td>${stand.played > 0 ? Math.round(stand.wins / stand.played * 1000) / 10 : 0}</td>
+                <td>
+                    ${this.renderTrendDots(stand.trand)}
+                </td>
+                <td>${stand.pointsFor}</td>
+                <td>${stand.pointsAgainst}</td>
+                <td class="${diff >= 0 ? 'positive' : 'negative'}">
+                    ${diff >= 0 ? '+' : ''}${diff}
+                </td>
+                <td><strong>${stand.points}</strong></td>
+            </tr>`;
+        }).join('');
+    }
 
-        // Проверяем, завершена ли регулярка
-        const regularSeasonCompleted = this.dataManager.calculateRegularSeasonCompleted(league);
-        
-        // Получаем сетку плей-офф (автоматически строится из игр)
-        const playoffBracket = this.dataManager.getPlayoffBracket(league);
-        
-        // Показываем вкладку плей-офф если регулярка завершена ИЛИ уже есть игры плей-офф
-        const hasPlayoffGames = this.dataManager.games.some(game => 
-            game.gameType === 'playoff' && game.league === league
-        );
-        
-        const shouldShowPlayoffTab = regularSeasonCompleted || hasPlayoffGames;
+    renderStandingsTable(standings, playoffCount = 0, groups = null) {
+        const body = groups
+            ? groups.map(group => `
+                            <tbody>
+                                <tr class="standings-group-label">
+                                    <td colspan="10">${group.name}</td>
+                                </tr>
+                                ${this.renderStandingsRows(group.standings, group.playoffTeams)}
+                            </tbody>
+                        `).join('')
+            : `<tbody>${this.renderStandingsRows(standings, playoffCount)}</tbody>`;
 
-        let html = `
-            <div class="standings-container">
-                <div class="playoff-tabs">
-                    <button class="playoff-tab active" data-tab="regular">
-                        <span class="playoff-tab-icon">📊</span>
-                        Регулярный сезон
-                    </button>
-                    ${shouldShowPlayoffTab ? `
-                        <button class="playoff-tab" data-tab="playoff">
-                            <span class="playoff-tab-icon">🏆</span>
-                            Плей-офф
-                        </button>
-                    ` : ''}
-                </div>
-                
-                <!-- Вкладка регулярного сезона -->
-                <div class="playoff-tab-content active" id="regular-tab">
+        return `
                     <div class="table-container">
                         <table class="standings-table">
                             <thead>
@@ -878,40 +880,53 @@ class HomePage {
                                     <th>О</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                ${standings.map((stand, index) => {
-                                    const playoffCount = Number(config?.playoffTeams) || 0;
-                                    const isPlayoffTeam = playoffCount > 0 && index < playoffCount;
-                                    const isLastPlayoff = isPlayoffTeam && index === playoffCount - 1;
-
-                                    return `<tr class="clickable-row${isPlayoffTeam ? ' playoff-spot' : ''}${isLastPlayoff ? ' playoff-spot-last' : ''}" data-team-name="${stand.teamName}">
-                                        <td>${index + 1}</td>
-                                        <td>
-                                            <div class="team-row">
-                                                <img src="${stand.team.logo}" alt="${stand.teamName}" class="team-logo-small" onerror="this.onImageError(this)">
-                                                ${stand.teamName}
-                                            </div>
-                                        </td>
-                                        <td>${stand.played}</td>
-                                        <td>${stand.wins}/${stand.losses}</td>
-                                        <td>${stand.played > 0 ? Math.round(stand.wins / stand.played * 1000) / 10 : 0}</td>
-                                        <td>
-                                            ${this.renderTrendDots(stand.trand)}
-                                        </td>
-                                        <td>${stand.pointsFor}</td>
-                                        <td>${stand.pointsAgainst}</td>
-                                        <td class="${stand.pointsFor - stand.pointsAgainst >= 0 ? 'positive' : 'negative'}">
-                                            ${stand.pointsFor - stand.pointsAgainst >= 0 ? '+' : ''}${stand.pointsFor - stand.pointsAgainst}
-                                        </td>
-                                        <td><strong>${stand.points}</strong></td>
-                                    </tr>`;
-                                }).join('')}
-                            </tbody>
+                            ${body}
                         </table>
-                    </div>
+                    </div>`;
+    }
+
+    async renderLeagueStandings(league) {
+        const container = document.getElementById(`league-${league.toLowerCase()}-teams`);
+        if (!container) return;
+
+        const standings = this.dataManager.getLeagueStandings(league);
+        const splitGroups = this.dataManager.getSplitGroupTables(league);
+        
+        if (standings.length === 0) {
+            container.innerHTML = '<p class="no-teams">Команды не найдены</p>';
+            return;
+        }
+
+        const regularSeasonCompleted = this.dataManager.calculateRegularSeasonCompleted(league);
+        const playoffBracket = this.dataManager.getPlayoffBracket(league);
+        const hasPlayoffGames = this.dataManager.games.some(game => 
+            game.gameType === 'playoff' && game.league === league
+        );
+        const shouldShowPlayoffTab = regularSeasonCompleted || hasPlayoffGames;
+
+        const regularTables = splitGroups
+            ? this.renderStandingsTable(standings, 0, splitGroups)
+            : this.renderStandingsTable(standings, this.dataManager.getPlayoffTeamsCount(league));
+
+        let html = `
+            <div class="standings-container">
+                <div class="playoff-tabs">
+                    <button class="playoff-tab active" data-tab="regular">
+                        <span class="playoff-tab-icon">📊</span>
+                        Регулярный сезон
+                    </button>
+                    ${shouldShowPlayoffTab ? `
+                        <button class="playoff-tab" data-tab="playoff">
+                            <span class="playoff-tab-icon">🏆</span>
+                            Плей-офф
+                        </button>
+                    ` : ''}
                 </div>
                 
-                <!-- Вкладка плей-офф -->
+                <div class="playoff-tab-content active" id="regular-tab">
+                    ${regularTables}
+                </div>
+                
                 <div class="playoff-tab-content" id="playoff-tab">
         `;
 

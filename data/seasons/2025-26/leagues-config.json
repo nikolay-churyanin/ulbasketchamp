@@ -1,17 +1,26 @@
 {
   "A": {
     "name": "Лига А",
-    "playoffTeams": 6,
-    "regularSeasonRounds": 2
+    "format": "round",
+    "round": {
+      "numberOfRounds": 2,
+      "playoffTeams": 6
+    }
   },
   "B": {
     "name": "Лига Б",
-    "playoffTeams": 6,
-    "regularSeasonRounds": 1
+    "format": "round",
+    "round": {
+      "numberOfRounds": 1,
+      "playoffTeams": 6
+    }
   },
   "F": {
     "name": "Женская лига",
-    "playoffTeams": 4,
-    "regularSeasonRounds": 1
+    "format": "round",
+    "round": {
+      "numberOfRounds": 1,
+      "playoffTeams": 4
+    }
   }
 }
