@@ -5,14 +5,14 @@
 @import url('components/modals.css?v=16');
 @import url('components/tables.css?v=16');
 @import url('sections/teams.css?v=20');
-@import url('sections/matches.css?v=15');
+@import url('sections/matches.css?v=16');
 @import url('match-details.css?v=16');
 @import url('team-modals.css?v=17');
 @import url('playoff.css?v=15');
 @import url('components/preview.css?v=15');
 @import url('utilities.css?v=15');
 @import url('top-stats.css?v=17');
-@import url('home.css?v=17');
+@import url('home.css?v=18');
 
 [hidden] {
     display: none !important;

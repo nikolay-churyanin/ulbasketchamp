@@ -652,48 +652,21 @@ class HomePage {
         for (const date of dates) {
             if (daysShown >= maxDaysToShow) break;
             
-            const dateGames = gamesByDate[date];
+            const dateGames = gamesByDate[date].sort((a, b) => a._fullDate - b._fullDate);
             const dateObj = new Date(dateGames[0]._fullDate);
-            const dateStr = this.formatGroupDate(dateObj);
-            
-            // Определяем класс для сегодня/завтра
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            const isToday = dateObj.toDateString() === today.toDateString();
-            const isTomorrow = dateObj.toDateString() === tomorrow.toDateString();
-            
-            let dayClass = '';
-            if (isToday) {
-                dayClass = 'today-matches';
-            } else if (isTomorrow) {
-                dayClass = 'tomorrow-matches';
-            }
+            const dateStr = this.matchesRenderer.formatGroupDate(dateObj);
             
             html += `
-                <div class="${dayClass}">
-                    <div class="upcoming-day-header">
-                        <div class="upcoming-day-title">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM16 2v4M8 2v4M3 10h18"/>
-                            </svg>
-                            ${dateStr}
-                        </div>
-                        <span class="upcoming-day-matches-count">
-                            ${dateGames.length} ${this.getPluralFormMatch(dateGames.length)}
-                        </span>
-                    </div>
-                    
-                    <div class="upcoming-matches-grid">
-            `;
-            
-            // Выводим матчи этого дня в порядке времени
-            dateGames.sort((a, b) => a._fullDate - b._fullDate).forEach(game => {
-                html += this.renderUpcomingMatchCard(game);
-            });
-            
-            html += `
+                <div class="matches-group">
+                    <h4 class="matches-group-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM16 2v4M8 2v4M3 10h18"/>
+                        </svg>
+                        ${dateStr}
+                        <span class="matches-group-subtitle">${dateGames.length} ${this.matchesRenderer.getPluralForm(dateGames.length)}</span>
+                    </h4>
+                    <div class="matches-grid">
+                        ${dateGames.map(game => this.matchesRenderer.renderMatchCard(game, game.league, 'schedule', { showLeague: true })).join('')}
                     </div>
                 </div>
             `;
@@ -705,96 +678,6 @@ class HomePage {
 
         // Добавляем обработчики для кликов по карточкам
         this.setupUpcomingMatchClickHandlers();
-    }
-
-    // Рендер карточки матча для главной
-    renderUpcomingMatchCard(game) {
-        const gameDate = new Date(game._fullDate);
-        const homeLogo = this.getTeamLogo(game.teamHome, game.league);
-        const awayLogo = this.getTeamLogo(game.teamAway, game.league);
-        
-        const leagueName = this.getLeagueName(game.league);
-        const leagueBadgeClass = `league-badge-${game.league.toLowerCase()}`;
-        
-        const now = new Date();
-
-        // Нормализуем даты до начала дня в UTC для правильного сравнения
-        const gameDay = new Date(Date.UTC(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate()));
-        const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-
-        // Вычисляем разницу в днях
-        const diffTime = gameDay - today;
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-        let timeLeftText = '';
-        if (diffDays === 0) {
-            // Для сегодняшних матчей показываем точное время
-            const timeDiff = game._fullDate - now;
-            const hoursDiff = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutesDiff = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            
-            if (hoursDiff === 0 && minutesDiff < 60) {
-                timeLeftText = `Через ${minutesDiff} мин`;
-            } else {
-                timeLeftText = `Через ${hoursDiff} ч ${minutesDiff} мин`;
-            }
-        } else if (diffDays === 1) {
-            timeLeftText = 'Завтра';
-        } else if (diffDays <= 7) {
-            timeLeftText = `Через ${diffDays} дн`;
-        } else {
-            timeLeftText = `${Math.floor(diffDays / 7)} нед`;
-        }
-
-        return `
-            <div class="upcoming-match-card" data-game-id="${game.id}" data-league="${game.league}">
-                <div class="upcoming-match-league-badge ${leagueBadgeClass}">
-                    ${leagueName}
-                </div>
-                
-                <div class="upcoming-match-time-header">
-                    <div class="upcoming-match-time">
-                        <div class="match-exact-time">
-                            ${gameDate.toLocaleTimeString('ru-RU', {
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            })}
-                        </div>
-                        <div class="match-time-left">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
-                            </svg>
-                            ${timeLeftText}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="upcoming-match-teams">
-                    <div class="upcoming-match-team">
-                        <img src="${homeLogo}" alt="${game.teamHome}" onerror="this.onImageError(this)">
-                        <span>${game.teamHome}</span>
-                    </div>
-                    
-                    <div class="upcoming-match-vs">VS</div>
-                    
-                    <div class="upcoming-match-team">
-                        <img src="${awayLogo}" alt="${game.teamAway}" onerror="this.onImageError(this)">
-                        <span>${game.teamAway}</span>
-                    </div>
-                </div>
-                
-                <div class="upcoming-match-footer">
-                    <div class="upcoming-match-location">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        ${game.location || 'Место уточняется'}
-                    </div>
-                </div>
-            </div>
-        `;
     }
 
     // Группировка матчей по датам
@@ -813,33 +696,6 @@ class HomePage {
         });
         
         return groups;
-    }
-
-    // Форматирование даты для группировки
-    formatGroupDate(date) {
-        const today = new Date();
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        
-        // Нормализуем даты до начала дня в UTC для правильного сравнения
-        const dateDay = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-        const todayDay = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
-        const tomorrowDay = new Date(Date.UTC(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate()));
-        
-        const isToday = dateDay.getTime() === todayDay.getTime();
-        const isTomorrow = dateDay.getTime() === tomorrowDay.getTime();
-        
-        if (isToday) {
-            return 'Сегодня';
-        } else if (isTomorrow) {
-            return 'Завтра';
-        } else {
-            return date.toLocaleDateString('ru-RU', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long'
-            });
-        }
     }
 
     // Получение правильной формы слова
@@ -1236,10 +1092,6 @@ class HomePage {
         return BasketballUtils.resolveTeamLogo(team?.logo);
     }
 
-    getLeagueName(leagueCode) {
-        return this.dataManager.getLeagueName(leagueCode);
-    }
-
     updateStats() {
         if (!this.dataManager) return;
         
@@ -1260,7 +1112,7 @@ class HomePage {
 
     // Также обновляем setupUpcomingMatchClickHandlers для главной страницы
     setupUpcomingMatchClickHandlers() {
-        document.querySelectorAll('.upcoming-match-card').forEach(card => {
+        document.querySelectorAll('#upcoming-games .match-card').forEach(card => {
             card.addEventListener('click', (e) => {
                 const gameId = card.dataset.gameId;
                 const league = card.dataset.league;

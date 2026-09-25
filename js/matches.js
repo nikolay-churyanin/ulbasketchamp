@@ -192,10 +192,11 @@ class MatchesRenderer {
     }
 
     // Рендер одной компактной карточки матча
-    renderMatchCard(game, league, type) {
+    renderMatchCard(game, league, type, options = {}) {
         const hasScore = game.scoreHome !== null && game.scoreAway !== null;
         const isFinished = type === 'results';
         const isUpcoming = type === 'schedule';
+        const showLeague = Boolean(options.showLeague);
         
         const gameDate = new Date(game._fullDate);
         const homeLogo = this.getTeamLogo(game.teamHome, league);
@@ -243,6 +244,11 @@ class MatchesRenderer {
                 statusText = 'Предстоящий';
             }
             statusClass = 'status-upcoming';
+        }
+
+        if (showLeague) {
+            statusText = this.dataManager.getLeagueName(league);
+            statusClass = `league-badge-${String(league).toLowerCase()}`;
         }
         
         return `
