@@ -80,12 +80,12 @@
   {
     "name": "Атом",
     "logo": "",
-    "city": "Ульяновск",
+    "city": "Димитровград",
     "league": "B"
   },
   {
     "name": "Север",
-    "logo": "",
+    "logo": "data/images/sever.jpg",
     "city": "Ульяновск",
     "league": "B"
   },
@@ -121,7 +121,7 @@
   },
   {
     "name": "40-Данко",
-    "logo": "",
+    "logo": "data/images/danko-40.jpg",
     "city": "Ульяновск",
     "league": "B"
   },
