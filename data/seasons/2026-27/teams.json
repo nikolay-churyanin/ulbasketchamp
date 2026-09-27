@@ -26,7 +26,7 @@
   {
     "name": "Цемрос",
     "logo": "data/images/cemros.jpg",
-    "city": "Ульяновск",
+    "city": "Сенгилей",
     "league": "A"
   },
   {
@@ -56,7 +56,7 @@
   {
     "name": "БК Петровск",
     "logo": "data/images/petrovsk.jpg",
-    "city": "Петровск",
+    "city": "Чердаклинский район",
     "league": "A"
   },
   {
@@ -98,7 +98,7 @@
   {
     "name": "Цемрос (Ф)",
     "logo": "data/images/cemros.jpg",
-    "city": "Ульяновск",
+    "city": "Сенгилей",
     "league": "B"
   },
   {
