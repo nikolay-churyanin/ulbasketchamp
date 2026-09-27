@@ -61,7 +61,8 @@
       "time": "12:00",
       "venue": "ФОК Фаворит",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "71:45"
     }
   },
   {
@@ -73,7 +74,8 @@
       "time": "13:30",
       "venue": "ФОК Фаворит",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "51:76"
     }
   },
   {
@@ -85,7 +87,8 @@
       "time": "14:00",
       "venue": "Зал УлГУ",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "79:42"
     }
   },
   {
@@ -97,7 +100,8 @@
       "time": "15:00",
       "venue": "ФОК Фаворит",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "42:64"
     }
   },
   {
@@ -109,7 +113,8 @@
       "time": "15:30",
       "venue": "Зал УлГУ",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "69:32"
     }
   },
   {
@@ -121,7 +126,8 @@
       "time": "17:00",
       "venue": "Зал УлГУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "81:63"
     }
   }
 ]
