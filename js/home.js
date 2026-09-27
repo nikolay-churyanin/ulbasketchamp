@@ -349,11 +349,12 @@ class HomePage {
             `;
         };
 
-        if (archived || (total > 0 && remaining === 0 && played > 0)) {
+        // Пустой остаток календаря ≠ конец сезона: следующие туры ещё не внесены.
+        if (archived) {
             setIntro(
-                archived ? 'archived' : 'done',
+                'archived',
                 'Сезон завершён',
-                archived ? 'Архив' : 'Финиш',
+                'Архив',
                 'Все матчи сыграны. Таблицы, плей-офф остаются здесь — спасибо командам, судьям и болельщикам.'
             );
             return;
@@ -375,6 +376,16 @@ class HomePage {
                 'Старт сезона',
                 'Анонс',
                 `В календаре уже ${total} ${this.getPluralFormMatch(total)} — первый результат откроет таблицу. Следите за анонсами ближайшего тура.`
+            );
+            return;
+        }
+
+        if (remaining === 0) {
+            setIntro(
+                'live',
+                'Сезон в разгаре',
+                'Идёт',
+                'Сыграны все объявленные матчи. Следующие игры появятся в расписании.'
             );
             return;
         }
@@ -1112,6 +1123,7 @@ class HomePage {
     setupUpcomingMatchClickHandlers() {
         document.querySelectorAll('#upcoming-games .match-card').forEach(card => {
             card.addEventListener('click', (e) => {
+                if (e.target.closest('a')) return;
                 const gameId = card.dataset.gameId;
                 const league = card.dataset.league;
                 const game = this.dataManager.getGameById(gameId);
