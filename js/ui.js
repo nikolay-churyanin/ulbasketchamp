@@ -126,6 +126,8 @@ class BasketballUI {
             const gameItems = body.querySelectorAll('.team-game-item');
             gameItems.forEach(item => {
                 item.addEventListener('click', async (e) => {
+                    if (e.target.closest('a')) return;
+
                     const gameId = item.dataset.gameId;
                     const league = item.dataset.league;
                     
@@ -194,6 +196,7 @@ class BasketballUI {
                         ${game.time ? `<span class="team-game-time">${game.time}</span>` : ''}
                     </div>
                     <div class="team-game-badges">
+                        ${this.renderTeamStreamLink(game)}
                         ${typeBadge}
                         <span class="game-status ${statusClass}">${statusText}</span>
                     </div>
@@ -217,6 +220,10 @@ class BasketballUI {
                 </div>
             </div>
         `;
+    }
+
+    renderTeamStreamLink(game) {
+        return window.homePage?.matchesRenderer?.renderStreamLink(game) || '';
     }
 
     formatDate(date) {

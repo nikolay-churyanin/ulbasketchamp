@@ -7,7 +7,7 @@ class BasketballData {
         this.seasonsCatalog = { current: '2025-26', seasons: [] };
         this.seasonId = null;
         this.seasonMeta = null;
-        this.dataVersion = '3.38';
+        this.dataVersion = '3.41';
         this.ready = this.init();
     }
 
@@ -622,7 +622,35 @@ class BasketballData {
         game.location = info.venue;
         game.gameType = info.gameType || 'regular';
         game.league = info.league || 'A';
+        game.stream = typeof info.stream === 'string' ? info.stream.trim() : '';
         game._fullDate = this.createValidDate(game.date, game.time);
+    }
+
+    parseVkStream(raw) {
+        const value = String(raw || '').trim();
+        const match = value.match(
+            /^(?:https?:\/\/(?:www\.)?(?:vkvideo\.ru|vk\.com)\/)?(video(-?\d+)_(\d+))\/?$/i
+        );
+        if (!match) return null;
+        return { slug: match[1], oid: match[2], id: match[3] };
+    }
+
+    getGameStreamUrl(game) {
+        const raw = String(game?.stream || game?.match_info?.stream || '').trim();
+        if (!raw) return '';
+
+        const vk = this.parseVkStream(raw);
+        if (vk) {
+            return `https://vkvideo.ru/${vk.slug}`;
+        }
+
+        try {
+            const parsed = new URL(raw);
+            if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return '';
+            return parsed.href;
+        } catch (error) {
+            return '';
+        }
     }
 
     hasGameScore(game) {
@@ -679,6 +707,7 @@ class BasketballData {
                 league: game.league,
                 time: game.time || this.extractTimeFromDate(gameDate),
                 location: game.location || game.venue || 'Не указано',
+                stream: game.stream || '',
                 _gameData: game
             };
         });
@@ -1596,6 +1625,7 @@ class BasketballData {
             date: game.date,
             time: game.time,
             location: game.location,
+            stream: game.stream || '',
             winner: game.scoreHome > game.scoreAway ? game.teamHome : game.teamAway
         };
     }

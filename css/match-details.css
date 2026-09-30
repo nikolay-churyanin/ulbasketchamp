@@ -235,6 +235,32 @@
     color: #6c757d;
 }
 
+.match-video-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 14px;
+    padding: 11px 16px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background: var(--navy, #16324f);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.match-video-action:hover {
+    color: #fff;
+    filter: brightness(1.08);
+}
+
+.match-video-action svg {
+    flex-shrink: 0;
+}
+
 .info-item svg {
     color: #0055a5;
     flex-shrink: 0;

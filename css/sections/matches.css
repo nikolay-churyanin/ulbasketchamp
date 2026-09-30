@@ -120,6 +120,15 @@
     flex-wrap: wrap;
 }
 
+.match-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
 .match-date-time {
     display: flex;
     flex-direction: column;
@@ -344,6 +353,29 @@
 
 .match-location svg {
     flex-shrink: 0;
+}
+
+.match-stream-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--accent, #c45c26);
+    background: var(--accent, #c45c26);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+}
+
+.match-stream-link:hover {
+    filter: brightness(1.05);
+    color: #fff;
 }
 
 /* Группировка по датам */

@@ -70,6 +70,13 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.team-game-badges .match-stream-link {
+    padding: 3px 8px;
+    font-size: 0.7rem;
 }
 
 .team-game-type {

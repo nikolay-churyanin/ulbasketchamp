@@ -191,6 +191,42 @@ class MatchesRenderer {
         return BasketballUtils.getPluralForm(count, ['матч','матча','матчей']);
     }
 
+    escapeAttr(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;');
+    }
+
+    renderStreamLink(game, extraClass = '', label = 'Видео') {
+        const url = this.dataManager.getGameStreamUrl(game);
+        if (!url) return '';
+        return `
+            <a class="match-stream-link ${extraClass}" href="${this.escapeAttr(url)}" target="_blank" rel="noopener noreferrer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                ${label}
+            </a>
+        `;
+    }
+
+    renderStreamAction(game) {
+        const url = this.dataManager.getGameStreamUrl(game);
+        if (!url) return '';
+        const isReplay = this.dataManager.isGameScored(game) ||
+            (game._fullDate && !this.dataManager.isGameOnSchedule(game));
+        const label = isReplay ? 'Смотреть запись' : 'Смотреть трансляцию';
+        return `
+            <a class="match-video-action" href="${this.escapeAttr(url)}" target="_blank" rel="noopener noreferrer">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                ${label}
+            </a>
+        `;
+    }
+
     // Рендер одной компактной карточки матча
     renderMatchCard(game, league, type, options = {}) {
         const hasScore = game.scoreHome !== null && game.scoreAway !== null;
@@ -273,7 +309,10 @@ class MatchesRenderer {
                             })}
                         </div>
                     </div>
-                    ${statusText ? `<span class="match-status ${statusClass}">${statusText}</span>` : ''}
+                    <div class="match-header-actions">
+                        ${statusText ? `<span class="match-status ${statusClass}">${statusText}</span>` : ''}
+                        ${this.renderStreamLink(game)}
+                    </div>
                 </div>
                 
                 <div class="match-content">
@@ -516,6 +555,7 @@ class MatchesRenderer {
                                 </div>
                             </div>
                         </div>
+                        ${this.renderStreamAction(game)}
                     </div>
                     
                     <!-- Компактная статистика команд -->
