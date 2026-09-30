@@ -362,9 +362,9 @@
     flex-shrink: 0;
     padding: 4px 10px;
     border-radius: 20px;
-    border: 1px solid var(--accent, #c45c26);
-    background: var(--accent, #c45c26);
-    color: #fff;
+    border: 1px solid rgba(22, 50, 79, 0.18);
+    background: rgba(22, 50, 79, 0.08);
+    color: var(--navy, #16324f);
     font-size: 0.75rem;
     font-weight: 700;
     text-decoration: none;
@@ -374,8 +374,10 @@
 }
 
 .match-stream-link:hover {
-    filter: brightness(1.05);
-    color: #fff;
+    filter: none;
+    border-color: var(--navy, #16324f);
+    background: var(--surface, #fff);
+    color: var(--navy, #16324f);
 }
 
 /* Группировка по датам */
