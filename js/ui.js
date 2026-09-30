@@ -187,6 +187,7 @@ class BasketballUI {
         }
 
         const typeBadge = isPlayoff && hasScore ? '<span class="team-game-type">Плей-офф</span>' : '';
+        const venue = this.formatTeamGameVenue(game);
 
         return `
             <div class="team-game-item ${resultClass}" data-game-id="${game.id}" data-league="${game.league || league}">
@@ -218,8 +219,23 @@ class BasketballUI {
                         <img src="${logoB}" alt="${game.teamAway}" class="team-game-logo" onerror="this.src='${placeholderLogo}'">
                     </div>
                 </div>
+                ${venue ? `<div class="team-game-venue">${venue}</div>` : ''}
             </div>
         `;
+    }
+
+    formatTeamGameVenue(game) {
+        const location = String(game?.location || '').trim();
+        if (!location || location === 'Не указано') return '';
+        return this.escapeHtml(location);
+    }
+
+    escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
     }
 
     renderTeamStreamLink(game) {
