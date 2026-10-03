@@ -148,7 +148,8 @@
       "time": "10:00",
       "venue": "Манеж УлГПУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "58:75"
     }
   },
   {
@@ -160,7 +161,8 @@
       "time": "11:30",
       "venue": "Манеж УлГПУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "92:103"
     }
   },
   {
