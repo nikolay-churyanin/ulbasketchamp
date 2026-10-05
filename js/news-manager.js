@@ -70,6 +70,8 @@ class NewsManager {
         const date = this.formatDate(news.date);
         const previewText = this.getPreviewText(news.content);
         
+        const title = this.displayTitle(news.title);
+
         return `
             <div class="news-card" data-news-id="${news.id}">
                 <div class="news-card-header">
@@ -79,13 +81,13 @@ class NewsManager {
                 
                 ${news.image ? `
                     <div class="news-image">
-                        <img src="${news.image}" alt="${news.title}" 
+                        <img src="${news.image}" alt="${this.escapeHtml(title)}" 
                              onerror="this.style.display='none'">
                     </div>
                 ` : ''}
                 
                 <div class="news-content">
-                    <h3 class="news-title">${this.escapeHtml(news.title)}</h3>
+                    <h3 class="news-title">${this.escapeHtml(title)}</h3>
                     <div class="news-preview">
                         ${this.escapeHtml(previewText)}
                     </div>
@@ -117,6 +119,12 @@ class NewsManager {
         return `<span class="news-badge ${item.cssClass}">${item.name}</span>`;
     }
 
+    displayTitle(title) {
+        return String(title || '')
+            .replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+\s*/u, '')
+            .trim();
+    }
+
     // Форматирование даты
     formatDate(dateString) {
         if (!dateString) return '';
@@ -132,18 +140,28 @@ class NewsManager {
 
     // Получить превью текст
     getPreviewText(content) {
-        // Убираем markdown разметку
+        const lead = content && content.match(/\*\*([\s\S]+?)\*\*/);
+        if (lead) {
+            const text = lead[1].replace(/\s+/g, ' ').trim();
+            if (text.length > 150) {
+                return text.substring(0, 150) + '...';
+            }
+            return text;
+        }
+
         let plainText = content
-            .replace(/^#.*$/gm, '')
+            .replace(/^#{1,3}\s+/gm, '')
+            .replace(/^Дата:\s*.+$/gm, '')
+            .replace(/^---$/gm, '')
             .replace(/\*\*(.*?)\*\*/g, '$1')
             .replace(/\*(.*?)\*/g, '$1')
             .replace(/!\[.*?\]\(.*?\)/g, '')
             .replace(/\[.*?\]\(.*?\)/g, '$1')
-            .replace(/\|.*\|/g, '') // Убираем строки таблиц
-            .replace(/[\|\-:\s]/g, ' ') // Убираем спецсимволы таблиц
+            .replace(/^\|.*\|$/gm, '')
+            .replace(/^[-:\s|]+$/gm, '')
             .replace(/\s+/g, ' ')
             .trim();
-        
+
         if (plainText.length > 150) {
             return plainText.substring(0, 150) + '...';
         }
@@ -171,12 +189,14 @@ class NewsManager {
     showNewsModal(news) {
         const modalContent = this.renderFullNews(news);
         
+        const title = this.displayTitle(news.title);
+
         if (window.homePage && window.homePage.ui && window.homePage.ui.showModal) {
-            window.homePage.ui.showModal(news.title, modalContent);
+            window.homePage.ui.showModal(title, modalContent);
         } else if (window.simpleModal) {
-            window.simpleModal.show(news.title, modalContent);
+            window.simpleModal.show(title, modalContent);
         } else {
-            this.createSimpleNewsModal(news.title, modalContent);
+            this.createSimpleNewsModal(title, modalContent);
         }
     }
 
@@ -192,7 +212,7 @@ class NewsManager {
                 <div class="news-modal-body markdown-body">
                     <div class="news-modal-meta">
                         ${leagueBadge}
-                        <span class="news-modal-date">📅 ${date}</span>
+                        <span class="news-modal-date">${date}</span>
                     </div>
                     
                     ${news.image ? `
@@ -220,7 +240,9 @@ class NewsManager {
         const headingRegex = /^(#{1,3})\s+(.+)$/gm;
         html = html.replace(headingRegex, (match, hashes, content) => {
             const level = hashes.length;
-            return `<h${level}>${content}</h${level}>`;
+            let title = this.applyInlineFormatting(content);
+            title = title.replace(/\s[—–-]\s(\d{1,3}:\d{1,3})\s*$/, ' <span class="news-score">$1</span>');
+            return `<h${level}>${title}</h${level}>`;
         });
         
         // 3. ГОРИЗОНТАЛЬНАЯ ЛИНИЯ (---) - обрабатываем ДО разделения на блоки
@@ -239,9 +261,8 @@ class NewsManager {
                 processedBlocks.push(block);
                 continue;
             }
-            
-            // Пропускаем уже обработанные горизонтальные линии
-            if (block === '<hr>') {
+
+            if (block === '<hr>' || /^<h[1-6][\s>]/.test(block)) {
                 processedBlocks.push(block);
                 continue;
             }

@@ -7,7 +7,7 @@ class BasketballData {
         this.seasonsCatalog = { current: '2025-26', seasons: [] };
         this.seasonId = null;
         this.seasonMeta = null;
-        this.dataVersion = '3.41';
+        this.dataVersion = '3.65';
         this.ready = this.init();
     }
 
