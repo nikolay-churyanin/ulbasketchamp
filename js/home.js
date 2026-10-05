@@ -336,7 +336,14 @@ class HomePage {
         const total = games.length;
         const played = games.filter(game => game._hasResult).length;
         const remaining = Math.max(0, total - played);
-        const lateThreshold = Math.min(8, Math.max(3, Math.ceil(total * 0.1)));
+        const regularProgress = this.dataManager.getLeagues().reduce((acc, league) => {
+            const totals = this.dataManager.getRegularSeasonTotals(league.id);
+            acc.played += totals.played;
+            acc.expected += totals.total;
+            return acc;
+        }, { played: 0, expected: 0 });
+        const nearRegularFinish = regularProgress.expected > 0
+            && (regularProgress.played / regularProgress.expected) >= 0.8;
 
         const setIntro = (state, title, badge, text) => {
             el.dataset.state = state;
@@ -390,7 +397,7 @@ class HomePage {
             return;
         }
 
-        if (remaining <= lateThreshold) {
+        if (nearRegularFinish && remaining > 0) {
             setIntro(
                 'stretch',
                 'Финишная прямая',
