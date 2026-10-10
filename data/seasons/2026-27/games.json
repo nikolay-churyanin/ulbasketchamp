@@ -291,7 +291,8 @@
       "time": "12:00",
       "venue": "Манеж УлГПУ",
       "league": "F",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "40:61"
     }
   },
   {
@@ -303,7 +304,8 @@
       "time": "13:30",
       "venue": "Манеж УлГПУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "72:61"
     }
   },
   {
@@ -315,7 +317,8 @@
       "time": "15:00",
       "venue": "Манеж УлГПУ",
       "league": "F",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "55:47"
     }
   },
   {
@@ -327,7 +330,8 @@
       "time": "16:30",
       "venue": "Манеж УлГПУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "61:96"
     }
   },
   {
@@ -339,7 +343,8 @@
       "time": "18:00",
       "venue": "Манеж УлГПУ",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "55:64"
     }
   },
   {
@@ -351,7 +356,8 @@
       "time": "18:00",
       "venue": "Зал УлГУ",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "45:69"
     }
   },
   {
