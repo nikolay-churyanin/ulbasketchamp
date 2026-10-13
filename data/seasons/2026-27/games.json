@@ -424,5 +424,137 @@
       "gameType": "regular",
       "score": "80:29"
     }
+  },
+  {
+    "id": "game_033",
+    "match_info": {
+      "team_a": "OldSchool",
+      "team_b": "Ульяночка",
+      "date": "2026-10-17",
+      "time": "10:00",
+      "venue": "Манеж УлГПУ",
+      "league": "F",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_034",
+    "match_info": {
+      "team_a": "Цемрос (Ф)",
+      "team_b": "УлГПУ",
+      "date": "2026-10-17",
+      "time": "11:30",
+      "venue": "Манеж УлГПУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_035",
+    "match_info": {
+      "team_a": "Триумф",
+      "team_b": "Спарта",
+      "date": "2026-10-17",
+      "time": "13:00",
+      "venue": "Манеж УлГПУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_036",
+    "match_info": {
+      "team_a": "Дельта - УИГА",
+      "team_b": "Перевалбаскет",
+      "date": "2026-10-17",
+      "time": "18:00",
+      "venue": "Зал УлГУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_037",
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Цементник-Марбакс",
+      "date": "2026-10-17",
+      "time": "19:30",
+      "venue": "Зал УлГУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_038",
+    "match_info": {
+      "team_a": "40-Данко",
+      "team_b": "Симбирские орлы",
+      "date": "2026-10-18",
+      "time": "09:00",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_039",
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "Север",
+      "date": "2026-10-18",
+      "time": "10:40",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_040",
+    "match_info": {
+      "team_a": "Ульяновское ВВАУЛ",
+      "team_b": "Атом",
+      "date": "2026-10-18",
+      "time": "12:20",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_041",
+    "match_info": {
+      "team_a": "Приборка",
+      "team_b": "Дельта - УИГА (Ф)",
+      "date": "2026-10-18",
+      "time": "14:00",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_042",
+    "match_info": {
+      "team_a": "УлГПУ",
+      "team_b": "Феникс",
+      "date": "2026-10-18",
+      "time": "15:40",
+      "venue": "ФОК Фаворит",
+      "league": "F",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_043",
+    "match_info": {
+      "team_a": "УСУТ",
+      "team_b": "БК Петровск",
+      "date": "2026-10-18",
+      "time": "17:20",
+      "venue": "ФОК Фаворит",
+      "league": "A",
+      "gameType": "regular"
+    }
   }
 ]
