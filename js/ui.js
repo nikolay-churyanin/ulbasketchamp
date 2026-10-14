@@ -90,7 +90,7 @@ class BasketballUI {
                     <img src="${BasketballUtils.resolveTeamLogo(team.logo)}" alt="${team.name}" class="team-info-logo" onerror="this.src='${placeholderLogo}'">
                 </div>
                 <div class="team-info-details">
-                    <h2>${team.name}</h2>
+                    <h2><button type="button" class="share-heading" data-share-copy="team" data-share-league="${league}" data-share-team="${String(team.name).replace(/"/g, '&quot;')}" title="Скопировать ссылку на команду">${team.name}</button></h2>
                     <div class="team-meta-info">
                         <div class="meta-item">
                             <span class="meta-label">Город</span>

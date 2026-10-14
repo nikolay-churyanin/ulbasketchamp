@@ -21,8 +21,10 @@ class HomePage {
             this.dataManager.ready.then(async () => {
                 this.setupSeasonSwitcher();
                 this.setupLeagueFormatPopovers();
+                this.setupShareCopyButtons();
                 this.renderLeagueShell();
                 await this.renderHomePage();
+                this.applyDeepLink();
             }).catch(error => {
                 console.error('Ошибка отрисовки сезона:', error);
                 this.dataManager.hideLoading();
@@ -113,6 +115,41 @@ class HomePage {
         });
 
         this.showSection('home');
+    }
+
+    setupShareCopyButtons() {
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('[data-share-copy]');
+            if (!btn) return;
+            e.preventDefault();
+            const kind = btn.dataset.shareCopy;
+            let url = '';
+            if (kind === 'weekend') {
+                url = BasketballUtils.weekendShareUrl();
+            } else if (kind === 'team') {
+                url = BasketballUtils.teamShareUrl(btn.dataset.shareLeague, btn.dataset.shareTeam);
+            }
+            if (!url) return;
+            const ok = await BasketballUtils.copyText(url);
+            btn.classList.remove('is-copied', 'is-copy-failed');
+            btn.classList.add(ok ? 'is-copied' : 'is-copy-failed');
+            clearTimeout(Number(btn.dataset.shareTimer));
+            btn.dataset.shareTimer = String(setTimeout(() => {
+                btn.classList.remove('is-copied', 'is-copy-failed');
+            }, 1800));
+        });
+    }
+
+    applyDeepLink() {
+        const params = new URLSearchParams(window.location.search);
+        const league = (params.get('league') || '').toUpperCase();
+        const team = params.get('team');
+        if (league && this.dataManager.getLeagueById(league)) {
+            this.openSection(`league-${league.toLowerCase()}`);
+        }
+        if (team) {
+            this.ui.showTeamModal(team, league || null);
+        }
     }
 
     openSection(sectionId) {

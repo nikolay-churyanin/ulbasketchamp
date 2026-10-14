@@ -273,6 +273,62 @@ class BasketballUtils {
             return forms[2];
         }
     }
+
+    static siteUrl() {
+        return 'https://ulbasketchamp.ru';
+    }
+
+    static teamSlug(name) {
+        const map = {
+            а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z',
+            и: 'i', й: 'i', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r',
+            с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'c', ч: 'ch', ш: 'sh', щ: 'sch',
+            ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya'
+        };
+        let out = '';
+        for (const ch of String(name || '').toLowerCase()) {
+            if (Object.prototype.hasOwnProperty.call(map, ch)) {
+                out += map[ch];
+            } else if (/[a-z0-9]/.test(ch)) {
+                out += ch;
+            } else {
+                out += '-';
+            }
+        }
+        return out.replace(/-+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    static teamShareUrl(league, teamName) {
+        const slug = this.teamSlug(teamName);
+        const folder = String(league || '').toLowerCase();
+        return `${this.siteUrl()}/s/${folder}/${slug}.html`;
+    }
+
+    static weekendShareUrl() {
+        return `${this.siteUrl()}/s/weekend.html`;
+    }
+
+    static async copyText(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch (error) {
+            try {
+                const area = document.createElement('textarea');
+                area.value = text;
+                area.setAttribute('readonly', '');
+                area.style.position = 'fixed';
+                area.style.left = '-9999px';
+                document.body.appendChild(area);
+                area.select();
+                const ok = document.execCommand('copy');
+                area.remove();
+                return ok;
+            } catch (fallbackError) {
+                return false;
+            }
+        }
+    }
 }
 
 // Полифиллы для старых браузеров

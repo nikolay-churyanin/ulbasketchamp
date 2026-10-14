@@ -17,13 +17,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="theme-color" content="#0f2236">
+    <meta name="description" content="Расписание, результаты и таблицы чемпионата Ульяновской области: Лига А, Лига Б и женская лига.">
+    <link rel="canonical" href="https://ulbasketchamp.ru/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="Чемпионат по баскетболу">
+    <meta property="og:title" content="Чемпионат по баскетболу — Ульяновская область">
+    <meta property="og:description" content="Расписание, результаты и таблицы Лиги А, Лиги Б и женской лиги.">
+    <meta property="og:url" content="https://ulbasketchamp.ru/">
+    <meta property="og:image" content="https://ulbasketchamp.ru/data/og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Чемпионат по баскетболу — Ульяновская область">
+    <meta name="twitter:description" content="Расписание, результаты и таблицы Лиги А, Лиги Б и женской лиги.">
+    <meta name="twitter:image" content="https://ulbasketchamp.ru/data/og.jpg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Чемпионат по баскетболу - Главная</title>
-    <link rel="stylesheet" href="css/style.css?v=43">
+    <link rel="stylesheet" href="css/style.css?v=45">
 </head>
 <body>
     <header>
@@ -85,7 +100,11 @@
 
             <!-- Ближайшие матчи -->
             <div class="upcoming-games-section">
-                <h2>Ближайшие матчи</h2>
+                <div class="upcoming-games-head">
+                    <h2>
+                        <button type="button" class="share-heading" data-share-copy="weekend" title="Скопировать ссылку на ближайшие матчи">Ближайшие матчи</button>
+                    </h2>
+                </div>
                 <div class="upcoming-games-grid" id="upcoming-games">
                     <!-- Матчи будут загружены через JavaScript -->
                 </div>
@@ -176,11 +195,11 @@
         </div>
     </div>
 
-    <script src="js/utils.js?v=20"></script>
+    <script src="js/utils.js?v=21"></script>
     <script src="js/data.js?v=39"></script>
-    <script src="js/ui.js?v=21"></script>
+    <script src="js/ui.js?v=24"></script>
     <script src="js/matches.js?v=24"></script>
-    <script src="js/home.js?v=32"></script>
+    <script src="js/home.js?v=35"></script>
     <script src="js/news-manager.js?v=17"></script>
     <script src="js/top-stats.js?v=18"></script>
 </body>

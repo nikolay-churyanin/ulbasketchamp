@@ -4,9 +4,13 @@
     margin-bottom: 40px;
 }
 
+.upcoming-games-head {
+    margin-bottom: var(--space-2);
+}
+
 .upcoming-games-section h2 {
     font-size: 1.35rem;
-    margin-bottom: var(--space-2);
+    margin-bottom: 0;
     color: var(--navy);
 }
 
