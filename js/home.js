@@ -142,9 +142,18 @@ class HomePage {
 
     applyDeepLink() {
         const params = new URLSearchParams(window.location.search);
-        const league = (params.get('league') || '').toUpperCase();
-        const team = params.get('team');
-        const upcoming = params.get('upcoming') === '1';
+        const hash = decodeURIComponent(window.location.hash || '').replace(/^#\/?/, '');
+        const hashParts = hash.split('/').filter(Boolean);
+        let league = (params.get('league') || '').toUpperCase();
+        let team = params.get('team');
+        let upcoming = params.get('upcoming') === '1' || hashParts[0] === 'upcoming';
+
+        if (hashParts.length === 2) {
+            league = hashParts[0].toUpperCase();
+            const match = this.dataManager.getTeamBySlug(hashParts[1], league);
+            team = match?.name || team;
+        }
+
         if (league && this.dataManager.getLeagueById(league)) {
             this.openSection(`league-${league.toLowerCase()}`);
         }

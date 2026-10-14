@@ -672,6 +672,12 @@ class BasketballData {
         );
     }
 
+    getTeamBySlug(slug, league) {
+        const needle = String(slug || '').toLowerCase();
+        const pool = league ? this.getTeamsByLeague(league) : this.teams;
+        return pool.find(team => BasketballUtils.teamSlug(team.name) === needle);
+    }
+
     getLeaguesForTeam(teamName) {
         const normalizedName = this.normalizeTeamName(teamName);
         return this.getLeagueIds().filter(leagueId =>

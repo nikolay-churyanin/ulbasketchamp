@@ -278,29 +278,47 @@ class BasketballUtils {
         return 'https://ulbasketchamp.ru';
     }
 
-    static shareUrl(params = {}) {
-        const url = new URL(`${this.siteUrl()}/`);
-        const season = window.basketballData?.seasonId;
-        if (season) {
-            url.searchParams.set('season', season);
-        }
-        Object.entries(params).forEach(([key, value]) => {
-            if (value) {
-                url.searchParams.set(key, value);
+    static teamSlug(name) {
+        const map = {
+            а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z',
+            и: 'i', й: 'i', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r',
+            с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'c', ч: 'ch', ш: 'sh', щ: 'sch',
+            ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya'
+        };
+        let out = '';
+        for (const ch of String(name || '').toLowerCase()) {
+            if (Object.prototype.hasOwnProperty.call(map, ch)) {
+                out += map[ch];
+            } else if (/[a-z0-9]/.test(ch)) {
+                out += ch;
+            } else {
+                out += '-';
             }
-        });
-        return url.toString();
+        }
+        return out.replace(/-+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    static shareBase() {
+        const url = new URL(`${this.siteUrl()}/`);
+        const data = window.basketballData;
+        const current = data?.seasonsCatalog?.current;
+        if (data?.seasonId && current && data.seasonId !== current) {
+            url.searchParams.set('season', data.seasonId);
+        }
+        return url;
     }
 
     static teamShareUrl(league, teamName) {
-        return this.shareUrl({
-            league: String(league || '').toUpperCase(),
-            team: teamName
-        });
+        const url = this.shareBase();
+        const folder = String(league || '').toLowerCase();
+        url.hash = `/${folder}/${this.teamSlug(teamName)}`;
+        return url.toString();
     }
 
     static weekendShareUrl() {
-        return this.shareUrl({ upcoming: '1' });
+        const url = this.shareBase();
+        url.hash = '/upcoming';
+        return url.toString();
     }
 
     static async copyText(text) {
