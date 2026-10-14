@@ -144,11 +144,19 @@ class HomePage {
         const params = new URLSearchParams(window.location.search);
         const league = (params.get('league') || '').toUpperCase();
         const team = params.get('team');
+        const upcoming = params.get('upcoming') === '1';
         if (league && this.dataManager.getLeagueById(league)) {
             this.openSection(`league-${league.toLowerCase()}`);
         }
         if (team) {
             this.ui.showTeamModal(team, league || null);
+            return;
+        }
+        if (upcoming) {
+            const section = document.querySelector('.upcoming-games-section');
+            if (section && !section.hidden) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
     }
 

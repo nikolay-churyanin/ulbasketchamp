@@ -278,34 +278,29 @@ class BasketballUtils {
         return 'https://ulbasketchamp.ru';
     }
 
-    static teamSlug(name) {
-        const map = {
-            а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z',
-            и: 'i', й: 'i', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r',
-            с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'c', ч: 'ch', ш: 'sh', щ: 'sch',
-            ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya'
-        };
-        let out = '';
-        for (const ch of String(name || '').toLowerCase()) {
-            if (Object.prototype.hasOwnProperty.call(map, ch)) {
-                out += map[ch];
-            } else if (/[a-z0-9]/.test(ch)) {
-                out += ch;
-            } else {
-                out += '-';
-            }
+    static shareUrl(params = {}) {
+        const url = new URL(`${this.siteUrl()}/`);
+        const season = window.basketballData?.seasonId;
+        if (season) {
+            url.searchParams.set('season', season);
         }
-        return out.replace(/-+/g, '-').replace(/^-|-$/g, '');
+        Object.entries(params).forEach(([key, value]) => {
+            if (value) {
+                url.searchParams.set(key, value);
+            }
+        });
+        return url.toString();
     }
 
     static teamShareUrl(league, teamName) {
-        const slug = this.teamSlug(teamName);
-        const folder = String(league || '').toLowerCase();
-        return `${this.siteUrl()}/s/${folder}/${slug}.html`;
+        return this.shareUrl({
+            league: String(league || '').toUpperCase(),
+            team: teamName
+        });
     }
 
     static weekendShareUrl() {
-        return `${this.siteUrl()}/s/weekend.html`;
+        return this.shareUrl({ upcoming: '1' });
     }
 
     static async copyText(text) {
