@@ -499,7 +499,8 @@
       "time": "15:40",
       "venue": "ФОК Фаворит",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "57:48"
     }
   },
   {
@@ -511,7 +512,8 @@
       "time": "10:40",
       "venue": "ФОК Фаворит",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "86:65"
     }
   },
   {
@@ -523,7 +525,8 @@
       "time": "12:20",
       "venue": "ФОК Фаворит",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "37:76"
     }
   },
   {
@@ -535,7 +538,8 @@
       "time": "14:00",
       "venue": "ФОК Фаворит",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "43:65"
     }
   },
   {
@@ -560,7 +564,8 @@
       "time": "17:20",
       "venue": "ФОК Фаворит",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "58:77"
     }
   }
 ]
