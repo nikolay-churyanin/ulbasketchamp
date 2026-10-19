@@ -567,5 +567,125 @@
       "gameType": "regular",
       "score": "58:77"
     }
+  },
+  {
+    "id": "game_044",
+    "match_info": {
+      "team_a": "Атом",
+      "team_b": "Приборка",
+      "date": "2026-10-24",
+      "time": "12:00",
+      "venue": "Манеж УлГПУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_045",
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "УлГПУ",
+      "date": "2026-10-24",
+      "time": "13:40",
+      "venue": "Манеж УлГПУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_046",
+    "match_info": {
+      "team_a": "Цемрос",
+      "team_b": "УСУТ-УлГПУ",
+      "date": "2026-10-24",
+      "time": "15:20",
+      "venue": "Манеж УлГПУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_047",
+    "match_info": {
+      "team_a": "УМЗ-Авангард",
+      "team_b": "Цемрос (Ф)",
+      "date": "2026-10-24",
+      "time": "17:00",
+      "venue": "Манеж УлГПУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_048",
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "УСУТ",
+      "date": "2026-10-24",
+      "time": "18:00",
+      "venue": "Зал УлГУ",
+      "league": "F",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_049",
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Дельта - УИГА",
+      "date": "2026-10-24",
+      "time": "19:30",
+      "venue": "Зал УлГУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_050",
+    "match_info": {
+      "team_a": "Север",
+      "team_b": "Ульяновское ВВАУЛ",
+      "date": "2026-10-25",
+      "time": "14:00",
+      "venue": "Зал УлГУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_051",
+    "match_info": {
+      "team_a": "Ульяночка",
+      "team_b": "Феникс",
+      "date": "2026-10-25",
+      "time": "15:30",
+      "venue": "Зал УлГУ",
+      "league": "F",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_052",
+    "match_info": {
+      "team_a": "Дельта - УИГА (Ф)",
+      "team_b": "Симбирские орлы",
+      "date": "2026-10-25",
+      "time": "17:00",
+      "venue": "Зал УлГУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_053",
+    "match_info": {
+      "team_a": "Перевалбаскет",
+      "team_b": "Триумф",
+      "date": "2026-10-25",
+      "time": "18:30",
+      "venue": "Зал УлГУ",
+      "league": "A",
+      "gameType": "regular"
+    }
   }
 ]
