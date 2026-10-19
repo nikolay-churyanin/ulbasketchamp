@@ -15,6 +15,8 @@ class HomePage {
     init() {
         this.setupNavigation();
         this.setupLeagueSwitcher();
+        this.setupStickyLeagueBar();
+        this.setupCompactHeader();
         this.setupNewsFilter();
         this.updateLeagueIndicator('home');
         
@@ -219,6 +221,52 @@ class HomePage {
             e.preventDefault();
             this.openSection(btn.dataset.section);
         });
+    }
+
+    setupStickyLeagueBar() {
+        const header = document.querySelector('header');
+        if (!header) return;
+
+        const sync = () => {
+            document.documentElement.style.setProperty('--site-header-height', `${header.offsetHeight}px`);
+        };
+        sync();
+        if (window.ResizeObserver) {
+            new ResizeObserver(sync).observe(header);
+        } else {
+            window.addEventListener('resize', sync);
+        }
+    }
+
+    setupCompactHeader() {
+        const header = document.querySelector('header');
+        if (!header) return;
+
+        const scrollRoom = () => {
+            const doc = document.documentElement;
+            return doc.scrollHeight - doc.clientHeight;
+        };
+
+        const onScroll = () => {
+            const y = window.scrollY || document.documentElement.scrollTop || 0;
+            const compact = header.classList.contains('is-compact');
+            const delta = this._compactDelta || 74;
+            // После сжатия страница становится короче. Если запаса прокрутки
+            // почти нет, шапка сразу раскрывается обратно и начинает дёргаться.
+            const canShrink = scrollRoom() - delta > 64;
+
+            if (!compact && y > 40 && canShrink) {
+                const before = header.offsetHeight;
+                header.classList.add('is-compact');
+                this._compactDelta = Math.max(1, before - header.offsetHeight);
+            } else if (compact && y < 8) {
+                header.classList.remove('is-compact');
+            }
+        };
+
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
     }
 
     updateLeagueSwitcher(sectionId) {

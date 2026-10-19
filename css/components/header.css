@@ -166,3 +166,40 @@ header h1#site-title {
         font-size: 0.85rem;
     }
 }
+
+header.is-compact .header-inner {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+header.is-compact .header-kicker {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+}
+
+header.is-compact h1,
+header.is-compact h1#site-title {
+    font-size: 1.05rem;
+}
+
+header.is-compact .season-switcher {
+    margin-top: 0;
+}
+
+header.is-compact .main-nav {
+    margin-top: 6px;
+}
+
+.header-kicker,
+.header-inner,
+header h1,
+header h1#site-title,
+.main-nav {
+    transition: max-height 0.2s ease, opacity 0.2s ease, margin 0.2s ease, padding 0.2s ease, font-size 0.2s ease;
+}
+
+.header-kicker {
+    max-height: 2rem;
+    overflow: hidden;
+}
