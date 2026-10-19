@@ -14,6 +14,7 @@ class HomePage {
 
     init() {
         this.setupNavigation();
+        this.setupLeagueSwitcher();
         this.setupNewsFilter();
         this.updateLeagueIndicator('home');
         
@@ -74,7 +75,7 @@ class HomePage {
         await this.renderHomePage();
 
         const active = document.querySelector('.nav-link.active');
-        const sectionId = active?.dataset.section || 'home';
+        const sectionId = this.resolveSectionId(active?.dataset.section || 'home');
 
         if (sectionId === 'news') {
             if (!this.dataManager.hasNews()) {
@@ -169,9 +170,18 @@ class HomePage {
         }
     }
 
+    resolveSectionId(sectionId) {
+        if (sectionId !== 'leagues') return sectionId || 'home';
+        const league = this.dataManager.getLeagueById(this.currentLeague) || this.dataManager.getLeagues()[0];
+        return league?.sectionId || 'home';
+    }
+
     openSection(sectionId) {
+        sectionId = this.resolveSectionId(sectionId);
+        const navSection = sectionId.startsWith('league-') ? 'leagues' : sectionId;
+
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.toggle('active', link.dataset.section === sectionId);
+            link.classList.toggle('active', link.dataset.section === navSection);
         });
 
         this.updateLeagueIndicator(sectionId);
@@ -195,7 +205,28 @@ class HomePage {
             }
         }
 
+        this.updateLeagueSwitcher(sectionId);
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    setupLeagueSwitcher() {
+        if (this._leagueSwitcherReady) return;
+        this._leagueSwitcherReady = true;
+
+        document.getElementById('league-pages')?.addEventListener('click', (e) => {
+            const btn = e.target.closest('.league-switch-btn');
+            if (!btn) return;
+            e.preventDefault();
+            this.openSection(btn.dataset.section);
+        });
+    }
+
+    updateLeagueSwitcher(sectionId) {
+        document.querySelectorAll('.league-switch-btn').forEach(btn => {
+            const active = btn.dataset.section === sectionId;
+            btn.classList.toggle('active', active);
+            btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
     }
 
     // Настройка фильтра новостей
@@ -217,33 +248,25 @@ class HomePage {
     }
 
     renderLeagueShell() {
-        this.renderLeagueNav();
         this.renderLeaguePages();
         this.renderNewsFilters();
         const active = document.querySelector('.nav-link.active');
-        this.showSection(active?.dataset.section || 'home');
-    }
-
-    renderLeagueNav() {
-        const nav = document.querySelector('.main-nav');
-        const newsLink = nav?.querySelector('[data-section="news"]');
-        if (!nav || !newsLink) return;
-
-        nav.querySelectorAll('.nav-link[data-section^="league-"]').forEach(link => link.remove());
-
-        this.dataManager.getLeagues().forEach(league => {
-            const link = document.createElement('a');
-            link.href = `#${league.sectionId}`;
-            link.className = 'nav-link';
-            link.dataset.section = league.sectionId;
-            link.textContent = league.name;
-            nav.insertBefore(link, newsLink);
-        });
+        const sectionId = this.resolveSectionId(active?.dataset.section || 'home');
+        this.showSection(sectionId);
+        this.updateLeagueSwitcher(sectionId);
     }
 
     renderLeaguePages() {
         const host = document.getElementById('league-pages');
         if (!host) return;
+
+        const switcher = `
+            <div class="league-switcher" role="group" aria-label="Лиги">
+                ${this.dataManager.getLeagues().map(item => `
+                    <button type="button" class="league-switch-btn" data-section="${item.sectionId}" aria-pressed="false">${item.name}</button>
+                `).join('')}
+            </div>
+        `;
 
         host.innerHTML = this.dataManager.getLeagues().map(league => {
             const note = this.dataManager.getLeagueFormatDescription(league.id);
@@ -251,7 +274,8 @@ class HomePage {
             return `
             <section id="${league.sectionId}" class="league-section hidden-section">
                 <div class="league-header ${league.cssClass}">
-                    <h2>${league.name}</h2>
+                    <h2 class="visually-hidden">${league.name}</h2>
+                    ${switcher}
                     <button type="button" class="league-info-btn" aria-label="Формат соревнований" aria-expanded="false" aria-controls="${popoverId}">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <circle cx="12" cy="12" r="9"></circle>

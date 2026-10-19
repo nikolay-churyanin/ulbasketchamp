@@ -45,7 +45,7 @@
 
 /* Заголовок лиги */
 .league-header {
-    padding: 12px 16px;
+    padding: 0;
     border-radius: 0;
     margin-bottom: 0;
     font-weight: 700;
@@ -55,8 +55,43 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 4px;
     position: relative;
+    min-height: 52px;
+}
+
+.league-header .league-switcher {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    padding: 8px 4px 8px 10px;
+}
+
+.league-header .league-switch-btn {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.72);
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+    padding: 8px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.league-header .league-switch-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.league-header .league-switch-btn.active {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
 }
 
 .league-header h2 {
@@ -67,7 +102,7 @@
     flex-shrink: 0;
     width: 32px;
     height: 32px;
-    margin: 0;
+    margin: 0 8px 0 0;
     padding: 0;
     border: 0;
     border-radius: 50%;
@@ -380,8 +415,18 @@
     }
     
     .league-header {
-        font-size: 1.1rem;
-        padding: 10px 15px;
+        font-size: 1rem;
+        padding: 0;
+    }
+
+    .league-header .league-switcher {
+        gap: 2px;
+        padding: 6px 2px 6px 6px;
+    }
+
+    .league-header .league-switch-btn {
+        font-size: 0.82rem;
+        padding: 8px 8px;
     }
     
     .toggle-view-btn {
