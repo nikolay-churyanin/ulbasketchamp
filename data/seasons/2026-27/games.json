@@ -693,7 +693,8 @@
       "time": "18:30",
       "venue": "Зал УлГУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "65:60"
     }
   }
 ]
