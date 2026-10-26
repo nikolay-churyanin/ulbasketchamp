@@ -286,10 +286,12 @@ class MatchesRenderer {
             }
         }
 
-        if (showLeague && statusClass !== 'status-live') {
-            statusText = this.dataManager.getLeagueName(league);
-            statusClass = `league-badge-${String(league).toLowerCase()}`;
-        }
+        const leagueBadge = showLeague
+            ? `<span class="match-status league-badge-${String(league).toLowerCase()}">${this.dataManager.getLeagueName(league)}</span>`
+            : '';
+        const statusBadge = (!showLeague || statusClass === 'status-live') && statusText
+            ? `<span class="match-status ${statusClass}">${statusText}</span>`
+            : '';
         
         return `
             <div class="match-card" data-game-id="${game.id}" data-league="${league}">
@@ -310,7 +312,8 @@ class MatchesRenderer {
                         </div>
                     </div>
                     <div class="match-header-actions">
-                        ${statusText ? `<span class="match-status ${statusClass}">${statusText}</span>` : ''}
+                        ${leagueBadge}
+                        ${statusBadge}
                         ${this.renderStreamLink(game)}
                     </div>
                 </div>
