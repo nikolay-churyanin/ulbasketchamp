@@ -762,5 +762,137 @@
       "gameType": "regular",
       "score": "56:53"
     }
+  },
+  {
+    "id": "game_059",
+    "match_info": {
+      "team_a": "УСУТ-УлГПУ",
+      "team_b": "УСУТ",
+      "date": "2026-11-07",
+      "time": "12:00",
+      "venue": "Манеж УлГПУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_060",
+    "match_info": {
+      "team_a": "Спарта",
+      "team_b": "Цемрос",
+      "date": "2026-11-07",
+      "time": "13:30",
+      "venue": "Манеж УлГПУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_061",
+    "match_info": {
+      "team_a": "OldSchool",
+      "team_b": "УСУТ",
+      "date": "2026-11-07",
+      "time": "15:00",
+      "venue": "Манеж УлГПУ",
+      "league": "F",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_062",
+    "match_info": {
+      "team_a": "УМЗ-Авангард",
+      "team_b": "Ульяновское ВВАУЛ",
+      "date": "2026-11-08",
+      "time": "09:00",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_063",
+    "match_info": {
+      "team_a": "БК Петровск",
+      "team_b": "Цементник-Марбакс",
+      "date": "2026-11-08",
+      "time": "10:30",
+      "venue": "ФОК Фаворит",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_064",
+    "match_info": {
+      "team_a": "Симбирские орлы",
+      "team_b": "Атом",
+      "date": "2026-11-08",
+      "time": "12:00",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_065",
+    "match_info": {
+      "team_a": "УлГПУ",
+      "team_b": "40-Данко",
+      "date": "2026-11-08",
+      "time": "13:30",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_066",
+    "match_info": {
+      "team_a": "Приборка",
+      "team_b": "Север",
+      "date": "2026-11-08",
+      "time": "15:00",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_067",
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "Цемрос (Ф)",
+      "date": "2026-11-08",
+      "time": "16:30",
+      "venue": "ФОК Фаворит",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_068",
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Ульяночка",
+      "date": "2026-11-08",
+      "time": "14:30",
+      "venue": "Зал УлГУ",
+      "league": "F",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_069",
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Перевалбаскет",
+      "date": "2026-11-08",
+      "time": "16:00",
+      "venue": "Зал УлГУ",
+      "league": "A",
+      "gameType": "regular"
+    }
   }
 ]
