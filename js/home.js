@@ -5,6 +5,7 @@ class HomePage {
         this.ui = ui;
         this.matchesRenderer = new MatchesRenderer(dataManager);
         this.currentLeague = null;
+        this.standingsSortBy = 'points';
         this.newsManager = new NewsManager(dataManager);
         
         // Сохраняем в глобальную область
@@ -875,15 +876,53 @@ class HomePage {
         this.renderLeagueMatches(league);
     }
 
-    renderStandingsRows(standings, playoffCount = 0) {
-        return standings.map((stand, index) => {
-            const spots = Number(playoffCount) || 0;
-            const isPlayoffTeam = spots > 0 && index < spots;
-            const isLastPlayoff = isPlayoffTeam && index === spots - 1;
+    winPct(stand) {
+        return stand.played > 0 ? stand.wins / stand.played : 0;
+    }
+
+    sortStandingsByWinPct(standings) {
+        return standings.slice().sort((a, b) => {
+            const pct = this.winPct(b) - this.winPct(a);
+            if (pct !== 0) return pct;
+            if (b.wins !== a.wins) return b.wins - a.wins;
+            const aDiff = a.pointsFor - a.pointsAgainst;
+            const bDiff = b.pointsFor - b.pointsAgainst;
+            if (bDiff !== aDiff) return bDiff - aDiff;
+            return a.teamName.localeCompare(b.teamName, 'ru');
+        });
+    }
+
+    hasUnevenPlayed(standings) {
+        if (!standings || standings.length < 2) return false;
+        const first = standings[0].played;
+        return standings.some(stand => stand.played !== first);
+    }
+
+    allowWinPctSort(standings, groups) {
+        if (groups?.length) {
+            return groups.some(group => this.hasUnevenPlayed(group.standings));
+        }
+        return this.hasUnevenPlayed(standings);
+    }
+
+    annotateStandings(standings, playoffCount = 0) {
+        const spots = Number(playoffCount) || 0;
+        return standings.map((stand, index) => ({
+            ...stand,
+            place: index + 1,
+            inPlayoffZone: spots > 0 && index < spots,
+            isLastPlayoff: spots > 0 && index === spots - 1
+        }));
+    }
+
+    renderStandingsRows(standings) {
+        return standings.map(stand => {
+            const isPlayoffTeam = Boolean(stand.inPlayoffZone);
+            const isLastPlayoff = Boolean(stand.isLastPlayoff);
             const diff = stand.pointsFor - stand.pointsAgainst;
 
             return `<tr class="clickable-row${isPlayoffTeam ? ' playoff-spot' : ''}${isLastPlayoff ? ' playoff-spot-last' : ''}" data-team-name="${stand.teamName}">
-                <td>${index + 1}</td>
+                <td>${stand.place}</td>
                 <td>
                     <div class="team-row">
                         <img src="${stand.team.logo}" alt="${stand.teamName}" class="team-logo-small" onerror="this.onImageError(this)">
@@ -907,16 +946,24 @@ class HomePage {
     }
 
     renderStandingsTable(standings, playoffCount = 0, groups = null) {
+        const byWinPct = this.standingsSortBy === 'winpct' && this.allowWinPctSort(standings, groups);
+        const orderedRows = (rows, spots) => {
+            const sorted = byWinPct ? this.sortStandingsByWinPct(rows) : rows;
+            return this.annotateStandings(sorted, spots);
+        };
         const body = groups
             ? groups.map(group => `
                             <tbody>
                                 <tr class="standings-group-label">
                                     <td colspan="10">${group.name}</td>
                                 </tr>
-                                ${this.renderStandingsRows(group.standings, group.playoffTeams)}
+                                ${this.renderStandingsRows(orderedRows(group.standings, group.playoffTeams))}
                             </tbody>
                         `).join('')
-            : `<tbody>${this.renderStandingsRows(standings, playoffCount)}</tbody>`;
+            : `<tbody>${this.renderStandingsRows(orderedRows(standings, playoffCount))}</tbody>`;
+
+        const pctClass = byWinPct ? ' class="standings-col-active"' : '';
+        const ptsClass = byWinPct ? '' : ' class="standings-col-active"';
 
         return `
                     <div class="table-container">
@@ -927,12 +974,12 @@ class HomePage {
                                     <th>Команда</th>
                                     <th>И</th>
                                     <th>В/П</th>
-                                    <th>%</th>
+                                    <th${pctClass}>%</th>
                                     <th>Последние<br>5 игр</th>
                                     <th>Забито</th>
                                     <th>Пропущено</th>
                                     <th>+/-</th>
-                                    <th>О</th>
+                                    <th${ptsClass}>О</th>
                                 </tr>
                             </thead>
                             ${body}
@@ -962,6 +1009,7 @@ class HomePage {
         const regularTables = splitGroups
             ? this.renderStandingsTable(standings, 0, splitGroups)
             : this.renderStandingsTable(standings, this.dataManager.getPlayoffTeamsCount(league));
+        const showWinPctSort = this.allowWinPctSort(standings, splitGroups);
 
         let html = `
             <div class="standings-container">
@@ -979,6 +1027,20 @@ class HomePage {
                 </div>
                 
                 <div class="playoff-tab-content active" id="regular-tab">
+                    <div class="standings-toolbar">
+                        ${showWinPctSort ? `
+                        <div class="standings-sort" role="group" aria-label="Сортировка таблицы">
+                            <button type="button" class="standings-sort-btn${this.standingsSortBy === 'points' ? ' active' : ''}" data-standings-sort="points">По очкам</button>
+                            <button type="button" class="standings-sort-btn${this.standingsSortBy === 'winpct' ? ' active' : ''}" data-standings-sort="winpct">По % побед</button>
+                        </div>
+                        ` : ''}
+                        <button type="button" class="standings-hint-btn" aria-label="Как считается таблица" aria-expanded="false" aria-controls="standings-hint-${league}">?</button>
+                        <div id="standings-hint-${league}" class="standings-hint-popover" hidden>
+                            <p>${showWinPctSort
+                                ? 'По очкам — официальные места: очки, при равенстве личные встречи и разница мячей. По проценту побед таблица пересчитывается целиком: номера мест и зона плей-офф — первые команды в этом порядке. Это ближе к силе, пока сыграно разное число матчей.'
+                                : 'Таблица считается по очкам, при равенстве — по личным встречам и разнице мячей.'}</p>
+                        </div>
+                    </div>
                     ${regularTables}
                 </div>
                 
@@ -1011,6 +1073,7 @@ class HomePage {
 
         // Настраиваем вкладки
         this.setupPlayoffTabs(container);
+        this.setupStandingsToolbar(container, league);
         
         // Добавляем обработчики для кликов по командам в регулярке
         container.querySelectorAll('.clickable-row').forEach(element => {
@@ -1177,6 +1240,39 @@ class HomePage {
                 </div>
             </div>
         `;
+    }
+
+    setupStandingsToolbar(container, league) {
+        const toolbar = container.querySelector('.standings-toolbar');
+        if (!toolbar) return;
+
+        toolbar.querySelectorAll('[data-standings-sort]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const next = btn.dataset.standingsSort;
+                if (next === this.standingsSortBy) return;
+                this.standingsSortBy = next;
+                this.renderLeagueStandings(league);
+            });
+        });
+
+        const hintBtn = toolbar.querySelector('.standings-hint-btn');
+        const hint = toolbar.querySelector('.standings-hint-popover');
+        if (!hintBtn || !hint) return;
+
+        hintBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const willOpen = hint.hidden;
+            hint.hidden = !willOpen;
+            hintBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+            if (willOpen) {
+                window.setTimeout(() => {
+                    document.addEventListener('click', () => {
+                        hint.hidden = true;
+                        hintBtn.setAttribute('aria-expanded', 'false');
+                    }, { once: true });
+                }, 0);
+            }
+        });
     }
 
     // Новый метод для настройки вкладок плей-офф
