@@ -773,7 +773,8 @@
       "venue": "Манеж УлГПУ",
       "league": "A",
       "gameType": "regular",
-      "stream": "https://vkvideo.ru/video-214017844_456239981"
+      "stream": "https://vkvideo.ru/video-214017844_456239981",
+      "score": "88:65"
     }
   },
   {
@@ -785,7 +786,8 @@
       "time": "13:30",
       "venue": "Манеж УлГПУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "92:96"
     }
   },
   {
