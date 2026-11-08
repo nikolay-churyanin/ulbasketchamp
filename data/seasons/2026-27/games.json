@@ -814,7 +814,8 @@
       "venue": "ФОК Фаворит",
       "league": "B",
       "gameType": "regular",
-      "stream": "https://vkvideo.ru/video-214017844_456239982"
+      "stream": "https://vkvideo.ru/video-214017844_456239982",
+      "score": "76:39"
     }
   },
   {
@@ -852,7 +853,8 @@
       "time": "12:00",
       "venue": "ФОК Фаворит",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "62:42"
     }
   },
   {
