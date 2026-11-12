@@ -910,18 +910,6 @@
     }
   },
   {
-    "id": "game_070",
-    "match_info": {
-      "team_a": "УлГПУ",
-      "team_b": "Ульяночка",
-      "date": "2026-11-14",
-      "time": "11:30",
-      "venue": "Манеж УлГПУ",
-      "league": "F",
-      "gameType": "regular"
-    }
-  },
-  {
     "id": "game_071",
     "match_info": {
       "team_a": "Приборка",
