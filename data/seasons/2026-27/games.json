@@ -961,5 +961,137 @@
       "gameType": "regular",
       "score": "63:62"
     }
+  },
+  {
+    "id": "game_076",
+    "match_info": {
+      "team_a": "УлГПУ",
+      "team_b": "УлГУ",
+      "date": "2026-11-19",
+      "time": "16:15",
+      "venue": "Манеж УлГПУ",
+      "league": "F",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_077",
+    "match_info": {
+      "team_a": "Феникс",
+      "team_b": "OldSchool",
+      "date": "2026-11-21",
+      "time": "10:00",
+      "venue": "Манеж УлГПУ",
+      "league": "F",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_078",
+    "match_info": {
+      "team_a": "Спарта",
+      "team_b": "Дельта - УИГА",
+      "date": "2026-11-21",
+      "time": "11:30",
+      "venue": "Манеж УлГПУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_079",
+    "match_info": {
+      "team_a": "УСУТ-УлГПУ",
+      "team_b": "Перевалбаскет",
+      "date": "2026-11-21",
+      "time": "13:00",
+      "venue": "Манеж УлГПУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_080",
+    "match_info": {
+      "team_a": "УлГПУ",
+      "team_b": "Дельта - УИГА (Ф)",
+      "date": "2026-11-21",
+      "time": "14:30",
+      "venue": "Манеж УлГПУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_081",
+    "match_info": {
+      "team_a": "Ульяновское ВВАУЛ",
+      "team_b": "Приборка",
+      "date": "2026-11-21",
+      "time": "18:00",
+      "venue": "Зал УлГУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_082",
+    "match_info": {
+      "team_a": "40-Данко",
+      "team_b": "УМЗ-Авангард",
+      "date": "2026-11-21",
+      "time": "19:30",
+      "venue": "Зал УлГУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_083",
+    "match_info": {
+      "team_a": "Ветераны",
+      "team_b": "Атом",
+      "date": "2026-11-22",
+      "time": "14:00",
+      "venue": "ДС Дельфин",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_084",
+    "match_info": {
+      "team_a": "Север",
+      "team_b": "Цемрос (Ф)",
+      "date": "2026-11-22",
+      "time": "14:30",
+      "venue": "Зал УлГУ",
+      "league": "B",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_085",
+    "match_info": {
+      "team_a": "УлГУ",
+      "team_b": "Триумф",
+      "date": "2026-11-22",
+      "time": "16:00",
+      "venue": "Зал УлГУ",
+      "league": "A",
+      "gameType": "regular"
+    }
+  },
+  {
+    "id": "game_086",
+    "match_info": {
+      "team_a": "УСУТ",
+      "team_b": "Цемрос",
+      "date": "2026-11-22",
+      "time": "17:30",
+      "venue": "Зал УлГУ",
+      "league": "A",
+      "gameType": "regular"
+    }
   }
 ]
