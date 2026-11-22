@@ -1074,7 +1074,8 @@
       "time": "14:30",
       "venue": "Зал УлГУ",
       "league": "B",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "56:36"
     }
   },
   {
@@ -1086,7 +1087,8 @@
       "time": "16:00",
       "venue": "Зал УлГУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "87:60"
     }
   },
   {
@@ -1098,7 +1100,8 @@
       "time": "17:30",
       "venue": "Зал УлГУ",
       "league": "A",
-      "gameType": "regular"
+      "gameType": "regular",
+      "score": "46:71"
     }
   }
 ]
