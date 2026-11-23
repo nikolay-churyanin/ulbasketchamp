@@ -881,15 +881,22 @@ class HomePage {
     }
 
     sortStandingsByWinPct(standings) {
-        return standings.slice().sort((a, b) => {
-            const pct = this.winPct(b) - this.winPct(a);
-            if (pct !== 0) return pct;
-            if (b.wins !== a.wins) return b.wins - a.wins;
-            const aDiff = a.pointsFor - a.pointsAgainst;
-            const bDiff = b.pointsFor - b.pointsAgainst;
-            if (bDiff !== aDiff) return bDiff - aDiff;
-            return a.teamName.localeCompare(b.teamName, 'ru');
-        });
+        const sorted = standings.slice().sort((a, b) => this.winPct(b) - this.winPct(a));
+        const result = [];
+        let i = 0;
+        while (i < sorted.length) {
+            const pct = this.winPct(sorted[i]);
+            const group = [];
+            while (i < sorted.length && this.winPct(sorted[i]) === pct) {
+                group.push(sorted[i]);
+                i++;
+            }
+            if (group.length > 1) {
+                this.dataManager.sortTiedStandings(group);
+            }
+            result.push(...group);
+        }
+        return result;
     }
 
     hasUnevenPlayed(standings) {
@@ -1037,8 +1044,8 @@ class HomePage {
                         <button type="button" class="standings-hint-btn" aria-label="Как считается таблица" aria-expanded="false" aria-controls="standings-hint-${league}">?</button>
                         <div id="standings-hint-${league}" class="standings-hint-popover" hidden>
                             <p>${showWinPctSort
-                                ? 'По очкам — официальные места: очки, при равенстве личные встречи и разница мячей. По проценту побед таблица пересчитывается целиком: номера мест и зона плей-офф — первые команды в этом порядке. Это ближе к силе, пока сыграно разное число матчей.'
-                                : 'Таблица считается по очкам, при равенстве — по личным встречам и разнице мячей.'}</p>
+                                ? 'По очкам — официальные места. При равенстве очков (и при равном проценте побед) смотрятся личные встречи внутри этой группы: неигравшие имеют +/- 0. Если личных встреч не было — общий +/-. По проценту побед таблица пересчитывается целиком, включая номера мест и зону плей-офф.'
+                                : 'Таблица считается по очкам. При равенстве — личные встречи (у неигравших +/- 0), если встреч не было — общий +/-.'}</p>
                         </div>
                     </div>
                     ${regularTables}

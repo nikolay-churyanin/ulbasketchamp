@@ -876,97 +876,62 @@ class BasketballData {
         return result;
     }
 
-    // Новый метод для сортировки группы по разнице в личных встречах
+    getRegularScoredGames(league) {
+        return this.games.filter(game =>
+            game.league === league &&
+            game.gameType !== 'playoff' &&
+            this.hasGameScore(game)
+        );
+    }
+
+    sortTiedStandings(group) {
+        const league = group[0]?.team?.league || group[0]?.league;
+        this.sortGroupByHeadToHeadDiff(group, this.getRegularScoredGames(league));
+    }
+
+    // Равенство очков (или % побед): личные встречи внутри группы.
+    // Неигравшие в группе имеют H2H +/- = 0. Если личных встреч не было — общий +/-.
     sortGroupByHeadToHeadDiff(group, allGames) {
-        // Создаем Map для хранения статистики личных встреч внутри группы
         const h2hStats = new Map();
-        
-        // Инициализируем статистику для каждой команды в группе
+
         group.forEach(team => {
-            const normName = this.normalizeTeamName(team.teamName);
-            h2hStats.set(normName, {
-                teamName: team.teamName,
-                pointsFor: 0,      // забито в матчах с командами из группы
-                pointsAgainst: 0,   // пропущено в матчах с командами из группы
-                diff: 0,            // разница (+/-)
+            h2hStats.set(this.normalizeTeamName(team.teamName), {
+                diff: 0,
                 gamesPlayed: 0
             });
         });
-        
-        // Получаем список нормализованных имен команд группы
-        const groupNormNames = Array.from(h2hStats.keys());
-        
-        // Собираем ВСЕ игры между командами из группы
+
+        const groupNormNames = new Set(h2hStats.keys());
+
         allGames.forEach(game => {
             const homeNorm = this.normalizeTeamName(game.teamHome);
             const awayNorm = this.normalizeTeamName(game.teamAway);
-            
-            // Проверяем, что обе команды входят в нашу группу
-            if (groupNormNames.includes(homeNorm) && groupNormNames.includes(awayNorm)) {
-                const homeStats = h2hStats.get(homeNorm);
-                const awayStats = h2hStats.get(awayNorm);
-                
-                if (homeStats && awayStats) {
-                    homeStats.pointsFor += game.scoreHome;
-                    homeStats.pointsAgainst += game.scoreAway;
-                    homeStats.diff += (game.scoreHome - game.scoreAway);
-                    homeStats.gamesPlayed++;
-                    
-                    awayStats.pointsFor += game.scoreAway;
-                    awayStats.pointsAgainst += game.scoreHome;
-                    awayStats.diff += (game.scoreAway - game.scoreHome);
-                    awayStats.gamesPlayed++;
-                }
-            }
+            if (!groupNormNames.has(homeNorm) || !groupNormNames.has(awayNorm)) return;
+            if (homeNorm === awayNorm) return;
+            if (!this.hasGameScore(game)) return;
+
+            const homeStats = h2hStats.get(homeNorm);
+            const awayStats = h2hStats.get(awayNorm);
+            homeStats.diff += game.scoreHome - game.scoreAway;
+            homeStats.gamesPlayed++;
+            awayStats.diff += game.scoreAway - game.scoreHome;
+            awayStats.gamesPlayed++;
         });
-        
-        // Сортируем группу по разнице очков в личных встречах
+
+        const anyH2H = [...h2hStats.values()].some(stats => stats.gamesPlayed > 0);
+        const overallDiff = team => team.pointsFor - team.pointsAgainst;
+
         group.sort((a, b) => {
-            const aNorm = this.normalizeTeamName(a.teamName);
-            const bNorm = this.normalizeTeamName(b.teamName);
-            
-            const aH2H = h2hStats.get(aNorm);
-            const bH2H = h2hStats.get(bNorm);
-            
-            // Если команды не играли между собой или нет статистики,
-            // используем общую разницу
-            if (!aH2H || !bH2H || aH2H.gamesPlayed === 0 || bH2H.gamesPlayed === 0) {
-                const aTotalDiff = a.pointsFor - a.pointsAgainst;
-                const bTotalDiff = b.pointsFor - b.pointsAgainst;
-                if (bTotalDiff !== aTotalDiff) {
-                    return bTotalDiff - aTotalDiff;
-                }
-                // Если и общая разница одинаковая - по забитым
-                if (b.pointsFor !== a.pointsFor) {
-                    return b.pointsFor - a.pointsFor;
-                }
-                return a.teamName.localeCompare(b.teamName);
+            if (anyH2H) {
+                const aDiff = h2hStats.get(this.normalizeTeamName(a.teamName))?.diff || 0;
+                const bDiff = h2hStats.get(this.normalizeTeamName(b.teamName))?.diff || 0;
+                if (bDiff !== aDiff) return bDiff - aDiff;
             }
-            
-            // Сравниваем по разнице в личных встречах (чем больше, тем выше)
-            if (bH2H.diff !== aH2H.diff) {
-                return bH2H.diff - aH2H.diff;
-            }
-            
-            // Если разница одинаковая - по забитым в личных встречах
-            if (bH2H.pointsFor !== aH2H.pointsFor) {
-                return bH2H.pointsFor - aH2H.pointsFor;
-            }
-            
-            // Если и это одинаково - по общей разнице
-            const aTotalDiff = a.pointsFor - a.pointsAgainst;
-            const bTotalDiff = b.pointsFor - b.pointsAgainst;
-            if (bTotalDiff !== aTotalDiff) {
-                return bTotalDiff - aTotalDiff;
-            }
-            
-            // Если и общая разница одинаковая - по забитым
-            if (b.pointsFor !== a.pointsFor) {
-                return b.pointsFor - a.pointsFor;
-            }
-            
-            // Последний критерий - алфавит
-            return a.teamName.localeCompare(b.teamName);
+
+            const byOverall = overallDiff(b) - overallDiff(a);
+            if (byOverall !== 0) return byOverall;
+            if (b.pointsFor !== a.pointsFor) return b.pointsFor - a.pointsFor;
+            return a.teamName.localeCompare(b.teamName, 'ru');
         });
     }
 
